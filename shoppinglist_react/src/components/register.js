@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import  {Link} from 'react-router-dom';
 
 class Register extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class Register extends Component {
 
             <div className="container mt-5">
                 <div className="row">
-                    <div className="container form-background card mx-5 mt-5 col media card-inverse ">
+                    <div className="container form-background card mx-5 mt-5 col media card ">
                         <h2 className="mt-5 text-capitalize"> Shopping list</h2>
                         <h6 className="text-capitalize">The Best Way To Record and Share your shopping lists</h6>
 
@@ -85,7 +86,7 @@ class Register extends Component {
                             <div>
                                 <button type="submit" className="btn btn-primary btn-block">Sign up</button>
 
-                                <p className="text-center">Already have an account?</p>
+                                <p className="text-center">Already have an account??<Link to="/login">Login</Link></p>
                             </div>
                         </form>
                     </div>

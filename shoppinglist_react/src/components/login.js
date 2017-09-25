@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+
 
 class Login extends Component {
         constructor(props) {
@@ -55,7 +57,7 @@ class Login extends Component {
                     <div>
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
 
-                        <p className="text-center">Back to Sign up</p>
+                        <p className="text-center"><Link to="/">Back to Sign Up</Link></p>
                     </div>
                 </form>
 
