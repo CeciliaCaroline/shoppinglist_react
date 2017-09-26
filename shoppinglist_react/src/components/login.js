@@ -26,8 +26,8 @@ class Login extends Component {
     render() {
         return (
 
-            <div className="container auth mt-5">
-                <form onSubmit={this.login} className="container form-background card mt-5 col-6 ">
+            <div className="container items">
+                <form onSubmit={this.login} className="container items form-background card mt-5 col-6 ">
                     <h2 className="text-center">Log In</h2>
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
