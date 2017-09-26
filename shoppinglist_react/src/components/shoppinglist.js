@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import TableBody from './tablebody';
 import PropTypes from 'prop-types';
 import AddList from "./addlist";
 import Header from "./header";
+import TableContents from "./tablecontents";
 
 
 class ShoppingList extends Component {
@@ -16,6 +16,7 @@ class ShoppingList extends Component {
 
     }
 
+
     onListAdd(title, description) {
         this.state.lists.push(
             {
@@ -27,23 +28,37 @@ class ShoppingList extends Component {
         this.nextId += 1;
     }
 
+    onRemovePlayer(index) {
+        alert("Are you sure you want to delete this list?");
+        this.state.lists.splice(index, 1);
+        this.setState(this.state);
+
+    }
+
 
     render() {
         return (
-            <div>
-                <Header />
+            <div className="container">
+                <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
                 <table className="table items table-hover table-striped">
                     <thead>
                     <tr>
                         <th>Title</th>
                         <th>Description</th>
-                        <th colSpan="2" className="text-center">Action</th>
+                        <th colSpan="2" >Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.lists.map((list, index) => (
-                        <TableBody title={list.title} description={list.description} key={list.id}/>))}
+                        <TableContents
+                            onRemove={() => {
+                                this.onRemovePlayer(index)
+                            }}
+
+                            title={list.title}
+                            description={list.description}
+                            key={list.id}/>))}
                     </tbody>
                 </table>
             </div>
