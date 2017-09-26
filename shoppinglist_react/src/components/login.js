@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 
 class Login extends Component {
-        constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             email: '', password: ''
@@ -15,6 +15,9 @@ class Login extends Component {
     login(e) {
         e.preventDefault();
         console.log(this.state);
+        let name = this.name.value;
+        let path = `home/${name}`;
+        this.props.history.push(path);
         this.refs.email.value = null;
         this.refs.password.value = null;
 
@@ -24,8 +27,20 @@ class Login extends Component {
         return (
 
             <div className="container auth mt-5">
-                <form onSubmit= {this.login} className="container form-background card mt-5 col-6 ">
+                <form onSubmit={this.login} className="container form-background card mt-5 col-6 ">
                     <h2 className="text-center">Log In</h2>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="username"
+                            required
+                            ref={(input) => this.name = input}
+                            onChange={event => (this.setState({username: event.target.value}))}
+
+                        />
+                    </div>
 
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
