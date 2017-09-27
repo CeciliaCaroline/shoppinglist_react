@@ -15,13 +15,19 @@ class Login extends Component {
     login(e) {
         e.preventDefault();
         console.log(this.state);
-        let name = this.name.value;
-        let path = `home/${name}`;
+        let path = `home`;
         this.props.history.push(path);
         this.refs.email.value = null;
         this.refs.password.value = null;
 
     }
+
+    onChange(event) {
+        const obj = {};
+        obj[event.target.name] = event.target.value;
+        this.setState(obj);
+
+    };
 
     render() {
         return (
@@ -29,28 +35,17 @@ class Login extends Component {
             <div className="container items">
                 <form onSubmit={this.login} className="container items form-background card mt-5 col-6 ">
                     <h2 className="text-center">Log In</h2>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="username"
-                            required
-                            ref={(input) => this.name = input}
-                            onChange={event => (this.setState({username: event.target.value}))}
-
-                        />
-                    </div>
 
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
                         <input
                             type="email"
                             className="form-control"
-                            id="email"
+                            name="email"
                             required
                             ref='email'
-                            onChange={event => (this.setState({email: event.target.value}))}
+                            value={this.state.email}
+                            onChange={this.onChange.bind(this)}
 
 
                         />
@@ -61,10 +56,11 @@ class Login extends Component {
                         <input
                             type="password"
                             className="form-control"
-                            id="password"
+                            name="password"
                             required
                             ref='password'
-                            onChange={event => (this.setState({password: event.target.value}))}
+                            value={this.state.password}
+                            onChange={this.onChange.bind(this)}
 
                         />
                     </div>

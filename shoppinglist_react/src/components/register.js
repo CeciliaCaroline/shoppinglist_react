@@ -23,6 +23,14 @@ class Register extends Component {
 
     }
 
+    onChange(event) {
+        const obj = {};
+        obj[event.target.name] = event.target.value;
+        this.setState(obj);
+
+    };
+
+
     render() {
         return (
 
@@ -54,10 +62,11 @@ class Register extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                id="username"
+                                name="username"
                                 required
                                 ref='username'
-                                onChange={event => (this.setState({username: event.target.value}))}
+                                value={this.state.username}
+                                onChange={this.onChange.bind(this)}
 
                             />
                         </div>
@@ -66,10 +75,11 @@ class Register extends Component {
                             <input
                                 type="email"
                                 className="form-control"
-                                id="email"
+                                name="email"
                                 required
                                 ref='email'
-                                onChange={event => (this.setState({email: event.target.value}))}
+                                value={this.state.email}
+                                onChange={this.onChange.bind(this)}
                             />
                         </div>
 
@@ -78,10 +88,11 @@ class Register extends Component {
                             <input
                                 type="password"
                                 className="form-control"
-                                id="password"
+                                name="password"
                                 required
                                 ref='password'
-                                onChange={event => (this.setState({password: event.target.value}))}
+                                value={this.state.password}
+                                onChange={this.onChange.bind(this)}
 
                             />
                         </div>
@@ -99,6 +110,7 @@ class Register extends Component {
         );
     }
 }
+
 
 
 export default Register;
