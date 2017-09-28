@@ -15,10 +15,9 @@ class Login extends Component {
     login(e) {
         e.preventDefault();
         console.log(this.state);
-        let path = `home`;
-        this.props.history.push(path);
-        this.refs.email.value = null;
-        this.refs.password.value = null;
+        this.setState({
+            email: '', password: ''
+        })
 
     }
 
