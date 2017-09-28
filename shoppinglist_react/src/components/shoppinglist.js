@@ -26,14 +26,27 @@ class ShoppingList extends Component {
             });
         this.setState(this.state);
         this.nextId += 1;
+
     }
 
-    onRemovePlayer(index) {
+    onListEdit(title, description) {
+        this.setState({
+            title: title,
+            description: description
+        });
+        // console.log(this.state);
+
+
+    }
+
+
+    onRemoveList(index) {
         alert("Are you sure you want to delete this list?");
         this.state.lists.splice(index, 1);
         this.setState(this.state);
 
     }
+
 
 
     render() {
@@ -46,19 +59,21 @@ class ShoppingList extends Component {
                     <tr>
                         <th>Title</th>
                         <th>Description</th>
-                        <th colSpan="2" >Action</th>
+                        <th colSpan="2">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.lists.map((list, index) => (
-                        <TableContents
-                            onRemove={() => {
-                                this.onRemovePlayer(index)
-                            }}
+                        <TableContents onEdit={(title, description) => {
+                            this.onListEdit(title, description)
+                        }}
+                                       onRemove={() => {
+                                           this.onRemoveList(index)
+                                       }}
 
-                            title={list.title}
-                            description={list.description}
-                            key={list.id}/>))}
+                                       title={list.title}
+                                       description={list.description}
+                                       key={list.id}/>))}
                     </tbody>
                 </table>
             </div>
@@ -69,7 +84,6 @@ class ShoppingList extends Component {
 
 ShoppingList.propTypes = {
 
-    // lists: PropTypes.array.isRequired,
     initialLists: PropTypes.arrayOf(PropTypes.shape({
             title: PropTypes.string.isRequired,
             description: PropTypes.string.isRequired,
