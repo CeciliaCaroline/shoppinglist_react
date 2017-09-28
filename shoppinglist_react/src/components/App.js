@@ -7,14 +7,14 @@ import PropTypes from 'prop-types';
 import {BrowserRouter, Route} from 'react-router-dom';
 
 
-
 let Lists = [{
     title: "Cecilia",
-    description: "62",
+    description: "qwertyuiop",
     id: 1
 }];
+
 class App extends Component {
-        constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             lists: this.props.initialLists
@@ -22,11 +22,12 @@ class App extends Component {
 
     }
 
+
     render() {
         return (
             <BrowserRouter>
                 <div className="App">
-                    <Route  exact path="/" component={Register}/>
+                    <Route exact path="/" component={Register}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/home" render={() => <Home initialLists={Lists}/>}/>
                     <Route path="/shoppinglist" render={() => <ShoppingList initialLists={Lists}/>}/>
