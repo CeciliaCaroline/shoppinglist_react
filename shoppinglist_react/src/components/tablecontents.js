@@ -16,17 +16,8 @@ class TableContents extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        // console.log(this.state);
-        this.props.onEdit((this.state.title), (this.state.description));
         console.log(this.state);
-        this.setState(this.state);
-
-        this.refs.title.value = null;
-        this.refs.description.value = null;
-
-
     };
-
 
     openModal() {
         this.setState({modalIsOpen: true});
@@ -102,13 +93,12 @@ class TableContents extends Component {
     }
 }
 
-TableContents.propTypes = {
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired
-
-};
+// TableContents.propTypes = {
+//     title: PropTypes.string.isRequired,
+//     description: PropTypes.string.isRequired,
+//     onRemove: PropTypes.func.isRequired
+//
+// };
 
 
 export default TableContents;

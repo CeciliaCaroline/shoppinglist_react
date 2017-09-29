@@ -1,21 +1,41 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import AddList from "./addlist";
 import Header from "./header";
 import TableContents from "./tablecontents";
+import axios from 'axios';
 
+let shoppingLists = [];
 
 class ShoppingList extends Component {
-    nextId = 4;
 
     constructor(props,) {
         super(props);
         this.state = {
-            lists: this.props.initialLists
+            lists: [],
+
         };
 
     }
 
+    getLists = () => {
+        return axios.get(`http://127.0.0.1:5000/shoppinglist`, {
+            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+        })
+            .then(response => {
+                    return response.data
+                }
+            )
+            .catch(err => console.log(err));
+    };
+
+    componentWillMount() {
+        this.getLists()
+            .then((allshoppingLists) => {
+                shoppingLists = allshoppingLists;
+                this.setState({lists: shoppingLists})
+            })
+            .catch(err => console.log(err))
+    }
 
     onListAdd(title, description) {
         this.state.lists.push(
@@ -29,24 +49,12 @@ class ShoppingList extends Component {
 
     }
 
-    onListEdit(title, description) {
-        this.setState({
-            title: title,
-            description: description
-        });
-        // console.log(this.state);
-
-
-    }
-
-
     onRemoveList(index) {
         alert("Are you sure you want to delete this list?");
         this.state.lists.splice(index, 1);
         this.setState(this.state);
 
     }
-
 
 
     render() {
@@ -63,17 +71,12 @@ class ShoppingList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lists.map((list, index) => (
-                        <TableContents onEdit={(title, description) => {
-                            this.onListEdit(title, description)
-                        }}
-                                       onRemove={() => {
-                                           this.onRemoveList(index)
-                                       }}
-
-                                       title={list.title}
-                                       description={list.description}
-                                       key={list.id}/>))}
+                    {/*<TableContents  />*/}
+                    {this.state.lists.map((list) => (
+                        <TableContents
+                            title={list.title}
+                            description={list.description}
+                            key={list.id}/>))}
                     </tbody>
                 </table>
             </div>
@@ -82,16 +85,5 @@ class ShoppingList extends Component {
     }
 }
 
-ShoppingList.propTypes = {
-
-    initialLists: PropTypes.arrayOf(PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            description: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired
-        }
-    )).isRequired,
-
-
-};
 
 export default ShoppingList;
