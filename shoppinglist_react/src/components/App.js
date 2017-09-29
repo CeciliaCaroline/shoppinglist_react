@@ -11,14 +11,6 @@ import {BrowserRouter, Route} from 'react-router-dom';
 
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            lists: this.props.initialLists
-        };
-
-    }
-
 
     render() {
         return (
@@ -29,7 +21,7 @@ class App extends Component {
                     <Route path="/auth/reset-password" component={ResetPassword}/>
                     <Route path="/auth/logout" component={Logout}/>
                     <Route path="/home" render={() => <Home />}/>
-                    <Route path="/shoppinglist" render={() => <ShoppingList />}/>
+                    <Route path="/shoppinglist/" render={() => <ShoppingList />}/>
                 </div>
             </BrowserRouter>
         );

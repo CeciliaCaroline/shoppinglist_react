@@ -7,6 +7,8 @@ class TableContents extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: '',
+            description: '',
             modalIsOpen: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,6 +19,14 @@ class TableContents extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log(this.state);
+        this.props.onEdit(this.state.name, this.state.description);
+        this.setState({
+            name: "",
+            description: "",
+            modalIsOpen: false
+
+        });
+        console.log(this.state)
     };
 
     openModal() {
@@ -31,7 +41,7 @@ class TableContents extends Component {
     render() {
         return (
             <tr>
-                <td>{this.props.title}</td>
+                <td>{this.props.name}</td>
                 <td>{this.props.description}</td>
                 <td>
                     <button className="text-center" onClick={this.openModal}>EDIT</button>
@@ -51,11 +61,11 @@ class TableContents extends Component {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="title"
+                                        name="name"
                                         required
-                                        ref='title'
-                                        defaultValue={this.props.title}
-                                        onChange={event => (this.setState({title: event.target.value}))}
+                                        ref='name'
+                                        defaultValue={this.props.name}
+                                        onChange={event => (this.setState({name: event.target.value}))}
                                     />
                                 </div>
 
@@ -64,7 +74,7 @@ class TableContents extends Component {
                                     <textarea
                                         type="text"
                                         className="form-control"
-                                        id="description"
+                                        name="description"
                                         required
                                         ref='description'
                                         defaultValue={this.props.description}
@@ -93,12 +103,13 @@ class TableContents extends Component {
     }
 }
 
-// TableContents.propTypes = {
-//     title: PropTypes.string.isRequired,
-//     description: PropTypes.string.isRequired,
-//     onRemove: PropTypes.func.isRequired
-//
-// };
+TableContents.propTypes = {
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    // onRemove: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired
+
+};
 
 
 export default TableContents;
