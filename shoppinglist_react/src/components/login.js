@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
 
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '', password: ''
+            email: '', password: '', loggedIn: false
         };
         this.login = this.login.bind(this);
 
@@ -15,9 +16,24 @@ class Login extends Component {
     login(e) {
         e.preventDefault();
         console.log(this.state);
-        this.setState({
-            email: '', password: ''
-        })
+        axios.post(`http://127.0.0.1:5000/auth/login`,
+            {
+                email: this.state.email,
+                password: this.state.password
+            })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 200) {
+                    localStorage.setItem('token', response.data.auth_token);
+                    this.setState({loggedIn: response.data.auth_token, email: '', password: ''});
+                    console.log(response.data.auth_token);
+                    console.log(this.state)
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
 
     }
 
@@ -29,6 +45,9 @@ class Login extends Component {
     };
 
     render() {
+        if (this.state.loggedIn) {
+            return <Redirect to="/shoppinglist"/>
+        }
         return (
 
             <div className="container items">
