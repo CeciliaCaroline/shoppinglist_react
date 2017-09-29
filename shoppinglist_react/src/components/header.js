@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import {NavLink} from 'react-router-dom';
 
 const Header = (props) => (
@@ -9,7 +8,7 @@ const Header = (props) => (
                 SHOPPING LIST
             </NavLink >
             <div className="navbar-nav ">
-                <NavLink to="/home/:name"  className="nav-item nav-link" >Caroline</NavLink >
+                <NavLink to="/home"  className="nav-item nav-link" >Home</NavLink >
                 <NavLink to="/shoppinglist" className="nav-item nav-link " >My Lists</NavLink >
                 <NavLink to="/login" className="nav-item nav-link" >Log Out</NavLink >
             </div>
@@ -17,7 +16,5 @@ const Header = (props) => (
     </nav>
 );
 
-// Header.propTypes = {
-//     name: PropTypes.string.isRequired
-// };
+
 export default Header;
