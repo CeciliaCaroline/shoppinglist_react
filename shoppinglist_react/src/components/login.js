@@ -46,7 +46,7 @@ class Login extends Component {
 
     render() {
         if (this.state.loggedIn) {
-            return <Redirect to="/shoppinglist"/>
+            return <Redirect to="/home"/>
         }
         return (
 
@@ -86,7 +86,8 @@ class Login extends Component {
                     <div>
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
 
-                        <p className="text-center"><Link to="/">Back to Sign Up</Link></p>
+                        <p className="text-center"><Link to="/auth/register">Back to Sign Up</Link></p>
+                        <p className="text-center"><Link to="/auth/reset-password">Forgot Password</Link></p>
                     </div>
                 </form>
 

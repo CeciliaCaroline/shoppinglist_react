@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
+
 
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '', username: '', password: ''
+            email: '', password: '', registered: false
         };
         this.register = this.register.bind(this);
 
@@ -15,13 +17,25 @@ class Register extends Component {
     register(e) {
         e.preventDefault();
         console.log(this.state);
-        let path = `login`;
-        this.props.history.push(path);
-        this.refs.username.value = null;
-        this.refs.email.value = null;
-        this.refs.password.value = null;
+        axios.post(`http://127.0.0.1:5000/auth/register`,
+            {
+                email: this.state.email,
+                password: this.state.password
+            })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 201) {
+                    localStorage.setItem('token', response.data.auth_token);
+                    this.setState({registered: true, email: '', password: ''});
 
-    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        console.log(this.state)
+    };
+
 
     onChange(event) {
         const obj = {};
@@ -32,6 +46,9 @@ class Register extends Component {
 
 
     render() {
+        if (this.state.registered) {
+            return <Redirect to="/auth/login"/>
+        }
         return (
 
             <div className="container mt-5">
@@ -40,7 +57,8 @@ class Register extends Component {
                         <h2 className="mt-5 text-capitalize"> Shopping list</h2>
                         <h6 className="text-capitalize">The Best Way To Record and Share your shopping lists</h6>
 
-                        <p className="lead">This is an application that enables users to record, track and share things
+                        <p className="lead">This is an application that enables users to record, track and share
+                            things
                             they
                             want to
                             spend
@@ -57,19 +75,19 @@ class Register extends Component {
                     <form onSubmit={this.register}
                           className="container media-body form-background card mx-5 mt-5 col">
                         <h2 className="text-capitalize card-title mt-5">New to Shoppinglist. Register</h2>
-                        <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="username"
-                                required
-                                ref='username'
-                                value={this.state.username}
-                                onChange={this.onChange.bind(this)}
+                        {/*<div className="form-group">*/}
+                        {/*<label htmlFor="username">Username</label>*/}
+                        {/*<input*/}
+                        {/*type="text"*/}
+                        {/*className="form-control"*/}
+                        {/*name="username"*/}
+                        {/*required*/}
+                        {/*ref='username'*/}
+                        {/*value={this.state.username}*/}
+                        {/*onChange={this.onChange.bind(this)}*/}
 
-                            />
-                        </div>
+                        {/*/>*/}
+                        {/*</div>*/}
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <input
@@ -100,7 +118,7 @@ class Register extends Component {
                         <div>
                             <button type="submit" className="btn btn-primary btn-block">Sign up</button>
 
-                            <p className="text-center">Already have an account??<Link to="/login">Login</Link></p>
+                            <p className="text-center">Already have an account??<Link to="/auth/login">Login</Link></p>
                         </div>
                     </form>
                 </div>
@@ -110,7 +128,6 @@ class Register extends Component {
         );
     }
 }
-
 
 
 export default Register;
