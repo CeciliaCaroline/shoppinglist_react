@@ -29,6 +29,7 @@ class ShoppingList extends Component {
             .catch(err => console.log(err));
     };
 
+
     componentDidMount() {
         this.getLists()
             .then((allshoppingLists) => {
@@ -53,12 +54,16 @@ class ShoppingList extends Component {
 
     }
 
-    onListEdit(id, name, description) {
-        shoppingLists[id].name = name;
-        shoppingLists[id].description = description;
-        this.setState({lists: shoppingLists});
 
-    }
+    onListEdit = (idx) => (evt) => {
+        this.state.lists.Shoppinglists.map((list, sidx) => {
+            if (idx !== sidx) return list;
+            return {...list, name: evt.target.value, description: evt.target.value};
+        });
+
+        this.setState(this.state);
+    };
+
 
     noBuckets = () => {
         return (
@@ -70,10 +75,23 @@ class ShoppingList extends Component {
         );
     };
 
-    onRemoveList(index) {
-        alert("Are you sure you want to delete this list?");
-        this.state.lists.splice(index, 1);
-        this.setState(this.state);
+    onRemoveList(id) {
+        axios.delete(`http://127.0.0.1:5000/shoppinglist/${id}`, {
+            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+        })
+            .then(response => {
+                    alert("Are you sure you want to delete this list?");
+                    let index = this.state.lists.Shoppinglists.findIndex(x => x.id === id);
+                    this.state.lists.Shoppinglists.splice(index, 1);
+                    this.setState(this.state);
+                    console.log(this.state);
+                    console.log('deleted');
+                    return response.data
+
+                }
+            )
+            .catch(err => console.log(err));
+
 
     }
 
@@ -96,10 +114,10 @@ class ShoppingList extends Component {
                     </thead>
                     <tbody>
                     {this.state.lists.Shoppinglists.map((list) => (
-                        <TableContents
-                            name={list.name}
-                            description={list.description}
-                            key={list.id} onEdit={this.onListEdit}/>))}
+                        <TableContents onRemove={this.onRemoveList.bind(this)}
+                                       name={list.name}
+                                       description={list.description}
+                                       key={list.id} onEdit={this.onListEdit.bind(this)}/>))}
 
                     </tbody>
                 </table>

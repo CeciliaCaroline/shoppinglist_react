@@ -18,8 +18,7 @@ class TableContents extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
-        this.props.onEdit(this.state.name, this.state.description);
+        this.props.onEdit();
         this.setState({
             name: "",
             description: "",
@@ -37,6 +36,7 @@ class TableContents extends Component {
     closeModal() {
         this.setState({modalIsOpen: false});
     }
+
 
     render() {
         return (
@@ -83,7 +83,7 @@ class TableContents extends Component {
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn btn-success">Save
+                                    <button type="submit" className="btn btn-success" onClick={this.props.onEdit}>Save
                                     </button>
                                     <button type="button" className="btn btn-success"
                                             onClick={this.closeModal}>Cancel
@@ -106,7 +106,7 @@ class TableContents extends Component {
 TableContents.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    // onRemove: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired
 
 };
