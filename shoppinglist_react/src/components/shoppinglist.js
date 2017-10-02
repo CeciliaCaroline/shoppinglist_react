@@ -7,22 +7,19 @@ import axios from 'axios';
 let shoppingLists = [];
 
 class ShoppingList extends Component {
+    nextId = 20;
 
     constructor(props,) {
         super(props);
         this.state = {
-            lists: [{
-                name: "name",
-                description: "description",
-                id: 5
-            }],
+            lists: [],
 
         };
 
     }
 
     getLists = () => {
-        return axios.get(`https://infinite-hollows-73486.herokuapp.com/shoppinglist`, {
+        return axios.get(`http://127.0.0.1:5000/shoppinglist/`, {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
         })
             .then(response => {
@@ -32,7 +29,7 @@ class ShoppingList extends Component {
             .catch(err => console.log(err));
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.getLists()
             .then((allshoppingLists) => {
                 shoppingLists = allshoppingLists;
@@ -42,7 +39,10 @@ class ShoppingList extends Component {
     }
 
     onListAdd(name, description) {
-        this.state.lists.push(
+
+        console.log(this.state.lists.Shoppinglists);
+
+        this.state.lists.Shoppinglists.push(
             {
                 name: name,
                 description: description,
@@ -53,13 +53,14 @@ class ShoppingList extends Component {
 
     }
 
-     onListEdit(id, name, description) {
+    onListEdit(id, name, description) {
         shoppingLists[id].name = name;
         shoppingLists[id].description = description;
         this.setState({lists: shoppingLists});
 
     }
-     noBuckets = () => {
+
+    noBuckets = () => {
         return (
             <div className="container-fluid">
                 <Header/>
@@ -78,7 +79,7 @@ class ShoppingList extends Component {
 
 
     render() {
-         if (this.state.lists.length === 0) {
+        if (this.state.lists.length === 0) {
             return this.noBuckets();
         }
         return (
@@ -94,8 +95,7 @@ class ShoppingList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {/*<TableContents  />*/}
-                    {this.state.lists.map((list) => (
+                    {this.state.lists.Shoppinglists.map((list) => (
                         <TableContents
                             name={list.name}
                             description={list.description}
