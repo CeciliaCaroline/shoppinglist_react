@@ -21,7 +21,7 @@ class AddList extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        axios.post(`https://infinite-hollows-73486.herokuapp.com/shoppinglist/`,
+        axios.post(`http://127.0.0.1:5000/shoppinglist/`,
             {
                 name: this.state.name,
                 description: this.state.description,

@@ -14,7 +14,7 @@ class Home extends Component {
                         <div className="  col  ">
                             <div className="card  items d-flex align-content-end text-center">
                                 <div>
-                                    <h2 className="text-welcome">Hi Caroline</h2>
+                                    <h2 className="text-welcome">Welcome to the Shopping list app</h2>
                                 </div>
                                 <section className="mt-5">
                                     <h5>You have 0 Lists</h5>
