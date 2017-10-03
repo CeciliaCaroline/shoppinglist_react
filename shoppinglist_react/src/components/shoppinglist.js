@@ -75,19 +75,22 @@ class ShoppingList extends Component {
         );
     };
 
-    onRemoveList(id) {
-        axios.delete(`http://127.0.0.1:5000/shoppinglist/${id}`, {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+    onRemoveList(e) {
+        e.persist();
+        let event = e;
+        axios.delete(`http://127.0.0.1:5000/shoppinglist/` + event.target.getAttribute('data-id'), {
+            headers: {Authorization: "Bearer " + localStorage.getItem('token'), 'Content-Type': "application/json"}
+
         })
             .then(response => {
                     alert("Are you sure you want to delete this list?");
-                    let index = this.state.lists.Shoppinglists.findIndex(x => x.id === id);
+                    let index = this.state.lists.Shoppinglists.findIndex(x => x.id == event.target.getAttribute('data-id'));
+                    console.log(index);
                     this.state.lists.Shoppinglists.splice(index, 1);
                     this.setState(this.state);
                     console.log(this.state);
                     console.log('deleted');
                     return response.data
-
                 }
             )
             .catch(err => console.log(err));
@@ -115,8 +118,8 @@ class ShoppingList extends Component {
                     <tbody>
                     {this.state.lists.Shoppinglists.map((list) => (
                         <TableContents onRemove={this.onRemoveList.bind(this)}
-                                       name={list.name}
-                                       description={list.description}
+                                       list={list}
+
                                        key={list.id} onEdit={this.onListEdit.bind(this)}/>))}
 
                     </tbody>

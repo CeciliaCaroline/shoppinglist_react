@@ -41,8 +41,8 @@ class TableContents extends Component {
     render() {
         return (
             <tr>
-                <td>{this.props.name}</td>
-                <td>{this.props.description}</td>
+                <td>{this.props.list.name}</td>
+                <td>{this.props.list.description}</td>
                 <td>
                     <button className="text-center" onClick={this.openModal}>EDIT</button>
                     <Modal
@@ -83,7 +83,8 @@ class TableContents extends Component {
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn btn-success" onClick={this.props.onEdit}>Save
+                                    <button type="submit" className="btn btn-success"
+                                            onClick={this.props.onEdit}>Save
                                     </button>
                                     <button type="button" className="btn btn-success"
                                             onClick={this.closeModal}>Cancel
@@ -96,7 +97,8 @@ class TableContents extends Component {
 
                 </td>
                 <td>
-                    <button className="text-right" onClick={this.props.onRemove}>DELETE</button>
+                    <button className="text-right" data-id={this.props.list.id} onClick={this.props.onRemove}>DELETE
+                    </button>
                 </td>
             </tr>
         );
@@ -104,8 +106,8 @@ class TableContents extends Component {
 }
 
 TableContents.propTypes = {
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    list: PropTypes.object.isRequired,
+    // description: PropTypes.string.isRequired,
     onRemove: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired
 
