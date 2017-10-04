@@ -52,7 +52,7 @@ class ShoppingList extends Component {
         this.setState(this.state);
         this.nextId += 1;
 
-    }
+    };
 
     noBuckets = () => {
         return (
@@ -64,16 +64,25 @@ class ShoppingList extends Component {
         );
     };
 
-    onListEdit = (idx) => (evt) => {
-        axios.put(`http://127.0.0.1:5000/shoppinglist/` + evt.target.getAttribute('data-id'), {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+    onListEdit (e) {
+        // e.persist();
+        let event = e;
+        axios.put(`http://127.0.0.1:5000/shoppinglist/40` ,
+
+            {
+                name: this.state.name,
+                description: this.state.description
+            },
+            {headers: {Authorization: "Bearer " + localStorage.getItem('token')}
 
         })
 
             .then(response => {
+                let index = this.state.lists.Shoppinglists.findIndex(x => x.id === 40);
+                console.log(index);
                 this.state.lists.Shoppinglists.map((list, sidx) => {
-                    if (idx !== sidx) return list;
-                    return {...list, name: evt.target.value, description: evt.target.value};
+                    if (index !== sidx) return list;
+                    return {...list};
                 });
 
                 this.setState(this.state);
@@ -100,8 +109,6 @@ class ShoppingList extends Component {
                 }
             )
             .catch(err => console.log(err));
-
-
     }
 
 

@@ -18,7 +18,7 @@ class TableContents extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.onEdit();
+        this.props.onEdit(this.state.name, this.state.description);
         this.setState({
             name: "",
             description: "",
@@ -36,6 +36,12 @@ class TableContents extends Component {
     closeModal() {
         this.setState({modalIsOpen: false});
     }
+    onChange(event) {
+        const obj = {};
+        obj[event.target.name] = event.target.value;
+        this.setState(obj);
+
+    };
 
 
     render() {
@@ -44,7 +50,7 @@ class TableContents extends Component {
                 <td>{this.props.list.name}</td>
                 <td>{this.props.list.description}</td>
                 <td>
-                    <button className="text-center" data-id={this.props.list.id} onClick={this.openModal}>EDIT</button>
+                    <button className="text-center" data={this.props.list.id} onClick={this.openModal}>EDIT</button>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
@@ -62,10 +68,9 @@ class TableContents extends Component {
                                         type="text"
                                         className="form-control"
                                         name="name"
-                                        required
                                         ref='name'
                                         defaultValue={this.props.list.name}
-                                        onChange={event => (this.setState({name: event.target.value}))}
+                                       onChange={this.onChange.bind(this)}
                                     />
                                 </div>
 
@@ -75,15 +80,14 @@ class TableContents extends Component {
                                         type="text"
                                         className="form-control"
                                         name="description"
-                                        required
                                         ref='description'
                                         defaultValue={this.props.list.description}
-                                        onChange={event => (this.setState({description: event.target.value}))}
+                                        onChange={this.onChange.bind(this)}
                                     />
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn btn-success"
+                                    <button type="submit" className="btn btn-success" data={this.props.list.id}
                                             onClick={this.props.onEdit}>Save
                                     </button>
                                     <button type="button" className="btn btn-success"
