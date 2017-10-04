@@ -44,7 +44,7 @@ class TableContents extends Component {
                 <td>{this.props.list.name}</td>
                 <td>{this.props.list.description}</td>
                 <td>
-                    <button className="text-center" onClick={this.openModal}>EDIT</button>
+                    <button className="text-center" data-id={this.props.list.id} onClick={this.openModal}>EDIT</button>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
@@ -64,7 +64,7 @@ class TableContents extends Component {
                                         name="name"
                                         required
                                         ref='name'
-                                        defaultValue={this.props.name}
+                                        defaultValue={this.props.list.name}
                                         onChange={event => (this.setState({name: event.target.value}))}
                                     />
                                 </div>
@@ -77,7 +77,7 @@ class TableContents extends Component {
                                         name="description"
                                         required
                                         ref='description'
-                                        defaultValue={this.props.description}
+                                        defaultValue={this.props.list.description}
                                         onChange={event => (this.setState({description: event.target.value}))}
                                     />
                                 </div>
@@ -107,7 +107,6 @@ class TableContents extends Component {
 
 TableContents.propTypes = {
     list: PropTypes.object.isRequired,
-    // description: PropTypes.string.isRequired,
     onRemove: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired
 

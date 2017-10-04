@@ -54,17 +54,6 @@ class ShoppingList extends Component {
 
     }
 
-
-    onListEdit = (idx) => (evt) => {
-        this.state.lists.Shoppinglists.map((list, sidx) => {
-            if (idx !== sidx) return list;
-            return {...list, name: evt.target.value, description: evt.target.value};
-        });
-
-        this.setState(this.state);
-    };
-
-
     noBuckets = () => {
         return (
             <div className="container-fluid">
@@ -75,11 +64,28 @@ class ShoppingList extends Component {
         );
     };
 
+    onListEdit = (idx) => (evt) => {
+        axios.put(`http://127.0.0.1:5000/shoppinglist/` + evt.target.getAttribute('data-id'), {
+            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+
+        })
+
+            .then(response => {
+                this.state.lists.Shoppinglists.map((list, sidx) => {
+                    if (idx !== sidx) return list;
+                    return {...list, name: evt.target.value, description: evt.target.value};
+                });
+
+                this.setState(this.state);
+                return response.data
+            });
+    };
+
     onRemoveList(e) {
         e.persist();
         let event = e;
         axios.delete(`http://127.0.0.1:5000/shoppinglist/` + event.target.getAttribute('data-id'), {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token'), 'Content-Type': "application/json"}
+            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
 
         })
             .then(response => {
