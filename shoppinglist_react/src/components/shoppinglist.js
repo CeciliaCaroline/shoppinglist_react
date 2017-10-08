@@ -64,21 +64,16 @@ class ShoppingList extends Component {
         );
     };
 
-    onListEdit (e) {
-        // e.persist();
-        let event = e;
-        axios.put(`http://127.0.0.1:5000/shoppinglist/40` ,
+    onListEdit(id, name, description) {
 
+        axios.put(`http://127.0.0.1:5000/shoppinglist/` + id,
             {
-                name: this.state.name,
-                description: this.state.description
-            },
-            {headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-
-        })
+                headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
+                body: {name: name, description: description}
+            })
 
             .then(response => {
-                let index = this.state.lists.Shoppinglists.findIndex(x => x.id === 40);
+                let index = this.state.lists.Shoppinglists.findIndex(x => x.id == id);
                 console.log(index);
                 this.state.lists.Shoppinglists.map((list, sidx) => {
                     if (index !== sidx) return list;

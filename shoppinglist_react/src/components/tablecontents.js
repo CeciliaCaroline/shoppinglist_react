@@ -17,8 +17,9 @@ class TableContents extends Component {
     }
 
     handleSubmit(e) {
+        console.log( e.target )
         e.preventDefault();
-        this.props.onEdit(this.state.name, this.state.description);
+        this.props.onEdit(e.target.getAttribute("data-id2"), this.state.name, this.state.description);
         this.setState({
             name: "",
             description: "",
@@ -59,7 +60,7 @@ class TableContents extends Component {
                     >
 
                         <div className="modal-body">
-                            <form onSubmit={this.handleSubmit} id="editList" className="col-md-offset-4 col-md-4 ">
+                            <form onSubmit={this.handleSubmit} data-id2={this.props.list.id} id="editList" className="col-md-offset-4 col-md-4 ">
                                 <h2 className="text-center">Edit List</h2>
 
                                 <div className="form-group">
@@ -87,8 +88,7 @@ class TableContents extends Component {
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn btn-success" data={this.props.list.id}
-                                            onClick={this.props.onEdit}>Save
+                                    <button type="submit" className="btn btn-success">Save
                                     </button>
                                     <button type="button" className="btn btn-success"
                                             onClick={this.closeModal}>Cancel
