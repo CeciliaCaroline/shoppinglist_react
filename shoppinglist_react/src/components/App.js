@@ -16,12 +16,13 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <div className="App">
+                    <Route exact path="/" component={Register}/>
                     <Route exact path="/auth/register" component={Register}/>
                     <Route path="/auth/login" component={Login}/>
                     <Route path="/auth/reset-password" component={ResetPassword}/>
                     <Route path="/auth/logout" component={Logout}/>
                     <Route path="/home" render={() => <Home />}/>
-                    <Route path="/shoppinglist/" render={() => <ShoppingList />}/>
+                    <Route path="/shoppinglist/" component={ShoppingList}/>
                 </div>
             </BrowserRouter>
         );

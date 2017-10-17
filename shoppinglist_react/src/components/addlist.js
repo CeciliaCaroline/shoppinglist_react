@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import axios from 'axios'
 import Modal from 'react-modal';
 
+const head = {
+  headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+};
 
 class AddList extends Component {
     constructor(props) {
@@ -25,9 +28,7 @@ class AddList extends Component {
             {
                 name: this.state.name,
                 description: this.state.description,
-            }, {
-                headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-            })
+            }, head)
 
 
             .then((response) => {

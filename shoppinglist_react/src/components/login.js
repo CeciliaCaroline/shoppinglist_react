@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 
+let head = {
+    headers: {"Content-Type": "application/json"}
+};
 
 class Login extends Component {
     constructor(props) {
@@ -20,7 +23,7 @@ class Login extends Component {
             {
                 email: this.state.email,
                 password: this.state.password
-            })
+            }, head)
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {

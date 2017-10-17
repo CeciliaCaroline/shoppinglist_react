@@ -101,7 +101,7 @@ class TableContents extends Component {
 
                 </td>
                 <td>
-                    <button className="text-right" data-id={this.props.list.id} onClick={this.props.onRemove}>DELETE
+                    <button className="text-right btn btn-danger" data-id={this.props.list.id} onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
             </tr>
