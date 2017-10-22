@@ -16,14 +16,13 @@ const head = {
 class ShoppingList extends Component {
     nextId = 1;
 
-    constructor(props,) {
+    constructor(props) {
         super(props);
         this.state = {
             lists: [],
             search: '',
-            // itemsPerPage: 1,
             activePage: 1,
-            count: 1,
+            // count: 1,
             isSearch: false,
 
         };
@@ -35,7 +34,7 @@ class ShoppingList extends Component {
         p.append('page', page || 1);
         console.log(`http://127.0.0.1:5000/shoppinglist/?` + p);
 
-        return axios.get(`http://127.0.0.1:5000/shoppinglist/?` + p, head)
+        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p, head)
             .then(response => {
 
                     return response.data
@@ -51,15 +50,15 @@ class ShoppingList extends Component {
                 console.log('data', shoppingLists);
                 this.setState({
                     lists: shoppingLists,
-                    // activePage: shoppingLists.page,
-                    totalItems: shoppingLists.total_count,
+                    activePage: shoppingLists.page,
+                    totalItems: shoppingLists.count,
                     itemsPerPage: shoppingLists.limit,
 
 
-                })
+                });
                 console.log(this.state.totalItems)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
         // console.log(this.state.lists.length)
         console.log(this.state.lists)
     }
@@ -82,27 +81,27 @@ class ShoppingList extends Component {
         this.nextId += 1;
     };
 
-    noBuckets = () => {
+    noLists = () => {
         return (
             <div className="container-fluid">
                 <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
-                <h2 className="text-center ">No bucket Lists</h2>
+                <h2 className="text-center ">No Shopping Lists</h2>
             </div>
         );
     };
 
     onListEdit(id, name, description) {
-
-        axios.put(`http://127.0.0.1:5000/shoppinglist/` + id,
+        axios.put(`http://127.0.0.1:5000/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
             {
                 headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
-                body: {name: name, description: description}
+
+
             })
 
             .then(response => {
                 let index = this.state.lists.Shoppinglists.findIndex(x => x.id == id);
-                console.log(index);
+                // console.log(index);
                 this.state.lists.Shoppinglists.map((list, sidx) => {
                     if (index !== sidx) return list;
                     return {...list};
@@ -111,13 +110,16 @@ class ShoppingList extends Component {
                 this.setState(this.state);
                 return response.data
             });
+
+        this.getShoppingLists(this.state.activePage)
     };
 
     onRemoveList(e) {
         e.persist();
         let event = e;
-        axios.delete(`http://127.0.0.1:5000/shoppinglist/` + event.target.getAttribute('data-id'), {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"}
+        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + event.target.getAttribute('data-id'), {
+            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
+
 
         })
             .then(response => {
@@ -148,7 +150,7 @@ class ShoppingList extends Component {
 
     render() {
         if (this.state.lists.length === 0) {
-            return this.noBuckets();
+            return this.noLists();
         }
         let filteredlists = this.state.lists.Shoppinglists.filter(
             (list) => {
@@ -158,7 +160,7 @@ class ShoppingList extends Component {
             }
         );
 
-        let search = this.state.search
+        let search = this.state.search;
         if (search) {
             console.log('filtered', filteredlists)
         }

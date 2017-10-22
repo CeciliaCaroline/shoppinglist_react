@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios'
 import Modal from 'react-modal';
+import axios from 'axios';
+
 
 const head = {
-  headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+    headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
 };
 
-class AddList extends Component {
+class AddItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
-            description: '',
+            price: '',
             modalIsOpen: false
         };
 
@@ -24,19 +24,27 @@ class AddList extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        axios.post(`http://127.0.0.1:5000/v2/shoppinglist/`,
+        console.log(this.state);
+        this.setState({
+            name: "",
+            price: "",
+            modalIsOpen: false
+
+        });
+
+        axios.post(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.list_id}/items/`,
             {
                 name: this.state.name,
-                description: this.state.description,
+                price: this.state.price,
             }, head)
 
 
             .then((response) => {
                 if (response.status === 201) {
-                    this.props.onAdd(this.state.name, this.state.description);
+                    this.props.onAdd(this.state.name, this.state.price);
                     this.setState({
                         name: "",
-                        description: "",
+                        price: "",
                         modalIsOpen: false
 
                     });
@@ -71,7 +79,7 @@ class AddList extends Component {
 
             <div className="container">
                 <button className=" items btn btn-info" onClick={this.openModal}>Create
-                    New List
+                    New Item
                 </button>
                 <Modal
                     isOpen={this.state.modalIsOpen}
@@ -83,7 +91,7 @@ class AddList extends Component {
 
                     <div className="modal-body">
                         <form onSubmit={this.handleSubmit} id="newList" className="col-md-offset-4 col-md-4 ">
-                            <h2 className="text-center">Add New List</h2>
+                            <h2 className="text-center">Add New Item</h2>
 
                             <div className="form-group">
                                 <label htmlFor="name">Title</label>
@@ -99,14 +107,14 @@ class AddList extends Component {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="description">Description</label>
+                                <label htmlFor="description">Price</label>
                                 <textarea
                                     type="text"
                                     className="form-control"
-                                    name="description"
+                                    name="price"
                                     required
-                                    ref='description'
-                                    value={this.state.description}
+                                    ref='price'
+                                    value={this.state.price}
                                     onChange={this.onChange.bind(this)}
                                 />
                             </div>
@@ -114,7 +122,7 @@ class AddList extends Component {
                             <div>
                                 <button type="submit" className="btn btn-success">Save
                                 </button>
-                                <button type="button" onClick={this.closeModal} className="btn btn-success">Cancel
+                                <button type="botton" onClick={this.closeModal} className="btn btn-success">Cancel
                                 </button>
                             </div>
 
@@ -127,9 +135,7 @@ class AddList extends Component {
 }
 
 
-AddList.propTypes = {
-    onAdd: PropTypes.func.isRequired
-};
 
-export default AddList;
+
+export default AddItem;
 

@@ -3,6 +3,7 @@ import Register from './register';
 import Login from "./login";
 import Home from "./home";
 import ShoppingList from "./shoppinglist";
+import Items from "./items";
 import ResetPassword from "./reset_password";
 import Logout from "./logout";
 import {BrowserRouter, Route} from 'react-router-dom';
@@ -22,7 +23,8 @@ class App extends Component {
                     <Route path="/auth/reset-password" component={ResetPassword}/>
                     <Route path="/auth/logout" component={Logout}/>
                     <Route path="/home" render={() => <Home />}/>
-                    <Route path="/shoppinglist/" component={ShoppingList}/>
+                    <Route exact path="/shoppinglist/" component={ShoppingList}/>
+                    <Route path='/shoppinglist/:id/items/' component={Items}/>
                 </div>
             </BrowserRouter>
         );

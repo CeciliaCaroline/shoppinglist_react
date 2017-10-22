@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import {Link} from 'react-router-dom';
 
 
 class TableContents extends Component {
@@ -17,17 +18,24 @@ class TableContents extends Component {
     }
 
     handleSubmit(e) {
-        console.log( e.target )
+        console.log( e.target );
         e.preventDefault();
         this.props.onEdit(e.target.getAttribute("data-id2"), this.state.name, this.state.description);
         this.setState({
-            name: "",
-            description: "",
+            name: this.state.name,
+            description: this.state.description,
             modalIsOpen: false
 
         });
         console.log(this.state)
     };
+
+    componentDidMount(){
+        this.setState({
+            name: this.props.list.name,
+            description: this.props.list.description
+        })
+    }
 
     openModal() {
         this.setState({modalIsOpen: true});
@@ -46,9 +54,11 @@ class TableContents extends Component {
 
 
     render() {
+        let id = this.props.list.id;
         return (
+
             <tr>
-                <td>{this.props.list.name}</td>
+                <td><Link to={`/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
                 <td>{this.props.list.description}</td>
                 <td>
                     <button className="text-center" data={this.props.list.id} onClick={this.openModal}>EDIT</button>
