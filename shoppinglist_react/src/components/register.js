@@ -5,11 +5,12 @@ import axios from 'axios';
 let head = {
     headers: {"Content-Type": "application/json"}
 };
+
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '', password: '', registered: false
+            email: '', password: '', username: '', registered: false
         };
         this.register = this.register.bind(this);
 
@@ -22,13 +23,14 @@ class Register extends Component {
         axios.post(`http://127.0.0.1:5000/auth/register`,
             {
                 email: this.state.email,
-                password: this.state.password
+                password: this.state.password,
+                username: this.state.username
             }, head)
             .then((response) => {
                 console.log(response);
                 if (response.status === 201) {
                     localStorage.setItem('token', response.data.auth_token);
-                    this.setState({registered: true, email: '', password: ''});
+                    this.setState({registered: true, email: '', password: '', username: ''});
 
                 }
             })
@@ -77,19 +79,19 @@ class Register extends Component {
                     <form onSubmit={this.register}
                           className="container media-body form-background card mx-5 mt-5 col">
                         <h2 className="text-capitalize card-title mt-5">New to Shoppinglist. Register</h2>
-                        {/*<div className="form-group">*/}
-                        {/*<label htmlFor="username">Username</label>*/}
-                        {/*<input*/}
-                        {/*type="text"*/}
-                        {/*className="form-control"*/}
-                        {/*name="username"*/}
-                        {/*required*/}
-                        {/*ref='username'*/}
-                        {/*value={this.state.username}*/}
-                        {/*onChange={this.onChange.bind(this)}*/}
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="username"
+                                required
+                                ref='username'
+                                value={this.state.username}
+                                onChange={this.onChange.bind(this)}
 
-                        {/*/>*/}
-                        {/*</div>*/}
+                            />
+                        </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <input
