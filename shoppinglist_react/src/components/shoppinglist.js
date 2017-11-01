@@ -29,12 +29,17 @@ class ShoppingList extends Component {
 
     }
 
-    getLists(page) {
+    getLists(page, search_string = "") {
         let p = new URLSearchParams();
         p.append('page', page || 1);
+        if (search_string && search_string.trim() !== "") {
+            search_string = "&q=" + search_string
+        } else {
+            search_string = ""
+        }
         console.log(`http://127.0.0.1:5000/shoppinglist/?` + p);
 
-        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p, head)
+        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p + search_string, head)
             .then(response => {
 
                     return response.data
@@ -43,8 +48,8 @@ class ShoppingList extends Component {
             .catch(err => console.log(err));
     };
 
-    getShoppingLists(pageNum) {
-        this.getLists(pageNum)
+    getShoppingLists(pageNum, search_string = "") {
+        this.getLists(pageNum, search_string)
             .then((allshoppingLists) => {
                 shoppingLists = allshoppingLists;
                 console.log('data', shoppingLists);
@@ -53,6 +58,7 @@ class ShoppingList extends Component {
                     activePage: shoppingLists.page,
                     totalItems: shoppingLists.count,
                     itemsPerPage: shoppingLists.limit,
+                    search_count: shoppingLists.search_count,
 
 
                 });
@@ -64,14 +70,14 @@ class ShoppingList extends Component {
     }
 
     componentDidMount() {
-        this.getShoppingLists(1)
+        this.getShoppingLists(1, "")
     }
 
     onListAdd(name, description) {
 
-        console.log(this.state.lists.Shoppinglists);
+        console.log(this.state.lists.ShoppingLists);
 
-        this.state.lists.Shoppinglists.push(
+        this.state.lists.ShoppingLists.push(
             {
                 name: name,
                 description: description,
@@ -100,9 +106,9 @@ class ShoppingList extends Component {
             })
 
             .then(response => {
-                let index = this.state.lists.Shoppinglists.findIndex(x => x.id == id);
+                let index = this.state.lists.ShoppingLists.findIndex(x => x.id == id);
                 // console.log(index);
-                this.state.lists.Shoppinglists.map((list, sidx) => {
+                this.state.lists.ShoppingLists.map((list, sidx) => {
                     if (index !== sidx) return list;
                     return {...list};
                 });
@@ -124,9 +130,9 @@ class ShoppingList extends Component {
         })
             .then(response => {
                     alert("Are you sure you want to delete this list?");
-                    let index = this.state.lists.Shoppinglists.findIndex(x => x.id == event.target.getAttribute('data-id'));
+                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id === event.target.getAttribute('data-id'));
                     console.log(index);
-                    this.state.lists.Shoppinglists.splice(index, 1);
+                    this.state.lists.ShoppingLists.splice(index, 1);
                     this.setState(this.state);
                     console.log(this.state);
                     console.log('deleted');
@@ -141,6 +147,11 @@ class ShoppingList extends Component {
 
     }
 
+    handleSubmit(event) {
+        event.preventDefault();
+        this.getShoppingLists(1, this.state.search)
+    }
+
     handleSelect(e) {
         console.log('handle select', e);
         this.setState({activePage: e});
@@ -152,30 +163,24 @@ class ShoppingList extends Component {
         if (this.state.lists.length === 0) {
             return this.noLists();
         }
-        let filteredlists = this.state.lists.Shoppinglists.filter(
-            (list) => {
 
-                return list.name.indexOf(this.state.search) !== -1;
-
-            }
-        );
-
-        let search = this.state.search;
-        if (search) {
-            console.log('filtered', filteredlists)
-        }
 
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
-        console.log(totalPages);
+
+        let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
+        console.log('total pages',totalPages);
+        console.log('search pages',searchPages);
         console.log('count', this.state.totalItems);
+        console.log('search_count', this.state.search_count);
         console.log('items per page', this.state.itemsPerPage);
+
 
         return (
 
             <div className="container">
                 <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
-                <div className="input-group col-4 offset-8">
+                <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
                     <span className="input-group-addon" id="btnGroupAddon">Search</span>
                     <input
                         type="text"
@@ -186,8 +191,7 @@ class ShoppingList extends Component {
                         value={this.state.search}
                         onChange={this.updateSearch.bind(this)}
                     />
-                </div>
-
+                </form>
                 <table className="table items table-hover table-striped">
                     <thead>
                     <tr>
@@ -197,17 +201,17 @@ class ShoppingList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredlists.map((list) => (
+                    {this.state.lists.ShoppingLists ? this.state.lists.ShoppingLists.map((list) => (
                         <TableContents onRemove={this.onRemoveList.bind(this)}
                                        list={list}
 
-                                       key={list.id} onEdit={this.onListEdit.bind(this)}/>))}
+                                       key={list.id} onEdit={this.onListEdit.bind(this)}/>)) : 'Not Found'}
 
                     </tbody>
                 </table>
                 <Pagination
                     bsSize="medium"
-                    items={totalPages}
+                    items={(this.state.search_count !== 0) ? searchPages : totalPages}
                     activePage={this.state.activePage}
                     onSelect={this.handleSelect.bind(this)}
                 />

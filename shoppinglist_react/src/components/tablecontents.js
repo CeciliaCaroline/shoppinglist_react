@@ -58,10 +58,10 @@ class TableContents extends Component {
         return (
 
             <tr>
-                <td><Link to={`/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
+                <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
                 <td>{this.props.list.description}</td>
                 <td>
-                    <button className="text-center" data={this.props.list.id} onClick={this.openModal}>EDIT</button>
+                    <button className="text-center" data-id2={this.props.list.id} onClick={this.openModal}>EDIT</button>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
