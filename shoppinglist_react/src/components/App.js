@@ -23,8 +23,8 @@ class App extends Component {
                     <Route path="/auth/reset-password" component={ResetPassword}/>
                     <Route path="/auth/logout" component={Logout}/>
                     <Route path="/home" render={() => <Home />}/>
-                    <Route exact path="/shoppinglist/" component={ShoppingList}/>
-                    <Route path='/shoppinglist/:id/items/' component={Items}/>
+                    <Route exact path="/v2/shoppinglist/" component={ShoppingList}/>
+                    <Route path='/v2/shoppinglist/:id/items/' component={Items}/>
                 </div>
             </BrowserRouter>
         );
