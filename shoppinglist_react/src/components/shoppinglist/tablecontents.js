@@ -18,7 +18,7 @@ class TableContents extends Component {
     }
 
     handleSubmit(e) {
-        console.log( e.target );
+        console.log(e.target);
         e.preventDefault();
         this.props.onEdit(e.target.getAttribute("data-id2"), this.state.name, this.state.description);
         this.setState({
@@ -30,7 +30,7 @@ class TableContents extends Component {
         console.log(this.state)
     };
 
-    componentDidMount(){
+    componentDidMount() {
         this.setState({
             name: this.props.list.name,
             description: this.props.list.description
@@ -45,6 +45,7 @@ class TableContents extends Component {
     closeModal() {
         this.setState({modalIsOpen: false});
     }
+
     onChange(event) {
         const obj = {};
         obj[event.target.name] = event.target.value;
@@ -58,10 +59,16 @@ class TableContents extends Component {
         return (
 
             <tr>
-                <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
+
+                    <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
+
                 <td>{this.props.list.description}</td>
+
+
                 <td>
-                    <button className="text-center" data-id2={this.props.list.id} onClick={this.openModal}>EDIT</button>
+                    <button className="text-center btn btn-primary btn-sm" data-id2={this.props.list.id}
+                            onClick={this.openModal}>EDIT
+                    </button>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
@@ -70,7 +77,8 @@ class TableContents extends Component {
                     >
 
                         <div className="modal-body">
-                            <form onSubmit={this.handleSubmit} data-id2={this.props.list.id} id="editList" className="col-md-offset-4 col-md-4 ">
+                            <form onSubmit={this.handleSubmit} data-id2={this.props.list.id} id="editList"
+                                  className="col-md-offset-4 col-md-4 ">
                                 <h2 className="text-center">Edit List</h2>
 
                                 <div className="form-group">
@@ -81,7 +89,7 @@ class TableContents extends Component {
                                         name="name"
                                         ref='name'
                                         defaultValue={this.props.list.name}
-                                       onChange={this.onChange.bind(this)}
+                                        onChange={this.onChange.bind(this)}
                                     />
                                 </div>
 
@@ -111,7 +119,8 @@ class TableContents extends Component {
 
                 </td>
                 <td>
-                    <button className="text-right btn btn-danger" data-id={this.props.list.id} onClick={this.props.onRemove}>DELETE
+                    <button className="text-right btn btn-danger btn-sm" data-id={this.props.list.id}
+                            onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
             </tr>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AddList from "./addlist";
-import Header from "./header";
+import Header from "../header";
 import TableContents from "./tablecontents";
 import axios from 'axios';
 import {Pagination} from 'react-bootstrap';
@@ -14,15 +14,17 @@ const head = {
 
 
 class ShoppingList extends Component {
-    nextId = 1;
 
     constructor(props) {
         super(props);
         this.state = {
-            lists: [],
+            lists: {
+                ShoppingLists: [],
+                count: 0,
+                page: 1
+            },
             search: '',
             activePage: 1,
-            // count: 1,
             isSearch: false,
 
         };
@@ -62,10 +64,9 @@ class ShoppingList extends Component {
 
 
                 });
-                console.log(this.state.totalItems)
+
             })
             .catch(err => console.log(err));
-        // console.log(this.state.lists.length)
         console.log(this.state.lists)
     }
 
@@ -73,18 +74,18 @@ class ShoppingList extends Component {
         this.getShoppingLists(1, "")
     }
 
-    onListAdd(name, description) {
+    onListAdd(name, description, id) {
 
-        console.log(this.state.lists.ShoppingLists);
-
+        console.log('lists', this.state.lists);
+        this.getShoppingLists(1, "");
         this.state.lists.ShoppingLists.push(
             {
                 name: name,
                 description: description,
-                id: this.nextId
+                id: id
             });
         this.setState(this.state);
-        this.nextId += 1;
+
     };
 
     noLists = () => {
@@ -114,10 +115,11 @@ class ShoppingList extends Component {
                 });
 
                 this.setState(this.state);
+                this.getShoppingLists(1, "");
                 return response.data
             });
 
-        this.getShoppingLists(this.state.activePage)
+
     };
 
     onRemoveList(e) {
@@ -130,12 +132,16 @@ class ShoppingList extends Component {
         })
             .then(response => {
                     alert("Are you sure you want to delete this list?");
-                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id === event.target.getAttribute('data-id'));
+                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.target.getAttribute('data-id'));
                     console.log(index);
                     this.state.lists.ShoppingLists.splice(index, 1);
                     this.setState(this.state);
+
+                    if (this.state.lists.ShoppingLists.length !== 0) {
+                        this.getShoppingLists(this.state.activePage)
+                    }
+
                     console.log(this.state);
-                    console.log('deleted');
                     return response.data
                 }
             )
@@ -160,7 +166,7 @@ class ShoppingList extends Component {
 
 
     render() {
-        if (this.state.lists.length === 0) {
+        if (!this.state.lists.ShoppingLists.length) {
             return this.noLists();
         }
 
@@ -168,8 +174,8 @@ class ShoppingList extends Component {
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
 
         let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
-        console.log('total pages',totalPages);
-        console.log('search pages',searchPages);
+        console.log('total pages', totalPages);
+        console.log('search pages', searchPages);
         console.log('count', this.state.totalItems);
         console.log('search_count', this.state.search_count);
         console.log('items per page', this.state.itemsPerPage);
@@ -181,7 +187,7 @@ class ShoppingList extends Component {
                 <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
-                    <span className="input-group-addon" id="btnGroupAddon">Search</span>
+                    <span className="input-group-addon input-group-sm" id="btnGroupAddon">Search</span>
                     <input
                         type="text"
                         className="form-control"
@@ -192,7 +198,7 @@ class ShoppingList extends Component {
                         onChange={this.updateSearch.bind(this)}
                     />
                 </form>
-                <table className="table items table-hover table-striped">
+                <table className="table items table-hover table-striped ">
                     <thead>
                     <tr>
                         <th>Title</th>
@@ -211,7 +217,7 @@ class ShoppingList extends Component {
                 </table>
                 <Pagination
                     bsSize="medium"
-                    items={(this.state.search_count !== 0) ? searchPages : totalPages}
+                    items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
                     onSelect={this.handleSelect.bind(this)}
                 />

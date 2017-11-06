@@ -4,7 +4,7 @@ import axios from 'axios'
 import Modal from 'react-modal';
 
 const head = {
-  headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+    headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
 };
 
 class AddList extends Component {
@@ -32,8 +32,10 @@ class AddList extends Component {
 
 
             .then((response) => {
+
+                let data = response.data;
                 if (response.status === 201) {
-                    this.props.onAdd(this.state.name, this.state.description);
+                    this.props.onAdd(data.name, data.description, data.id);
                     this.setState({
                         name: "",
                         description: "",
@@ -46,6 +48,7 @@ class AddList extends Component {
             .catch((error) => {
                 console.log(error);
             });
+
 
     };
 
@@ -70,7 +73,7 @@ class AddList extends Component {
         return (
 
             <div className="container">
-                <button className=" items btn btn-info" onClick={this.openModal}>Create
+                <button className=" items btn btn-info " onClick={this.openModal}>Create
                     New List
                 </button>
                 <Modal

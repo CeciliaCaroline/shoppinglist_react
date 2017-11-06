@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Header from "./header";
+import Header from "../header";
 import AddItem from './additem';
 import axios from 'axios';
 import ItemContents from "./itemcontents";
@@ -14,16 +14,19 @@ const head = {
 
 
 class Items extends Component {
-    nextId = 1;
+
 
     constructor(props) {
         super(props);
         this.state = {
-            items: [],
+            items: {
+                Shoppinglists_Items: [],
+                count: 0,
+                page: 1
+            },
             search: '',
             activePage: 1,
             list_id: "",
-            // count: 1,
             isSearch: false,
 
         }
@@ -51,19 +54,21 @@ class Items extends Component {
         this.getItems(pageNum, search_string)
             .then((allitems) => {
                 shoppinglists_items = allitems;
-                console.log('data', shoppinglists_items);
-                this.setState({
-                    items: shoppinglists_items,
-                    // activePage: shoppingLists.page,
-                    totalItems: shoppinglists_items.count,
-                    itemsPerPage: shoppinglists_items.limit,
-                    search_count: shoppinglists_items.search_count,
+                    this.setState({
+                        items: shoppinglists_items,
+                        activePage: shoppinglists_items.page,
+                        totalItems: shoppinglists_items.count,
+                        itemsPerPage: shoppinglists_items.limit,
+                        search_count: shoppinglists_items.search_count,
+                        get_count: allitems.count,
 
 
-                });
-                console.log('total', this.state.totalItems);
+                    });
+
+
             })
             .catch(err => console.log(err));
+
 
     }
 
@@ -76,7 +81,6 @@ class Items extends Component {
     onRemoveItem(e) {
         e.persist();
         let event = e;
-        console.log(this.state.items.Shoppinglists_Items);
         axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.target.getAttribute('data-id'), {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
 
@@ -87,12 +91,17 @@ class Items extends Component {
                     let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.target.getAttribute('data-id'));
                     this.state.items.Shoppinglists_Items.splice(index, 1);
                     this.setState(this.state);
-                    console.log(this.state);
-                    console.log('deleted');
+
+                    if (this.state.items.Shoppinglists_Items.length !== 0) {
+                        this.getShoppingListItems(this.state.activePage)
+                    }
+
+                    console.log('delete state', this.state);
                     return response.data
                 }
             )
             .catch(err => console.log(err));
+        //
     }
 
 
@@ -113,6 +122,7 @@ class Items extends Component {
                 });
 
                 this.setState(this.state);
+                this.getShoppingListItems(1, "");
                 return response.data
             });
 
@@ -130,17 +140,19 @@ class Items extends Component {
     };
 
 
-    onItemAdd(name, price) {
+    onItemAdd(name, price, id) {
 
-
+        console.log('items', this.state.items);
+        this.getShoppingListItems(1, "");
         this.state.items.Shoppinglists_Items.push(
             {
                 name: name,
                 price: price,
-                id: this.nextId
+                id: id
             });
         this.setState(this.state);
-        this.nextId += 1
+        // this.getShoppingListItems(this.state.activePage);
+
 
     };
 
@@ -151,28 +163,31 @@ class Items extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.getShoppingListItems(1, this.state.search)
+        this.getShoppingListItems(1, this.state.search);
+        if (!this.state.search_count) {
+            return this.noItems()
+        }
     }
 
 
     handleSelect(e) {
         console.log('handle select', e);
         this.setState({activePage: e});
-        this.getShoppingLists(e)
+        this.getShoppingListItems(e)
     }
 
 
     render() {
 
-        if (this.state.items.Shoppinglists_Items === 0) {
+        if (!this.state.items.Shoppinglists_Items.length) {
             return this.noItems();
         }
 
 
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
         let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
-        console.log('total pages',totalPages);
-        console.log('search pages',searchPages);
+        console.log('total pages', totalPages);
+        console.log('search pages', searchPages);
         console.log('items', this.state.items.Shoppinglists_Items);
         console.log('count', this.state.totalItems);
         console.log('items per page', this.state.itemsPerPage);
@@ -200,7 +215,7 @@ class Items extends Component {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Description</th>
+                        <th>Price</th>
                         <th colSpan="2">Action</th>
                     </tr>
                     </thead>
@@ -215,7 +230,7 @@ class Items extends Component {
                 </table>
                 <Pagination
                     bsSize="medium"
-                    items={(this.state.search_count !== 0) ? searchPages : totalPages}
+                    items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
                     onSelect={this.handleSelect.bind(this)}
                 />
@@ -226,6 +241,5 @@ class Items extends Component {
         );
     }
 }
-
 
 export default Items;

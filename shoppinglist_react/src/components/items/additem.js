@@ -40,8 +40,9 @@ class AddItem extends Component {
 
 
             .then((response) => {
+            let data = response.data;
                 if (response.status === 201) {
-                    this.props.onAdd(this.state.name, this.state.price);
+                    this.props.onAdd(data.name, data.price, data.id);
                     this.setState({
                         name: "",
                         price: "",
@@ -49,11 +50,14 @@ class AddItem extends Component {
 
                     });
                     console.log(this.state)
+
+
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+
 
     };
 
@@ -78,7 +82,7 @@ class AddItem extends Component {
         return (
 
             <div className="container">
-                <button className=" items btn btn-info" onClick={this.openModal}>Create
+                <button className=" items btn btn-info " onClick={this.openModal}>Create
                     New Item
                 </button>
                 <Modal

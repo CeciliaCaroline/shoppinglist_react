@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 
@@ -61,7 +60,9 @@ class ItemContents extends Component {
                 <td> {this.props.list.name}</td>
                 <td>{this.props.list.price}</td>
                 <td>
-                    <button className="text-center" data={this.props.list.id} onClick={this.openModal}>EDIT</button>
+                    <button className="text-center btn btn-primary btn-sm" data={this.props.list.id}
+                            onClick={this.openModal}>EDIT
+                    </button>
                     <Modal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
@@ -99,9 +100,9 @@ class ItemContents extends Component {
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn btn-success">Save
+                                    <button type="submit" className="btn btn-success btn-sm">Save
                                     </button>
-                                    <button type="button" className="btn btn-success"
+                                    <button type="button" className="btn btn-success btn-sm"
                                             onClick={this.closeModal}>Cancel
                                     </button>
                                 </div>
@@ -112,7 +113,7 @@ class ItemContents extends Component {
 
                 </td>
                 <td>
-                    <button className="text-right btn btn-danger" data-id={this.props.list.id}
+                    <button className="text-right btn btn-danger btn-sm" data-id={this.props.list.id}
                             onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
@@ -120,13 +121,6 @@ class ItemContents extends Component {
         );
     }
 }
-
-ItemContents.propTypes = {
-    list: PropTypes.object.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired
-
-};
 
 
 export default ItemContents;

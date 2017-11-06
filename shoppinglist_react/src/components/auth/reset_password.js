@@ -2,40 +2,42 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 
-class ResetPassword extends Component {
+
+const head = {
+    headers: {'Content-Type': 'application/json'}
+};class ResetPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            newpassword: '',
-            confirmpassword: '',
+            new_password: '',
+            confirm_password: '',
+            token: '',
             reset: true,
-        }
+        };
         this.handleReset = this.handleReset.bind(this)
     }
 
     handleReset(e) {
         e.preventDefault();
         // console.log(this.state);
-        axios.post(`http://127.0.0.1:5000/auth/reset-password`,
+        // let token = localStorage.getItem('token');
+        axios.post(`http://127.0.0.1:5000/auth/reset_password/${this.props.match.params.token}`,
             {
                 email: this.state.email,
-                newpassword: this.state.newpassword,
-                confirmpassword: this.state.confirmpassword
-            })
+                new_password: this.state.new_password,
+                confirm_password: this.state.confirm_password
+            }, head)
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {
 
-                    this.setState({reset: false, email: '', newpassword: '', confirmpassword: ''});
-
+                    this.setState({reset: false, email: '', new_password: '', confirm_password: ''});
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
-
-
     }
 
     onChange(event) {
@@ -47,7 +49,7 @@ class ResetPassword extends Component {
 
     render() {
         if (!this.state.reset) {
-            return <Redirect to="/auth/login" />
+            return <Redirect to="/v2/shoppinglist/"/>
         }
         return (
 
@@ -75,7 +77,7 @@ class ResetPassword extends Component {
                         <input
                             type="password"
                             className="form-control"
-                            name="newpassword"
+                            name="new_password"
                             required
                             ref='newpassword'
                             value={this.state.password}
@@ -89,7 +91,7 @@ class ResetPassword extends Component {
                         <input
                             type="password"
                             className="form-control"
-                            name="confirmpassword"
+                            name="confirm_password"
                             required
                             ref='confirmpassword'
                             value={this.state.password}

@@ -17,6 +17,7 @@ class Home extends Component {
                                     <h2 className="text-welcome">Welcome to the Shopping list app</h2>
                                 </div>
                                 <section className="mt-5">
+
                                     <h5>You have 0 Lists</h5>
                                     <p>Click on <em>My Lists</em> to create new lists</p>
 
