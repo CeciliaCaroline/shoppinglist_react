@@ -28,7 +28,7 @@ class Login extends Component {
                 console.log(response);
                 if (response.status === 200) {
                     localStorage.setItem('token', response.data.auth_token);
-                    this.setState({loggedIn: response.data.auth_token, email: '', password: ''});
+                    this.props.history.push("/v2/shoppinglist/");
                     console.log(response.data.auth_token);
                     console.log(this.state)
                 }
@@ -48,9 +48,7 @@ class Login extends Component {
     };
 
     render() {
-        if (this.state.loggedIn) {
-            return <Redirect to="/home"/>
-        }
+
         return (
 
             <div className="container items">
@@ -90,7 +88,8 @@ class Login extends Component {
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
 
                         <p className="text-center"><Link to="/auth/register">Back to Sign Up</Link></p>
-                        <p className="text-center"><Link to="/auth/reset-password">Forgot Password</Link></p>
+                        <p className="text-center"><Link to="/auth/reset-password">Forgot Password?</Link>
+                        </p>
                     </div>
                 </form>
 
