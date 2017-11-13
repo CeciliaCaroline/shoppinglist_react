@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
+import NotificationSystem from 'react-notification-system';
 
 let head = {
     headers: {"Content-Type": "application/json"}
@@ -10,10 +11,17 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '', password: '', loggedIn: false
+            email: '',
+            password: '',
+            loggedIn: false,
+            notificationSystem: null
         };
         this.login = this.login.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     login(e) {
@@ -28,12 +36,39 @@ class Login extends Component {
                 console.log(response);
                 if (response.status === 200) {
                     localStorage.setItem('token', response.data.auth_token);
-                    this.props.history.push("/v2/shoppinglist/");
+                    this.state.notificationSystem.addNotification({
+                        message: 'Login successful',
+                        level: 'success',
+                        position: 'tc'
+                    });
+                    setTimeout(() => {
+                        this.setState({
+                            email: '',
+                            password: '',
+                            loggedIn: true
+                        });
+                    }, 1000);
+
                     console.log(response.data.auth_token);
                     console.log(this.state)
                 }
             })
-            .catch(function (error) {
+            .catch((error) => {
+                if (error.response.status === 403) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'User does not exist or password is incorrect',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+
+                if (error.response.status === 400) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'Missing or wrong email format or password is less than four characters',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
                 console.log(error);
             });
 
@@ -48,11 +83,15 @@ class Login extends Component {
     };
 
     render() {
+        if (this.state.loggedIn) {
+            this.props.history.push("/v2/shoppinglist/");
+        }
 
         return (
 
             <div className="container items">
                 <form onSubmit={this.login} className="container items form-background card mt-5 col-6 ">
+                    <NotificationSystem ref="notificationSystem"/>
                     <h2 className="text-center">Log In</h2>
 
                     <div className="form-group">
