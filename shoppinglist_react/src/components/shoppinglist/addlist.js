@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import axios from 'axios'
 import Modal from 'react-modal';
+import NotificationSystem from 'react-notification-system';
 
 const head = {
     headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
@@ -13,13 +14,18 @@ class AddList extends Component {
         this.state = {
             name: '',
             description: '',
-            modalIsOpen: false
+            modalIsOpen: false,
+
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     handleSubmit(e) {
@@ -37,16 +43,39 @@ class AddList extends Component {
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.description, data.id);
                     this.setState({
-                        name: "",
-                        description: "",
+
                         modalIsOpen: false
 
                     });
+                    this.state.notificationSystem.addNotification({
+                        message: 'Shopping list has been created',
+                        level: 'success',
+                        position: 'tc'
+                    });
+                    this.setState({
+                        name: "",
+                        description: "",
+                    });
+
                     console.log(this.state)
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.status === 403) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'No name or description input. Try again',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+
+                if (error.response.status === 400) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
             });
 
 
@@ -76,6 +105,7 @@ class AddList extends Component {
                 <button className=" items btn btn-info " onClick={this.openModal}>Create
                     New List
                 </button>
+                <NotificationSystem ref="notificationSystem"/>
                 <Modal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
@@ -129,10 +159,6 @@ class AddList extends Component {
     }
 }
 
-
-AddList.propTypes = {
-    onAdd: PropTypes.func.isRequired
-};
 
 export default AddList;
 

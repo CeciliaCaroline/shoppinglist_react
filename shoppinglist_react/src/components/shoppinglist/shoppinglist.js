@@ -4,6 +4,7 @@ import Header from "../header";
 import TableContents from "./tablecontents";
 import axios from 'axios';
 import {Pagination} from 'react-bootstrap';
+import NotificationSystem from 'react-notification-system';
 
 
 let shoppingLists = [];
@@ -26,9 +27,16 @@ class ShoppingList extends Component {
             search: '',
             activePage: 1,
             isSearch: false,
-
+            notificationSystem: null
         };
 
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
+        this.getShoppingLists(1, "");
+        console.log(this.refs.notificationSystem);
+        console.log(this.state)
     }
 
     getLists(page, search_string = "") {
@@ -39,11 +47,9 @@ class ShoppingList extends Component {
         } else {
             search_string = ""
         }
-        console.log(`http://127.0.0.1:5000/shoppinglist/?` + p);
 
         return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p + search_string, head)
             .then(response => {
-
                     return response.data
                 }
             )
@@ -54,7 +60,6 @@ class ShoppingList extends Component {
         this.getLists(pageNum, search_string)
             .then((allshoppingLists) => {
                 shoppingLists = allshoppingLists;
-                console.log('data', shoppingLists);
                 this.setState({
                     lists: shoppingLists,
                     activePage: shoppingLists.page,
@@ -67,12 +72,8 @@ class ShoppingList extends Component {
 
             })
             .catch(err => console.log(err));
-        console.log(this.state.lists)
     }
 
-    componentDidMount() {
-        this.getShoppingLists(1, "")
-    }
 
     onListAdd(name, description, id) {
 
@@ -108,18 +109,30 @@ class ShoppingList extends Component {
 
             .then(response => {
                 let index = this.state.lists.ShoppingLists.findIndex(x => x.id == id);
-                // console.log(index);
                 this.state.lists.ShoppingLists.map((list, sidx) => {
                     if (index !== sidx) return list;
                     return {...list};
+                });
+                this.setState({notificationSystem: this.refs.notificationSystem});
+                this.state.notificationSystem.addNotification({
+                    message: 'Shopping list has been updated',
+                    level: 'success',
                 });
 
                 this.setState(this.state);
                 this.getShoppingLists(1, "");
                 return response.data
+            })
+            .catch((error) => {
+                if (error.response.status === 400) {
+
+                    this.state.notificationSystem.addNotification({
+                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
             });
-
-
     };
 
     onRemoveList(e) {
@@ -133,10 +146,19 @@ class ShoppingList extends Component {
             .then(response => {
                     alert("Are you sure you want to delete this list?");
                     let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.target.getAttribute('data-id'));
-                    console.log(index);
-                    this.state.lists.ShoppingLists.splice(index, 1);
-                    this.setState(this.state);
 
+                    this.state.lists.ShoppingLists.splice(index, 1);
+                    if (response.status === 200) {
+                        this.setState({notificationSystem: this.refs.notificationSystem});
+
+                        this.state.notificationSystem.addNotification({
+                            message: 'Shopping list has been deleted',
+                            level: 'success',
+                            position: 'tc'
+                        });
+                    }
+
+                    this.setState(this.state);
                     if (this.state.lists.ShoppingLists.length !== 0) {
                         this.getShoppingLists(this.state.activePage)
                     }
@@ -186,6 +208,7 @@ class ShoppingList extends Component {
             <div className="container">
                 <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
+                <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
                     <span className="input-group-addon input-group-sm" id="btnGroupAddon">Search</span>
                     <input

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import {Link} from 'react-router-dom';
+import NotificationSystem from 'react-notification-system';
 
 
 class TableContents extends Component {
@@ -10,7 +11,8 @@ class TableContents extends Component {
         this.state = {
             name: '',
             description: '',
-            modalIsOpen: false
+            modalIsOpen: false,
+            notificationSystem: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -18,14 +20,17 @@ class TableContents extends Component {
     }
 
     handleSubmit(e) {
-        console.log(e.target);
         e.preventDefault();
         this.props.onEdit(e.target.getAttribute("data-id2"), this.state.name, this.state.description);
         this.setState({
-            name: this.state.name,
-            description: this.state.description,
+
             modalIsOpen: false
 
+        });
+
+        this.setState({
+            name: this.state.name,
+            description: this.state.description,
         });
         console.log(this.state)
     };
@@ -33,17 +38,26 @@ class TableContents extends Component {
     componentDidMount() {
         this.setState({
             name: this.props.list.name,
-            description: this.props.list.description
+            description: this.props.list.description,
+            notificationSystem: this.refs.notificationSystem
         })
     }
 
     openModal() {
-        this.setState({modalIsOpen: true});
+        this.setState({
+            modalIsOpen: true,
+            notificationSystem: this.refs.notificationSystem
+        });
     }
 
 
     closeModal() {
-        this.setState({modalIsOpen: false});
+        this.setState({
+            modalIsOpen: false,
+            notificationSystem: this.refs.notificationSystem
+        });
+
+
     }
 
     onChange(event) {
@@ -57,10 +71,8 @@ class TableContents extends Component {
     render() {
         let id = this.props.list.id;
         return (
-
             <tr>
-
-                    <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
+                <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link></td>
 
                 <td>{this.props.list.description}</td>
 
@@ -123,6 +135,7 @@ class TableContents extends Component {
                             onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
+                <NotificationSystem ref="notificationSystem"/>
             </tr>
         );
     }
