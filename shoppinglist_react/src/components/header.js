@@ -8,7 +8,7 @@ const Header = (props) => (
                 SHOPPING LIST
             </NavLink >
             <div className="navbar-nav ">
-                <NavLink to="/home"  className="nav-item nav-link" >Home</NavLink >
+                {/*<NavLink to="/home"  className="nav-item nav-link" >Home</NavLink >*/}
                 <NavLink to="/v2/shoppinglist/" className="nav-item nav-link " >My Lists</NavLink >
                 <NavLink to="/auth/logout" className="nav-item nav-link" >Log Out</NavLink >
             </div>
