@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import Modal from 'react-modal';
 
 
+
 class ItemContents extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             price: '',
-            modalIsOpen: false
+            modalIsOpen: false,
+
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -31,17 +33,25 @@ class ItemContents extends Component {
     componentDidMount() {
         this.setState({
             name: this.props.list.name,
-            price: this.props.list.price
+            price: this.props.list.price,
+
         })
     }
 
     openModal() {
-        this.setState({modalIsOpen: true});
+        this.setState({
+            modalIsOpen: true,
+
+        });
+
     }
 
 
     closeModal() {
-        this.setState({modalIsOpen: false});
+        this.setState({
+            modalIsOpen: false,
+
+        });
     }
 
     onChange(event) {
@@ -117,6 +127,7 @@ class ItemContents extends Component {
                             onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
+
             </tr>
         );
     }

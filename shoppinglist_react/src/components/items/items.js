@@ -4,11 +4,12 @@ import AddItem from './additem';
 import axios from 'axios';
 import ItemContents from "./itemcontents";
 import {Pagination} from 'react-bootstrap';
+import NotificationSystem from 'react-notification-system';
 
 
 let shoppinglists_items = [];
 
-const head = {
+let head = {
     headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
 };
 
@@ -28,7 +29,7 @@ class Items extends Component {
             activePage: 1,
             list_id: "",
             isSearch: false,
-
+            notificationSystem: null
         }
     }
 
@@ -54,25 +55,21 @@ class Items extends Component {
         this.getItems(pageNum, search_string)
             .then((allitems) => {
                 shoppinglists_items = allitems;
-                    this.setState({
-                        items: shoppinglists_items,
-                        activePage: shoppinglists_items.page,
-                        totalItems: shoppinglists_items.count,
-                        itemsPerPage: shoppinglists_items.limit,
-                        search_count: shoppinglists_items.search_count,
-                        get_count: allitems.count,
+                this.setState({
+                    items: shoppinglists_items,
+                    activePage: shoppinglists_items.page,
+                    totalItems: shoppinglists_items.count,
+                    itemsPerPage: shoppinglists_items.limit,
+                    search_count: shoppinglists_items.search_count,
+                    get_count: allitems.count,
 
-
-                    });
-
-
+                });
             })
             .catch(err => console.log(err));
-
-
     }
 
     componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
         this.getShoppingListItems(1, "");
         this.setState({list_id: this.props.match.params.id});
 
@@ -84,12 +81,18 @@ class Items extends Component {
         axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.target.getAttribute('data-id'), {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
 
-
         })
             .then(response => {
                     alert("Are you sure you want to delete this Item?");
                     let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.target.getAttribute('data-id'));
                     this.state.items.Shoppinglists_Items.splice(index, 1);
+                    this.setState({notificationSystem: this.refs.notificationSystem});
+
+                    this.state.notificationSystem.addNotification({
+                        message: 'Shopping list item has been deleted',
+                        level: 'success',
+                        position: 'tc'
+                    });
                     this.setState(this.state);
 
                     if (this.state.items.Shoppinglists_Items.length !== 0) {
@@ -101,7 +104,7 @@ class Items extends Component {
                 }
             )
             .catch(err => console.log(err));
-        //
+
     }
 
 
@@ -120,13 +123,30 @@ class Items extends Component {
                     if (index !== sidx) return item;
                     return {...item};
                 });
+                this.setState({notificationSystem: this.refs.notificationSystem});
+                this.state.notificationSystem.addNotification({
+                    message: 'Shopping list item has been edited',
+                    level: 'success',
+                    position: 'tc'
+                });
 
                 this.setState(this.state);
                 this.getShoppingListItems(1, "");
                 return response.data
+            })
+
+            .catch((error) => {
+                if (error.response.status === 400) {
+
+                    this.state.notificationSystem.addNotification({
+                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
             });
 
-        this.getShoppingListItems(this.state.activePage)
+        // this.getShoppingListItems(this.state.activePage)
     }
 
     noItems = () => {
@@ -199,6 +219,7 @@ class Items extends Component {
 
                 <Header/>
                 <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
+                <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
                     <span className="input-group-addon" id="btnGroupAddon">Search</span>
                     <input

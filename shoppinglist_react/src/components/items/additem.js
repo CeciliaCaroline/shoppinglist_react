@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
+import NotificationSystem from 'react-notification-system';
 
 
-const head = {
+let head = {
     headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
 };
 
@@ -20,6 +21,10 @@ class AddItem extends Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     handleSubmit(e) {
@@ -40,7 +45,7 @@ class AddItem extends Component {
 
 
             .then((response) => {
-            let data = response.data;
+                let data = response.data;
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.price, data.id);
                     this.setState({
@@ -49,13 +54,32 @@ class AddItem extends Component {
                         modalIsOpen: false
 
                     });
+                    this.state.notificationSystem.addNotification({
+                        message: 'Shopping list item has been created',
+                        level: 'success',
+                        position: 'tc'
+                    });
                     console.log(this.state)
 
 
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.status === 403) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'No name or description input. Try again',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+
+                if (error.response.status === 400) {
+                    this.state.notificationSystem.addNotification({
+                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
             });
 
 
@@ -85,6 +109,7 @@ class AddItem extends Component {
                 <button className=" items btn btn-info " onClick={this.openModal}>Create
                     New Item
                 </button>
+                <NotificationSystem ref="notificationSystem"/>
                 <Modal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
@@ -137,8 +162,6 @@ class AddItem extends Component {
         );
     }
 }
-
-
 
 
 export default AddItem;
