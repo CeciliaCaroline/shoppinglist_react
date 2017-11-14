@@ -4,7 +4,7 @@ import axios from 'axios'
 import Modal from 'react-modal';
 import NotificationSystem from 'react-notification-system';
 
-const head = {
+let head = {
     headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
 };
 

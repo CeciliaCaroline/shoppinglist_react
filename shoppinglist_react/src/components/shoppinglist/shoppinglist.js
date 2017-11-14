@@ -9,11 +9,6 @@ import NotificationSystem from 'react-notification-system';
 
 let shoppingLists = [];
 
-const head = {
-    headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-};
-
-
 class ShoppingList extends Component {
 
     constructor(props) {
@@ -35,7 +30,6 @@ class ShoppingList extends Component {
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
         this.getShoppingLists(1, "");
-        console.log(this.refs.notificationSystem);
         console.log(this.state)
     }
 
@@ -48,7 +42,10 @@ class ShoppingList extends Component {
             search_string = ""
         }
 
-        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p + search_string, head)
+        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p + search_string,
+            {
+                headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+            })
             .then(response => {
                     return response.data
                 }
@@ -117,6 +114,7 @@ class ShoppingList extends Component {
                 this.state.notificationSystem.addNotification({
                     message: 'Shopping list has been updated',
                     level: 'success',
+                    position: 'tc'
                 });
 
                 this.setState(this.state);
@@ -208,6 +206,7 @@ class ShoppingList extends Component {
             <div className="container">
                 <Header/>
                 <AddList onAdd={this.onListAdd.bind(this)}/>
+
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
                     <span className="input-group-addon input-group-sm" id="btnGroupAddon">Search</span>
