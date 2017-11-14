@@ -35,7 +35,9 @@ class Login extends Component {
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {
+
                     localStorage.setItem('token', response.data.auth_token);
+
                     this.state.notificationSystem.addNotification({
                         message: 'Login successful',
                         level: 'success',
