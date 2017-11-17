@@ -17,16 +17,26 @@ body {
     background: rebeccapurple;
 }
 
-.nav-item{
+.nav-item {
     font-size: .95em;
     color: white;
     text-align: right;
     padding: 1em;
     transition: .2s;
 }
-.items{
+
+.items {
 
     margin-top: 100px;
+}
+
+.pagination > li{
+
+    padding: 6px 12px;
+    color: #337ab7;
+    background-color: #fff;
+    border: 1px solid #ddd;
+
 }
 
 
