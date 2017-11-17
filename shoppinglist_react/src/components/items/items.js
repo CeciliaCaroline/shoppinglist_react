@@ -7,11 +7,9 @@ import {Pagination} from 'react-bootstrap';
 import NotificationSystem from 'react-notification-system';
 
 
+let vex = require('vex-js');
+vex.defaultOptions.className = 'vex-theme-os';
 let shoppinglists_items = [];
-
-let head = {
-    headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-};
 
 
 class Items extends Component {
@@ -42,13 +40,23 @@ class Items extends Component {
             search_string = ""
         }
 
-        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/?` + p + search_string, head)
+        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/?` + p + search_string, {
+            headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+        })
             .then(response => {
-                    console.log('response', response.data);
                     return response.data
                 }
             )
-            .catch(err => console.log(err));
+            .catch((error) => {
+                if (error.response.status === 404) {
+                    this.setState({notificationSystem: this.refs.notificationSystem, });
+                    this.state.notificationSystem.addNotification({
+                        message: 'No shopping lists have been found',
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+            });
     };
 
     getShoppingListItems(pageNum, search_string = "") {
@@ -75,16 +83,37 @@ class Items extends Component {
 
     }
 
+    openModal(event) {
+        let component = this;
+        let e = event.target;
+
+        vex.dialog.defaultOptions.showCloseButton = true;
+        vex.dialog.defaultOptions.escapeButtonCloses = true;
+        vex.dialog.defaultOptions.overlayClosesOnClick = true;
+
+        vex.dialog.buttons.YES.text = 'Yes';
+        vex.dialog.buttons.NO.text = 'No, thank you!';
+
+        vex.dialog.confirm({
+            message: 'Are you sure you want to delete this list?',
+            callback: function (value) {
+                if (value === true) {
+
+                    component.onRemoveItem(e);
+                }
+            }
+        });
+
+    }
+
     onRemoveItem(e) {
-        e.persist();
         let event = e;
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.target.getAttribute('data-id'), {
+        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'), {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
 
         })
             .then(response => {
-                    alert("Are you sure you want to delete this Item?");
-                    let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.target.getAttribute('data-id'));
+                    let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.getAttribute('data-id2'));
                     this.state.items.Shoppinglists_Items.splice(index, 1);
                     this.setState({notificationSystem: this.refs.notificationSystem});
 
@@ -99,7 +128,6 @@ class Items extends Component {
                         this.getShoppingListItems(this.state.activePage)
                     }
 
-                    console.log('delete state', this.state);
                     return response.data
                 }
             )
@@ -112,13 +140,10 @@ class Items extends Component {
         axios.put(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + id, '{ "name": "' + name + '", "price": "' + price + '"}',
             {
                 headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
-
-
             })
 
             .then(response => {
                 let index = this.state.items.Shoppinglists_Items.findIndex(x => x.id == id);
-                // console.log(index);
                 this.state.items.Shoppinglists_Items.map((item, sidx) => {
                     if (index !== sidx) return item;
                     return {...item};
@@ -136,14 +161,26 @@ class Items extends Component {
             })
 
             .catch((error) => {
-                if (error.response.status === 400) {
+                console.log(error.response.data);
+                this.setState({notificationSystem: this.refs.notificationSystem});
 
-                    this.state.notificationSystem.addNotification({
-                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
-                        level: 'error',
-                        position: 'tc'
-                    });
+                if (error.response.status === 400) {
+                    if (error.response.data.message === 'Item price should be an integer') {
+                        this.state.notificationSystem.addNotification({
+                            message: 'Item price should be an integer',
+                            level: 'error',
+                            position: 'tc'
+                        });
+                    } else {
+                        this.state.notificationSystem.addNotification({
+                            message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                            level: 'error',
+                            position: 'tc'
+                        });
+                    }
+
                 }
+
             });
 
         // this.getShoppingListItems(this.state.activePage)
@@ -162,7 +199,6 @@ class Items extends Component {
 
     onItemAdd(name, price, id) {
 
-        console.log('items', this.state.items);
         this.getShoppingListItems(1, "");
         this.state.items.Shoppinglists_Items.push(
             {
@@ -184,14 +220,11 @@ class Items extends Component {
     handleSubmit(event) {
         event.preventDefault();
         this.getShoppingListItems(1, this.state.search);
-        if (!this.state.search_count) {
-            return this.noItems()
-        }
+
     }
 
 
     handleSelect(e) {
-        console.log('handle select', e);
         this.setState({activePage: e});
         this.getShoppingListItems(e)
     }
@@ -203,15 +236,8 @@ class Items extends Component {
             return this.noItems();
         }
 
-
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
         let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
-        console.log('total pages', totalPages);
-        console.log('search pages', searchPages);
-        console.log('items', this.state.items.Shoppinglists_Items);
-        console.log('count', this.state.totalItems);
-        console.log('items per page', this.state.itemsPerPage);
-
 
         return (
 
@@ -221,7 +247,7 @@ class Items extends Component {
                 <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
-                    <span className="input-group-addon" id="btnGroupAddon">Search</span>
+                    <span className="input-group-addon">Search Name</span>
                     <input
                         type="text"
                         className="form-control"
@@ -242,8 +268,9 @@ class Items extends Component {
                     </thead>
                     <tbody>
                     {this.state.items.Shoppinglists_Items ? this.state.items.Shoppinglists_Items.map((item) => (
-                        <ItemContents onRemove={this.onRemoveItem.bind(this)}
+                        <ItemContents onRemove={this.openModal.bind(this)}
                                       list={item}
+                                      id={item.id}
 
                                       key={item.id} onEdit={this.onItemEdit.bind(this)}/>)) : 'No items found'}
 
@@ -254,9 +281,8 @@ class Items extends Component {
                     items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
                     onSelect={this.handleSelect.bind(this)}
+                    className='justify-content-center'
                 />
-
-
             </div>
 
         );

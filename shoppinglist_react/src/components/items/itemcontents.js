@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import Modal from 'react-modal';
 
 
+let vex = require('vex-js');
+vex.defaultOptions.className = 'vex-theme-os';
+
 
 class ItemContents extends Component {
     constructor(props) {
@@ -9,21 +12,19 @@ class ItemContents extends Component {
         this.state = {
             name: '',
             price: '',
-            modalIsOpen: false,
+
 
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
     }
 
-    handleSubmit(e) {
-        console.log(e.target);
-        e.preventDefault();
-        this.props.onEdit(e.target.getAttribute("data-id2"), this.state.name, this.state.price);
+    handleSubmit(name, price) {
+
+        this.props.onEdit(this.props.id, name, price);
         this.setState({
-            name: this.state.name,
-            price: this.state.price,
+            name: name,
+            price: price,
             modalIsOpen: false
 
         });
@@ -39,27 +40,37 @@ class ItemContents extends Component {
     }
 
     openModal() {
-        this.setState({
-            modalIsOpen: true,
 
-        });
+        let component = this;
+        let name1 = component.props.list.name;
+        let price1 = component.props.list.price;
+        let itemId = component.props.list.id;
+
+        vex.dialog.buttons.YES.text = 'Save';
+        vex.dialog.buttons.NO.text = 'Cancel';
+        vex.dialog.open({
+            message: 'Edit Shopping List Item',
+            input: [
+
+                '<input name="name" type="text" value="' + name1 + '" required data-id2="' + itemId + '"   />',
+                '<input name="price" type="text" value="' + price1 + '"  required  />'
+
+
+            ].join(''),
+
+            callback: function (data) {
+                if (!data) {
+                    console.log('Cancelled')
+                } else {
+                    console.log('name', data.name, 'Price', data.price);
+                    component.handleSubmit(data.name, data.price)
+
+                }
+            }
+        })
 
     }
 
-
-    closeModal() {
-        this.setState({
-            modalIsOpen: false,
-
-        });
-    }
-
-    onChange(event) {
-        const obj = {};
-        obj[event.target.name] = event.target.value;
-        this.setState(obj);
-
-    };
 
 
     render() {
@@ -70,60 +81,12 @@ class ItemContents extends Component {
                 <td> {this.props.list.name}</td>
                 <td>{this.props.list.price}</td>
                 <td>
-                    <button className="text-center btn btn-primary btn-sm" data={this.props.list.id}
+                    <button className="text-center btn btn-primary btn-sm"
                             onClick={this.openModal}>EDIT
                     </button>
-                    <Modal
-                        isOpen={this.state.modalIsOpen}
-                        onRequestClose={this.closeModal}
-                        contentLabel="Example Modal"
-                        bsSize="small"
-                    >
-
-                        <div className="modal-body">
-                            <form onSubmit={this.handleSubmit} data-id2={this.props.list.id} id="editList"
-                                  className="col-md-offset-4 col-md-4 ">
-                                <h2 className="text-center">Edit List</h2>
-
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="name"
-                                        ref='name'
-                                        defaultValue={this.props.list.name}
-                                        onChange={this.onChange.bind(this)}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="price">Price</label>
-                                    <textarea
-                                        type="text"
-                                        className="form-control"
-                                        name="price"
-                                        ref='price'
-                                        defaultValue={this.props.list.price}
-                                        onChange={this.onChange.bind(this)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <button type="submit" className="btn btn-success btn-sm">Save
-                                    </button>
-                                    <button type="button" className="btn btn-success btn-sm"
-                                            onClick={this.closeModal}>Cancel
-                                    </button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </Modal>
-
                 </td>
                 <td>
-                    <button className="text-right btn btn-danger btn-sm" data-id={this.props.list.id}
+                    <button className="text-right btn btn-danger btn-sm" data-id2={this.props.list.id}
                             onClick={this.props.onRemove}>DELETE
                     </button>
                 </td>
