@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
 import axios from 'axios'
-import Modal from 'react-modal';
 import NotificationSystem from 'react-notification-system';
 
-let head = {
-    headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-};
+let vex = require('vex-js');
+vex.registerPlugin(require('vex-dialog'));
+vex.defaultOptions.className = 'vex-theme-os';
 
 class AddList extends Component {
     constructor(props) {
@@ -14,27 +12,25 @@ class AddList extends Component {
         this.state = {
             name: '',
             description: '',
-            modalIsOpen: false,
-
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit(name, description) {
+
         axios.post(`http://127.0.0.1:5000/v2/shoppinglist/`,
             {
-                name: this.state.name,
-                description: this.state.description,
-            }, head)
+                name: name,
+                description: description,
+            }, {
+                headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
+            })
 
 
             .then((response) => {
@@ -42,11 +38,6 @@ class AddList extends Component {
                 let data = response.data;
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.description, data.id);
-                    this.setState({
-
-                        modalIsOpen: false
-
-                    });
                     this.state.notificationSystem.addNotification({
                         message: 'Shopping list has been created',
                         level: 'success',
@@ -57,7 +48,6 @@ class AddList extends Component {
                         description: "",
                     });
 
-                    console.log(this.state)
                 }
             })
             .catch((error) => {
@@ -71,30 +61,40 @@ class AddList extends Component {
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        message: 'Wrong name format. Name cannot contain special characters or be empty',
                         level: 'error',
                         position: 'tc'
                     });
                 }
             });
-
-
     };
 
-
     openModal() {
-        this.setState({modalIsOpen: true});
-    }
+
+        let component = this;
+
+        vex.dialog.buttons.YES.text = 'Save';
+        vex.dialog.buttons.NO.text = 'Cancel';
+        vex.dialog.open({
+            message: 'New Shopping List',
+            input: [
+
+                '<input name="name" type="text" placeholder="Enter name" required    />',
+                '<input name="description" type="text" placeholder="Description here" required  />'
 
 
-    closeModal() {
-        this.setState({modalIsOpen: false});
-    }
+            ].join(''),
 
-    onChange(event) {
-        const obj = {};
-        obj[event.target.name] = event.target.value;
-        this.setState(obj);
+            callback: function (data) {
+                if (!data) {
+                    console.log('Cancelled')
+                } else {
+                    component.handleSubmit(data.name, data.description)
+
+                }
+            }
+        })
+
     }
 
 
@@ -102,58 +102,11 @@ class AddList extends Component {
         return (
 
             <div className="container">
-                <button className=" items btn btn-info " onClick={this.openModal}>Create
+                <button className=" items btn btn-primary btn-sm " onClick={this.openModal}>Create
                     New List
                 </button>
                 <NotificationSystem ref="notificationSystem"/>
-                <Modal
-                    isOpen={this.state.modalIsOpen}
-                    onRequestClose={this.closeModal}
-                    contentLabel="Example Modal"
-                    bsSize="small"
-                    aria-labelledby="contained-modal-title-sm"
-                >
 
-                    <div className="modal-body">
-                        <form onSubmit={this.handleSubmit} id="newList" className="col-md-offset-4 col-md-4 ">
-                            <h2 className="text-center">Add New List</h2>
-
-                            <div className="form-group">
-                                <label htmlFor="name">Title</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="name"
-                                    required
-                                    ref='name'
-                                    value={this.state.name}
-                                    onChange={this.onChange.bind(this)}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <textarea
-                                    type="text"
-                                    className="form-control"
-                                    name="description"
-                                    required
-                                    ref='description'
-                                    value={this.state.description}
-                                    onChange={this.onChange.bind(this)}
-                                />
-                            </div>
-
-                            <div>
-                                <button type="submit" className="btn btn-success">Save
-                                </button>
-                                <button type="button" onClick={this.closeModal} className="btn btn-success">Cancel
-                                </button>
-                            </div>
-
-                        </form>
-                    </div>
-                </Modal>
             </div>
         );
     }

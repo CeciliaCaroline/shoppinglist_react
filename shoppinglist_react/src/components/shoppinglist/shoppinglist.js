@@ -7,8 +7,9 @@ import {Pagination} from 'react-bootstrap';
 import NotificationSystem from 'react-notification-system';
 
 
+let vex = require('vex-js');
+vex.defaultOptions.className = 'vex-theme-os';
 let shoppingLists = [];
-
 class ShoppingList extends Component {
 
     constructor(props) {
@@ -30,7 +31,6 @@ class ShoppingList extends Component {
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
         this.getShoppingLists(1, "");
-        console.log(this.state)
     }
 
     getLists(page, search_string = "") {
@@ -50,7 +50,18 @@ class ShoppingList extends Component {
                     return response.data
                 }
             )
-            .catch(err => console.log(err));
+            .catch((error) => {
+                if (error.response.status === 404) {
+                    this.setState({notificationSystem: this.refs.notificationSystem});
+                    this.state.notificationSystem.addNotification({
+                        message: 'No shopping lists have been found',
+                        level: 'error',
+                        position: 'tc',
+                        dismissible: 'true',
+                        autoDismiss: 0
+                    });
+                }
+            });
     };
 
     getShoppingLists(pageNum, search_string = "") {
@@ -64,7 +75,6 @@ class ShoppingList extends Component {
                     itemsPerPage: shoppingLists.limit,
                     search_count: shoppingLists.search_count,
 
-
                 });
 
             })
@@ -73,8 +83,6 @@ class ShoppingList extends Component {
 
 
     onListAdd(name, description, id) {
-
-        console.log('lists', this.state.lists);
         this.getShoppingLists(1, "");
         this.state.lists.ShoppingLists.push(
             {
@@ -133,18 +141,38 @@ class ShoppingList extends Component {
             });
     };
 
+    openModal(event) {
+        let component = this;
+        let e = event.target;
+
+        vex.dialog.defaultOptions.showCloseButton = true;
+        vex.dialog.defaultOptions.escapeButtonCloses = true;
+        vex.dialog.defaultOptions.overlayClosesOnClick = true;
+
+        vex.dialog.buttons.YES.text = 'Yes';
+        vex.dialog.buttons.NO.text = 'No, thank you!';
+
+        vex.dialog.confirm({
+            message: 'Are you sure you want to delete this list?',
+            callback: function (value) {
+                if (value === true) {
+
+                    console.log(e);
+                    component.onRemoveList(e);
+                }
+            }
+        });
+
+    }
+
     onRemoveList(e) {
-        e.persist();
         let event = e;
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + event.target.getAttribute('data-id'), {
+        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + event.getAttribute('data-id'), {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-
-
         })
             .then(response => {
-                    alert("Are you sure you want to delete this list?");
-                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.target.getAttribute('data-id'));
 
+                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.getAttribute('data-id'));
                     this.state.lists.ShoppingLists.splice(index, 1);
                     if (response.status === 200) {
                         this.setState({notificationSystem: this.refs.notificationSystem});
@@ -160,8 +188,6 @@ class ShoppingList extends Component {
                     if (this.state.lists.ShoppingLists.length !== 0) {
                         this.getShoppingLists(this.state.activePage)
                     }
-
-                    console.log(this.state);
                     return response.data
                 }
             )
@@ -176,10 +202,10 @@ class ShoppingList extends Component {
     handleSubmit(event) {
         event.preventDefault();
         this.getShoppingLists(1, this.state.search)
+
     }
 
     handleSelect(e) {
-        console.log('handle select', e);
         this.setState({activePage: e});
         this.getShoppingLists(e)
     }
@@ -192,14 +218,7 @@ class ShoppingList extends Component {
 
 
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
-
         let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
-        console.log('total pages', totalPages);
-        console.log('search pages', searchPages);
-        console.log('count', this.state.totalItems);
-        console.log('search_count', this.state.search_count);
-        console.log('items per page', this.state.itemsPerPage);
-
 
         return (
 
@@ -209,10 +228,10 @@ class ShoppingList extends Component {
 
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
-                    <span className="input-group-addon input-group-sm" id="btnGroupAddon">Search</span>
+                    <span className="input-group-addon input-group-sm form-control form-control-sm">Search Name</span>
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control form-control-sm"
                         name="search"
                         ref='search'
                         aria-describedby="btnGroupAddon"
@@ -230,10 +249,12 @@ class ShoppingList extends Component {
                     </thead>
                     <tbody>
                     {this.state.lists.ShoppingLists ? this.state.lists.ShoppingLists.map((list) => (
-                        <TableContents onRemove={this.onRemoveList.bind(this)}
+                        <TableContents onRemove={this.openModal.bind(this)}
                                        list={list}
 
-                                       key={list.id} onEdit={this.onListEdit.bind(this)}/>)) : 'Not Found'}
+                                       key={list.id} id={list.id}
+                                       onEdit={this.onListEdit.bind(this)}
+                        />)) : 'Not Found'}
 
                     </tbody>
                 </table>
