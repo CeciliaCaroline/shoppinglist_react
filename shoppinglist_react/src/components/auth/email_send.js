@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import NotificationSystem from 'react-notification-system';
 
 let head = {
     headers: {"Content-Type": "application/json"}
@@ -11,8 +12,13 @@ class SendEmail extends Component {
         this.state = {
             email: '',
             reset: true,
+            notificationSystem: null
         };
         this.handleReset = this.handleReset.bind(this)
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     handleReset(e) {
@@ -27,6 +33,12 @@ class SendEmail extends Component {
                 console.log(response);
                 if (response.status === 200) {
 
+                    this.state.notificationSystem.addNotification({
+                        message: 'Email to reset password has been sent',
+                        level: 'success',
+                        position: 'tc'
+                    });
+
                     this.setState({email: ''});
 
                 }
@@ -34,8 +46,6 @@ class SendEmail extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-
-
     }
 
     onChange(event) {
@@ -50,6 +60,7 @@ class SendEmail extends Component {
         return (
 
             <div className="container items">
+                <NotificationSystem ref="notificationSystem"/>
                 <form onSubmit={this.handleReset} className="container items form-background card mt-5 col-6 ">
                     <h2 className="text-center">Reset Password</h2>
 
@@ -63,8 +74,6 @@ class SendEmail extends Component {
                             ref='email'
                             value={this.state.email}
                             onChange={this.onChange.bind(this)}
-
-
                         />
                     </div>
                     <div>

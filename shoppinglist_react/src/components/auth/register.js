@@ -22,7 +22,6 @@ class Register extends Component {
 
     }
 
-
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
@@ -67,12 +66,12 @@ class Register extends Component {
                         level: 'error',
                         position: 'tc'
                     });
-                    // return ;
+
                 }
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Missing or wrong email format or password is less than four characters',
+                        message: 'Missing username or wrong email format or password is less than five characters',
                         level: 'error',
                         position: 'tc'
                     });
@@ -89,7 +88,6 @@ class Register extends Component {
         this.setState(obj);
 
     };
-
 
     render() {
         if (this.state.registered) {

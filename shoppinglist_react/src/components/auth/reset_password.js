@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
+import NotificationSystem from 'react-notification-system';
 
 
 const head = {
     headers: {'Content-Type': 'application/json'}
-};class ResetPassword extends Component {
+};
+
+class ResetPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,8 +17,13 @@ const head = {
             confirm_password: '',
             token: '',
             reset: true,
+            notificationSystem: null
         };
         this.handleReset = this.handleReset.bind(this)
+    }
+
+    componentDidMount() {
+        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     handleReset(e) {
@@ -31,8 +39,21 @@ const head = {
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {
+                    localStorage.setItem('token', this.props.match.params.token);
+                    this.state.notificationSystem.addNotification({
+                        message: 'Password reset successful',
+                        level: 'success',
+                        position: 'tc'
+                    });
+                    setTimeout(() => {
+                        this.setState({
+                            email: '',
+                            new_password: '',
+                            confirm_password: '',
+                            reset: false
+                        });
+                    }, 500);
 
-                    this.setState({reset: false, email: '', new_password: '', confirm_password: ''});
                 }
             })
             .catch(function (error) {
@@ -54,6 +75,7 @@ const head = {
         return (
 
             <div className="container items">
+                <NotificationSystem ref="notificationSystem"/>
                 <form onSubmit={this.handleReset} className="container items form-background card mt-5 col-6 ">
                     <h2 className="text-center">Reset Password</h2>
 
@@ -96,7 +118,6 @@ const head = {
                             ref='confirmpassword'
                             value={this.state.password}
                             onChange={this.onChange.bind(this)}
-
                         />
                     </div>
 

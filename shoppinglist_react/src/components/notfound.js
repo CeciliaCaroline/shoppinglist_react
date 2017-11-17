@@ -1,26 +1,22 @@
 import React, {Component} from 'react';
-import Header from './header';
+import Header from './header'
 
 
-
-class Home extends Component {
-
+class NotFound extends Component {
     render() {
         return (
+
             <div>
                 <Header/>
                 <div className="container">
                     <div className="row">
                         <div className="  col  ">
                             <div className="card  items d-flex align-content-end text-center">
-                                <div>
-                                    <h2 className="text-welcome">Welcome to the Shopping list app</h2>
-                                </div>
-                                <section className="mt-5">
 
-                                    <h5>You have 0 Lists</h5>
-                                    <p>Click on <em>My Lists</em> to create new lists</p>
-
+                                <section className='mt-5 container'>
+                                    <h3 className='text-center'>404 page not found</h3>
+                                    <p className='text-center'>We are sorry but the page you are looking for does not
+                                        exist.</p>
                                 </section>
                             </div>
 
@@ -28,10 +24,10 @@ class Home extends Component {
                     </div>
                 </div>
             </div>
-        );
 
+        )
     }
 }
 
 
-export default Home;
+export default NotFound;

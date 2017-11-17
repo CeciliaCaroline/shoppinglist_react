@@ -66,15 +66,13 @@ class Login extends Component {
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Missing or wrong email format or password is less than four characters',
+                        message: 'Missing or wrong email format or password is less than five characters',
                         level: 'error',
                         position: 'tc'
                     });
                 }
                 console.log(error);
             });
-
-
     }
 
     onChange(event) {
@@ -106,8 +104,6 @@ class Login extends Component {
                             ref='email'
                             value={this.state.email}
                             onChange={this.onChange.bind(this)}
-
-
                         />
                     </div>
 
@@ -125,21 +121,20 @@ class Login extends Component {
                         />
                     </div>
 
-                    <div>
+                    <div className='text-center'>
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
+                        <small className="text-center">Forgot Password? You can reset it <Link to="/auth/reset_password">
+                            here</Link>
+                        </small>
+                        <div className='text-center'>
+                        <small className="text-center justify content-end"><Link to="/auth/register"> Sign Up</Link></small>
+                        </div>
 
-                        <p className="text-center"><Link to="/auth/register">Back to Sign Up</Link></p>
-                        <p className="text-center"><Link to="/auth/reset-password">Forgot Password?</Link>
-                        </p>
                     </div>
                 </form>
-
-
             </div>
-
         );
     }
 }
-
 
 export default Login;
