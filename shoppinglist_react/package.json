@@ -12,7 +12,9 @@
     "react-notification-system": "^0.2.16",
     "react-paginate": "^5.0.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.13"
+    "react-scripts": "1.0.13",
+    "rodal": "^1.6.1",
+    "vex-js": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
