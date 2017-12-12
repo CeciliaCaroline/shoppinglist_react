@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App component renders correctly 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="container mt-5"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="notifications-wrapper"
+        style={Object {}}
+      />
+      <div
+        className="container form-background card mx-5 mt-5 col media card "
+      >
+        <h2
+          className="mt-5 text-capitalize"
+        >
+           Shopping list
+        </h2>
+        <h6
+          className="text-capitalize"
+        >
+          The Best Way To Record and Share your shopping lists
+        </h6>
+        <p
+          className="lead"
+        >
+          This is an application that enables users to record, track and share things they want to spend money on in order to meet their desires.
+        </p>
+        <h4>
+          Create
+        </h4>
+        <p>
+          Create a shopping list with all the items that you want to purchase
+        </p>
+        <h4>
+          Update
+        </h4>
+        <p>
+          Change your mind? Update your list with new items
+        </p>
+        <h4>
+          Share
+        </h4>
+        <p>
+          Share your list with friends and family
+        </p>
+      </div>
+      <form
+        className="container media-body form-background card mx-5 mt-5 col"
+        onSubmit={[Function]}
+      >
+        <h2
+          className="text-capitalize card-title mt-5"
+        >
+          New to Shoppinglist. Register
+        </h2>
+        <div
+          className="form-group"
+        >
+          <label
+            htmlFor="username"
+          >
+            Username
+          </label>
+          <input
+            className="form-control"
+            name="username"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className="form-control"
+            name="email"
+            onChange={[Function]}
+            required={true}
+            type="email"
+            value=""
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            className="form-control"
+            name="password"
+            onChange={[Function]}
+            required={true}
+            type="password"
+            value=""
+          />
+        </div>
+        <div>
+          <button
+            className="btn btn-primary btn-block"
+            onClick={[Function]}
+            type="submit"
+          >
+            Sign up
+          </button>
+          <p
+            className="text-center"
+          >
+            Already have an account??
+            <a
+              href="/auth/login"
+              onClick={[Function]}
+            >
+              Login
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;
