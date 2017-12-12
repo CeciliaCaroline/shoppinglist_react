@@ -30,7 +30,7 @@ class SendEmail extends Component {
 
             }, head)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.status === 200) {
 
                     this.state.notificationSystem.addNotification({
@@ -44,7 +44,7 @@ class SendEmail extends Component {
                 }
             })
             .catch(function (error) {
-                console.log(error);
+                // console.log(error);
             });
     }
 
