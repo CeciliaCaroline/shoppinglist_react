@@ -38,8 +38,9 @@ class AddList extends Component {
                 let data = response.data;
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.description, data.id);
+                    // console.log(response.data);
                     this.state.notificationSystem.addNotification({
-                        message: 'Shopping list has been created',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -53,7 +54,7 @@ class AddList extends Component {
             .catch((error) => {
                 if (error.response.status === 403) {
                     this.state.notificationSystem.addNotification({
-                        message: 'No name or description input. Try again',
+                        message: error.response.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -61,7 +62,7 @@ class AddList extends Component {
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Wrong name format. Name cannot contain special characters or be empty',
+                        message: error.response.message,
                         level: 'error',
                         position: 'tc'
                     });

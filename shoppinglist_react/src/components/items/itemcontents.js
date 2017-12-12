@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Modal from 'react-modal';
 
 
 let vex = require('vex-js');
@@ -29,6 +28,7 @@ class ItemContents extends Component {
 
         });
         console.log(this.state)
+
     };
 
     componentDidMount() {
