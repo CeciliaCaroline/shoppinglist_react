@@ -28,8 +28,6 @@ class ResetPassword extends Component {
 
     handleReset(e) {
         e.preventDefault();
-        // console.log(this.state);
-        // let token = localStorage.getItem('token');
         axios.post(`http://127.0.0.1:5000/auth/reset_password/${this.props.match.params.token}`,
             {
                 email: this.state.email,
@@ -37,11 +35,12 @@ class ResetPassword extends Component {
                 confirm_password: this.state.confirm_password
             }, head)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.status === 200) {
                     localStorage.setItem('token', this.props.match.params.token);
+                    console.log(response.data.message);
                     this.state.notificationSystem.addNotification({
-                        message: 'Password reset successful',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -57,7 +56,7 @@ class ResetPassword extends Component {
                 }
             })
             .catch(function (error) {
-                console.log(error);
+                // console.log(error);
             });
     }
 
