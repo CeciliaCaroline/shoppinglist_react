@@ -4,16 +4,17 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
-    "react": "^15.6.1",
-    "react-alert": "^2.4.0",
-    "react-bootstrap": "^0.31.3",
-    "react-dom": "^15.6.1",
-    "react-modal": "^2.3.2",
+    "moxios": "^0.4.0",
+    "react": "~16.1.1",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "~16.1.1",
     "react-notification-system": "^0.2.16",
     "react-paginate": "^5.0.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.13",
     "rodal": "^1.6.1",
+    "sinon": "^4.1.2",
+    "url-search-params": "^0.10.0",
     "vex-js": "^4.0.1"
   },
   "scripts": {
@@ -23,8 +24,11 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "enzyme": "^3.0.0",
-    "jest": "^21.2.0",
-    "react-addons-test-utils": "^15.6.2"
+    "axios-mock-adapter": "^1.10.0",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "~1.1.0",
+    "jest": "^21.2.1",
+    "react-addons-test-utils": "~15.6.2",
+    "react-test-renderer": "^16.0.0-alpha.12"
   }
 }
