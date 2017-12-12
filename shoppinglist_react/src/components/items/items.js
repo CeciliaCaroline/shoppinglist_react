@@ -11,7 +11,6 @@ let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 let shoppinglists_items = [];
 
-
 class Items extends Component {
 
 
@@ -32,6 +31,7 @@ class Items extends Component {
     }
 
     getItems(page, search_string = "") {
+        let URLSearchParams = require('url-search-params');
         let p = new URLSearchParams();
         p.append('page', page || 1);
         if (search_string && search_string.trim() !== "") {
@@ -49,7 +49,7 @@ class Items extends Component {
             )
             .catch((error) => {
                 if (error.response.status === 404) {
-                    this.setState({notificationSystem: this.refs.notificationSystem, });
+                    this.setState({notificationSystem: this.refs.notificationSystem,});
                     this.state.notificationSystem.addNotification({
                         message: 'No shopping lists have been found',
                         level: 'error',
@@ -65,6 +65,7 @@ class Items extends Component {
                 shoppinglists_items = allitems;
                 this.setState({
                     items: shoppinglists_items,
+                    name: shoppinglists_items.name,
                     activePage: shoppinglists_items.page,
                     totalItems: shoppinglists_items.count,
                     itemsPerPage: shoppinglists_items.limit,
@@ -191,7 +192,7 @@ class Items extends Component {
             <div className="container-fluid">
                 <Header/>
                 <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
-                <h2 className="text-center ">No Shopping List Items</h2>
+                <h2 className="text-center ">No Shopping List Items </h2>
             </div>
         );
     };
@@ -229,7 +230,6 @@ class Items extends Component {
         this.getShoppingListItems(e)
     }
 
-
     render() {
 
         if (!this.state.items.Shoppinglists_Items.length) {
@@ -247,10 +247,10 @@ class Items extends Component {
                 <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
-                    <span className="input-group-addon">Search Name</span>
+                    <span className="input-group-addon form-control form-control-sm">Search Name</span>
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control form-control-sm"
                         name="search"
                         ref='search'
                         aria-describedby="btnGroupAddon"
@@ -258,6 +258,7 @@ class Items extends Component {
                         onChange={this.updateSearch.bind(this)}
                     />
                 </form>
+                <h5>Shopping list - {this.state.name}</h5>
                 <table className="table items table-hover table-striped">
                     <thead>
                     <tr>
