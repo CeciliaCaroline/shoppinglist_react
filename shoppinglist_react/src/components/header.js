@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {NavLink, Link, Redirect} from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -64,12 +64,12 @@ class Header extends Component {
 
             <nav className="navbar navbar-inverse fixed-top bg-faded navbar-toggleable-sm ">
                 <div className="container">
-                    <NavLink to="/v2/shoppinglist/" className="navbar-brand m-o align-content-end mr-auto">
+                    <a href="/v2/shoppinglist/" className="navbar-brand m-o align-content-end mr-auto" onClick={this.pushNavigation}>
                         SHOPPING LIST
-                    </NavLink>
+                    </a>
                     <div className="navbar-nav ">
-                        <NavLink to="/v2/shoppinglist/" className="nav-item nav-link ">My Lists</NavLink>
-                        <Link to='#' className="nav-item nav-link" onClick={this.openModal.bind(this)}>Log Out</Link>
+                        <a href="/v2/shoppinglist/" className="nav-item nav-link active" onClick={this.pushNavigation}>My Lists</a >
+                        <a href='#' className="nav-item nav-link" onClick={this.openModal.bind(this)}>Log Out</a>
                     </div>
                 </div>
             </nav>
