@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
 import AddList from "./addlist";
 import Header from "../header";
 import TableContents from "./tablecontents";
 import axios from 'axios';
 import {Pagination} from 'react-bootstrap';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
+
 
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 let shoppingLists = [];
-class ShoppingList extends Component {
+class ShoppingList extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -34,6 +36,8 @@ class ShoppingList extends Component {
     }
 
     getLists(page, search_string = "") {
+        let URLSearchParams = require('url-search-params');
+
         let p = new URLSearchParams();
         p.append('page', page || 1);
         if (search_string && search_string.trim() !== "") {
@@ -47,6 +51,7 @@ class ShoppingList extends Component {
                 headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
             })
             .then(response => {
+                // console.log(response.data);
                     return response.data
                 }
             )
@@ -83,6 +88,7 @@ class ShoppingList extends Component {
 
 
     onListAdd(name, description, id) {
+        console.log(name, description, id);
         this.getShoppingLists(1, "");
         this.state.lists.ShoppingLists.push(
             {
@@ -120,7 +126,7 @@ class ShoppingList extends Component {
                 });
                 this.setState({notificationSystem: this.refs.notificationSystem});
                 this.state.notificationSystem.addNotification({
-                    message: 'Shopping list has been updated',
+                    message: response.data.message,
                     level: 'success',
                     position: 'tc'
                 });
@@ -157,7 +163,7 @@ class ShoppingList extends Component {
             callback: function (value) {
                 if (value === true) {
 
-                    console.log(e);
+                    // console.log(e);
                     component.onRemoveList(e);
                 }
             }
@@ -228,7 +234,7 @@ class ShoppingList extends Component {
 
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
-                    <span className="input-group-addon input-group-sm form-control form-control-sm">Search Name</span>
+                    <span className="input-group-addon  form-control form-control-sm">Search Name</span>
                     <input
                         type="text"
                         className="form-control form-control-sm"
@@ -252,7 +258,7 @@ class ShoppingList extends Component {
                         <TableContents onRemove={this.openModal.bind(this)}
                                        list={list}
 
-                                       key={list.id} id={list.id}
+                                       key={list.id} id={list.id} onlink={this.pushNavigation}
                                        onEdit={this.onListEdit.bind(this)}
                         />)) : 'Not Found'}
 

@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
+import BaseComponent from '../base';
+
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 
-class TableContents extends Component {
+class TableContents extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -75,7 +76,7 @@ class TableContents extends Component {
         return (
             <tr>
 
-                <td><Link to={`/v2/shoppinglist/${id}/items/`}> {this.props.list.name}</Link>
+                <td><a href={`/v2/shoppinglist/${id}/items/`} onClick={this.props.onlink}> {this.props.list.name}</a>
 
                 </td>
 

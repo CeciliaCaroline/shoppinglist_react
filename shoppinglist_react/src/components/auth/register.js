@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import React from 'react';
+import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
 
 let head = {
     headers: {"Content-Type": "application/json"}
 };
 
-class Register extends Component {
+class Register extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,12 +37,11 @@ class Register extends Component {
                 username: this.state.username
             }, head)
             .then((response) => {
-                console.log('response', response);
-                console.log('response status', response.status);
                 if (response.status === 201) {
+
                     localStorage.setItem('token', response.data.auth_token);
                     this.state.notificationSystem.addNotification({
-                        message: 'You have successfully registered',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -62,7 +62,7 @@ class Register extends Component {
             .catch((error) => {
                 if (error.response.status === 403) {
                     this.state.notificationSystem.addNotification({
-                        message: 'User already exists, Please sign In',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -71,12 +71,11 @@ class Register extends Component {
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Missing username or wrong email format or password is less than five characters',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
                 }
-                console.log(error);
             });
 
     };
@@ -166,7 +165,9 @@ class Register extends Component {
                                 Sign up
                             </button>
 
-                            <p className="text-center">Already have an account??<Link to="/auth/login">Login</Link></p>
+                            <p className="text-center">Already have an account??<a href="/auth/login"
+                                                                                   onClick={this.pushNavigation}>Login</a>
+                            </p>
                         </div>
                     </form>
                 </div>
@@ -176,6 +177,5 @@ class Register extends Component {
         );
     }
 }
-
 
 export default Register;

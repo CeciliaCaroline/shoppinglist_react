@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
+
 
 let head = {
     headers: {"Content-Type": "application/json"}
 };
 
-class Login extends Component {
+class Login extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,20 +27,20 @@ class Login extends Component {
 
     login(e) {
         e.preventDefault();
-        console.log(this.state);
+        // console.log(this.state);
         axios.post(`http://127.0.0.1:5000/auth/login`,
             {
                 email: this.state.email,
                 password: this.state.password
             }, head)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.status === 200) {
 
                     localStorage.setItem('token', response.data.auth_token);
 
                     this.state.notificationSystem.addNotification({
-                        message: 'Login successful',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -51,14 +52,13 @@ class Login extends Component {
                         });
                     }, 1000);
 
-                    console.log(response.data.auth_token);
-                    console.log(this.state)
                 }
             })
             .catch((error) => {
+            // console.log(error.response);
                 if (error.response.status === 403) {
                     this.state.notificationSystem.addNotification({
-                        message: 'User does not exist or password is incorrect',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -66,12 +66,12 @@ class Login extends Component {
 
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Missing or wrong email format or password is less than five characters',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
                 }
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -123,11 +123,11 @@ class Login extends Component {
 
                     <div className='text-center'>
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
-                        <small className="text-center">Forgot Password? You can reset it <Link to="/auth/reset_password">
-                            here</Link>
+                        <small className="text-center">Forgot Password? You can reset it <a href="/auth/reset_password" onClick={this.pushNavigation}>
+                            here</a>
                         </small>
                         <div className='text-center'>
-                        <small className="text-center justify content-end"><Link to="/auth/register"> Sign Up</Link></small>
+                        <small className="text-center justify content-end"><a href="/auth/register" onClick={this.pushNavigation}> Sign Up</a></small>
                         </div>
 
                     </div>
