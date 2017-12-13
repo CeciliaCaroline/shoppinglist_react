@@ -23,16 +23,13 @@ class SendEmail extends Component {
 
     handleReset(e) {
         e.preventDefault();
-        // console.log(this.state);
         axios.post(`http://127.0.0.1:5000/auth/reset_password`,
             {
                 email: this.state.email,
-
             }, head)
-            .then((response) => {
-                // console.log(response);
-                if (response.status === 200) {
 
+            .then((response) => {
+                if (response.status === 200) {
                     this.state.notificationSystem.addNotification({
                         message: 'Email to reset password has been sent',
                         level: 'success',
@@ -44,7 +41,7 @@ class SendEmail extends Component {
                 }
             })
             .catch(function (error) {
-                // console.log(error);
+                console.log(error);
             });
     }
 

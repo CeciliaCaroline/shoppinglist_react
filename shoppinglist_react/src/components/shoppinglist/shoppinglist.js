@@ -37,7 +37,6 @@ class ShoppingList extends BaseComponent {
 
     getLists(page, search_string = "") {
         let URLSearchParams = require('url-search-params');
-
         let p = new URLSearchParams();
         p.append('page', page || 1);
         if (search_string && search_string.trim() !== "") {
@@ -51,7 +50,6 @@ class ShoppingList extends BaseComponent {
                 headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
             })
             .then(response => {
-                // console.log(response.data);
                     return response.data
                 }
             )
@@ -114,8 +112,6 @@ class ShoppingList extends BaseComponent {
         axios.put(`http://127.0.0.1:5000/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
             {
                 headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
-
-
             })
 
             .then(response => {
@@ -137,7 +133,6 @@ class ShoppingList extends BaseComponent {
             })
             .catch((error) => {
                 if (error.response.status === 400) {
-
                     this.state.notificationSystem.addNotification({
                         message: 'Wrong name format. Name cannot contain special characters or start with a space',
                         level: 'error',
@@ -162,8 +157,6 @@ class ShoppingList extends BaseComponent {
             message: 'Are you sure you want to delete this list?',
             callback: function (value) {
                 if (value === true) {
-
-                    // console.log(e);
                     component.onRemoveList(e);
                 }
             }
@@ -182,7 +175,6 @@ class ShoppingList extends BaseComponent {
                     this.state.lists.ShoppingLists.splice(index, 1);
                     if (response.status === 200) {
                         this.setState({notificationSystem: this.refs.notificationSystem});
-
                         this.state.notificationSystem.addNotification({
                             message: 'Shopping list has been deleted',
                             level: 'success',
@@ -270,8 +262,6 @@ class ShoppingList extends BaseComponent {
                     activePage={this.state.activePage}
                     onSelect={this.handleSelect.bind(this)}
                 />
-
-
             </div>
 
         );

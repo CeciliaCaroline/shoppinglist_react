@@ -51,7 +51,6 @@ class Header extends Component {
                 }
             }
         });
-
     }
 
     render() {
@@ -76,6 +75,5 @@ class Header extends Component {
         )
     }
 }
-
 
 export default Header;

@@ -66,7 +66,6 @@ class Register extends BaseComponent {
                         level: 'error',
                         position: 'tc'
                     });
-
                 }
 
                 if (error.response.status === 400) {
@@ -129,7 +128,6 @@ class Register extends BaseComponent {
                                 ref='username'
                                 value={this.state.username}
                                 onChange={this.onChange.bind(this)}
-
                             />
                         </div>
                         <div className="form-group">
@@ -155,7 +153,6 @@ class Register extends BaseComponent {
                                 ref='password'
                                 value={this.state.password}
                                 onChange={this.onChange.bind(this)}
-
                             />
                         </div>
 

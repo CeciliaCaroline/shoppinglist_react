@@ -27,18 +27,14 @@ class Login extends BaseComponent {
 
     login(e) {
         e.preventDefault();
-        // console.log(this.state);
         axios.post(`http://127.0.0.1:5000/auth/login`,
             {
                 email: this.state.email,
                 password: this.state.password
             }, head)
             .then((response) => {
-                // console.log(response);
                 if (response.status === 200) {
-
                     localStorage.setItem('token', response.data.auth_token);
-
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
@@ -55,7 +51,6 @@ class Login extends BaseComponent {
                 }
             })
             .catch((error) => {
-            // console.log(error.response);
                 if (error.response.status === 403) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -71,7 +66,6 @@ class Login extends BaseComponent {
                         position: 'tc'
                     });
                 }
-                // console.log(error);
             });
     }
 
@@ -129,7 +123,6 @@ class Login extends BaseComponent {
                         <div className='text-center'>
                         <small className="text-center justify content-end"><a href="/auth/register" onClick={this.pushNavigation}> Sign Up</a></small>
                         </div>
-
                     </div>
                 </form>
             </div>

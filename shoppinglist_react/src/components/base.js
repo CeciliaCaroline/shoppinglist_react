@@ -10,6 +10,5 @@ class BaseComponent extends Component {
 
 }
 
-
 export default BaseComponent
 

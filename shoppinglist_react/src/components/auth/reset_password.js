@@ -35,7 +35,6 @@ class ResetPassword extends Component {
                 confirm_password: this.state.confirm_password
             }, head)
             .then((response) => {
-                // console.log(response);
                 if (response.status === 200) {
                     localStorage.setItem('token', this.props.match.params.token);
                     console.log(response.data.message);
@@ -56,7 +55,7 @@ class ResetPassword extends Component {
                 }
             })
             .catch(function (error) {
-                // console.log(error);
+                console.log(error);
             });
     }
 
@@ -88,8 +87,6 @@ class ResetPassword extends Component {
                             ref='email'
                             value={this.state.email}
                             onChange={this.onChange.bind(this)}
-
-
                         />
                     </div>
 
@@ -103,7 +100,6 @@ class ResetPassword extends Component {
                             ref='newpassword'
                             value={this.state.password}
                             onChange={this.onChange.bind(this)}
-
                         />
                     </div>
 
@@ -125,8 +121,6 @@ class ResetPassword extends Component {
 
                     </div>
                 </form>
-
-
             </div>
 
         );

@@ -12,8 +12,6 @@ vex.defaultOptions.className = 'vex-theme-os';
 let shoppinglists_items = [];
 
 class Items extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -117,7 +115,6 @@ class Items extends Component {
                     let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.getAttribute('data-id2'));
                     this.state.items.Shoppinglists_Items.splice(index, 1);
                     this.setState({notificationSystem: this.refs.notificationSystem});
-
                     this.state.notificationSystem.addNotification({
                         message: 'Shopping list item has been deleted',
                         level: 'success',
@@ -128,7 +125,6 @@ class Items extends Component {
                     if (this.state.items.Shoppinglists_Items.length !== 0) {
                         this.getShoppingListItems(this.state.activePage)
                     }
-
                     return response.data
                 }
             )
@@ -162,7 +158,6 @@ class Items extends Component {
             })
 
             .catch((error) => {
-                console.log(error.response.data);
                 this.setState({notificationSystem: this.refs.notificationSystem});
 
                 if (error.response.status === 400) {
@@ -179,11 +174,8 @@ class Items extends Component {
                             position: 'tc'
                         });
                     }
-
                 }
-
             });
-
         // this.getShoppingListItems(this.state.activePage)
     }
 
@@ -196,7 +188,6 @@ class Items extends Component {
             </div>
         );
     };
-
 
     onItemAdd(name, price, id) {
 
@@ -215,15 +206,12 @@ class Items extends Component {
 
     updateSearch(event) {
         this.setState({search: event.target.value.substr(0, 20)})
-
     }
 
     handleSubmit(event) {
         event.preventDefault();
         this.getShoppingListItems(1, this.state.search);
-
     }
-
 
     handleSelect(e) {
         this.setState({activePage: e});
@@ -272,9 +260,7 @@ class Items extends Component {
                         <ItemContents onRemove={this.openModal.bind(this)}
                                       list={item}
                                       id={item.id}
-
                                       key={item.id} onEdit={this.onItemEdit.bind(this)}/>)) : 'No items found'}
-
                     </tbody>
                 </table>
                 <Pagination

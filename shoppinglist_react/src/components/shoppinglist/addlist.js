@@ -23,7 +23,6 @@ class AddList extends Component {
     }
 
     handleSubmit(name, description) {
-
         axios.post(`http://127.0.0.1:5000/v2/shoppinglist/`,
             {
                 name: name,
@@ -34,11 +33,9 @@ class AddList extends Component {
 
 
             .then((response) => {
-
                 let data = response.data;
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.description, data.id);
-                    // console.log(response.data);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
@@ -91,7 +88,6 @@ class AddList extends Component {
                     console.log('Cancelled')
                 } else {
                     component.handleSubmit(data.name, data.description)
-
                 }
             }
         })
