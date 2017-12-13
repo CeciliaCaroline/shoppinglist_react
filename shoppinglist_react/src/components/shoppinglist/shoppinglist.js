@@ -106,7 +106,7 @@ class ShoppingList extends BaseComponent {
         );
     };
 
-    onListEdit(id, name, description) {
+    onListEdit = (id, name, description) => {
         axios.put(`http://127.0.0.1:5000/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
             {
                 headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
@@ -170,7 +170,7 @@ class ShoppingList extends BaseComponent {
 
     };
 
-    onRemoveList(e) {
+    onRemoveList = (e) =>  {
         let event = e;
         axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + event.getAttribute('data-id'), {
             headers: {Authorization: "Bearer " + localStorage.getItem('token')}
@@ -267,7 +267,7 @@ class ShoppingList extends BaseComponent {
                         <TableContents onRemove={this.openModal}
                                        list={list}
                                        key={list.id} id={list.id} onlink={this.pushNavigation}
-                                       onEdit={this.onListEdit.bind(this)}
+                                       onEdit={this.onListEdit}
                         />)) : 'Not Found'}
 
                     </tbody>
