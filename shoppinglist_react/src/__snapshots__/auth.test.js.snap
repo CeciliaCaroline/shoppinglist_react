@@ -375,7 +375,6 @@ exports[`Authentication components renders correctly 5`] = `
       </a>
       <a
         className="nav-item nav-link"
-        href="#"
         onClick={[Function]}
       >
         Log Out

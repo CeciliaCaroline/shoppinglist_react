@@ -29,7 +29,6 @@ exports[`Shopping list components renders correctly 1`] = `
         </a>
         <a
           className="nav-item nav-link"
-          href="#"
           onClick={[Function]}
         >
           Log Out
