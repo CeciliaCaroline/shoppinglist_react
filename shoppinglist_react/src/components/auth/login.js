@@ -17,15 +17,13 @@ class Login extends BaseComponent {
             loggedIn: false,
             notificationSystem: null
         };
-        this.login = this.login.bind(this);
-
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    login(e) {
+    login = (e) => {
         e.preventDefault();
         axios.post(`http://127.0.0.1:5000/auth/login`,
             {
@@ -67,9 +65,9 @@ class Login extends BaseComponent {
                     });
                 }
             });
-    }
+    };
 
-    onChange(event) {
+    onChange = (event) => {
         const obj = {};
         obj[event.target.name] = event.target.value;
         this.setState(obj);
@@ -97,7 +95,7 @@ class Login extends BaseComponent {
                             required
                             ref='email'
                             value={this.state.email}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
                         />
                     </div>
 
@@ -110,18 +108,21 @@ class Login extends BaseComponent {
                             required
                             ref='password'
                             value={this.state.password}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
 
                         />
                     </div>
 
                     <div className='text-center'>
                         <button type="submit" className="btn btn-primary btn-block">Log In</button>
-                        <small className="text-center">Forgot Password? You can reset it <a href="/auth/reset_password" onClick={this.pushNavigation}>
+                        <small className="text-center">Forgot Password? You can reset it <a href="/auth/reset_password"
+                                                                                            onClick={this.pushNavigation}>
                             here</a>
                         </small>
                         <div className='text-center'>
-                        <small className="text-center justify content-end"><a href="/auth/register" onClick={this.pushNavigation}> Sign Up</a></small>
+                            <small className="text-center justify content-end"><a href="/auth/register"
+                                                                                  onClick={this.pushNavigation}> Sign
+                                Up</a></small>
                         </div>
                     </div>
                 </form>

@@ -14,14 +14,13 @@ class SendEmail extends Component {
             reset: true,
             notificationSystem: null
         };
-        this.handleReset = this.handleReset.bind(this)
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    handleReset(e) {
+    handleReset = (e) =>  {
         e.preventDefault();
         axios.post(`http://127.0.0.1:5000/auth/reset_password`,
             {
@@ -43,9 +42,9 @@ class SendEmail extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    onChange(event) {
+    onChange = (event) => {
         const obj = {};
         obj[event.target.name] = event.target.value;
         this.setState(obj);
@@ -70,7 +69,7 @@ class SendEmail extends Component {
                             required
                             ref='email'
                             value={this.state.email}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
                         />
                     </div>
                     <div>

@@ -19,14 +19,13 @@ class ResetPassword extends Component {
             reset: true,
             notificationSystem: null
         };
-        this.handleReset = this.handleReset.bind(this)
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    handleReset(e) {
+    handleReset = (e) => {
         e.preventDefault();
         axios.post(`http://127.0.0.1:5000/auth/reset_password/${this.props.match.params.token}`,
             {
@@ -37,7 +36,6 @@ class ResetPassword extends Component {
             .then((response) => {
                 if (response.status === 200) {
                     localStorage.setItem('token', this.props.match.params.token);
-                    console.log(response.data.message);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
@@ -57,9 +55,9 @@ class ResetPassword extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    onChange(event) {
+    onChange = (event) => {
         const obj = {};
         obj[event.target.name] = event.target.value;
         this.setState(obj);
@@ -86,7 +84,7 @@ class ResetPassword extends Component {
                             required
                             ref='email'
                             value={this.state.email}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
                         />
                     </div>
 
@@ -99,7 +97,7 @@ class ResetPassword extends Component {
                             required
                             ref='newpassword'
                             value={this.state.password}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
                         />
                     </div>
 
@@ -112,7 +110,7 @@ class ResetPassword extends Component {
                             required
                             ref='confirmpassword'
                             value={this.state.password}
-                            onChange={this.onChange.bind(this)}
+                            onChange={this.onChange}
                         />
                     </div>
 

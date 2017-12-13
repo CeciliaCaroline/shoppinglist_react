@@ -49,7 +49,7 @@ class Items extends Component {
                 if (error.response.status === 404) {
                     this.setState({notificationSystem: this.refs.notificationSystem,});
                     this.state.notificationSystem.addNotification({
-                        message: 'No shopping lists have been found',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -82,7 +82,7 @@ class Items extends Component {
 
     }
 
-    openModal(event) {
+    openModal = (event) => {
         let component = this;
         let e = event.target;
 
@@ -103,7 +103,7 @@ class Items extends Component {
             }
         });
 
-    }
+    };
 
     onRemoveItem(e) {
         let event = e;
@@ -116,7 +116,7 @@ class Items extends Component {
                     this.state.items.Shoppinglists_Items.splice(index, 1);
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
-                        message: 'Shopping list item has been deleted',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -128,12 +128,20 @@ class Items extends Component {
                     return response.data
                 }
             )
-            .catch(err => console.log(err));
+            .catch((error) => {
+                if (error.response.status === 404) {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+            });
 
     }
 
 
-    onItemEdit(id, name, price) {
+    onItemEdit = (id, name, price) => {
         axios.put(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + id, '{ "name": "' + name + '", "price": "' + price + '"}',
             {
                 headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
@@ -147,7 +155,7 @@ class Items extends Component {
                 });
                 this.setState({notificationSystem: this.refs.notificationSystem});
                 this.state.notificationSystem.addNotification({
-                    message: 'Shopping list item has been edited',
+                    message: response.data.message,
                     level: 'success',
                     position: 'tc'
                 });
@@ -163,13 +171,13 @@ class Items extends Component {
                 if (error.response.status === 400) {
                     if (error.response.data.message === 'Item price should be an integer') {
                         this.state.notificationSystem.addNotification({
-                            message: 'Item price should be an integer',
+                            message: error.response.data.message,
                             level: 'error',
                             position: 'tc'
                         });
                     } else {
                         this.state.notificationSystem.addNotification({
-                            message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                            message: error.response.data.message,
                             level: 'error',
                             position: 'tc'
                         });
@@ -189,7 +197,7 @@ class Items extends Component {
         );
     };
 
-    onItemAdd(name, price, id) {
+    onItemAdd = (name, price, id) => {
 
         this.getShoppingListItems(1, "");
         this.state.items.Shoppinglists_Items.push(
@@ -204,19 +212,19 @@ class Items extends Component {
 
     };
 
-    updateSearch(event) {
+    updateSearch = (event) => {
         this.setState({search: event.target.value.substr(0, 20)})
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault();
         this.getShoppingListItems(1, this.state.search);
-    }
+    };
 
-    handleSelect(e) {
+    handleSelect = (e) => {
         this.setState({activePage: e});
         this.getShoppingListItems(e)
-    }
+    };
 
     render() {
 
@@ -232,9 +240,9 @@ class Items extends Component {
             <div className="container">
 
                 <Header/>
-                <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
+                <AddItem onAdd={this.onItemAdd} list_id={this.state.list_id}/>
                 <NotificationSystem ref="notificationSystem"/>
-                <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
+                <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit}>
                     <span className="input-group-addon form-control form-control-sm">Search Name</span>
                     <input
                         type="text"
@@ -243,7 +251,7 @@ class Items extends Component {
                         ref='search'
                         aria-describedby="btnGroupAddon"
                         value={this.state.search}
-                        onChange={this.updateSearch.bind(this)}
+                        onChange={this.updateSearch}
                     />
                 </form>
                 <h5>Shopping list - {this.state.name}</h5>
@@ -257,17 +265,17 @@ class Items extends Component {
                     </thead>
                     <tbody>
                     {this.state.items.Shoppinglists_Items ? this.state.items.Shoppinglists_Items.map((item) => (
-                        <ItemContents onRemove={this.openModal.bind(this)}
+                        <ItemContents onRemove={this.openModal}
                                       list={item}
                                       id={item.id}
-                                      key={item.id} onEdit={this.onItemEdit.bind(this)}/>)) : 'No items found'}
+                                      key={item.id} onEdit={this.onItemEdit}/>)) : 'No items found'}
                     </tbody>
                 </table>
                 <Pagination
                     bsSize="medium"
                     items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
-                    onSelect={this.handleSelect.bind(this)}
+                    onSelect={this.handleSelect}
                     className='justify-content-center'
                 />
             </div>

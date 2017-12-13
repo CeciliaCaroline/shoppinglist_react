@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 
 let vex = require('vex-js');
@@ -11,21 +11,16 @@ class ItemContents extends Component {
         this.state = {
             name: '',
             price: '',
-
-
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.openModal = this.openModal.bind(this);
     }
 
-    handleSubmit(name, price) {
+    handleSubmit = (name, price) => {
 
         this.props.onEdit(this.props.id, name, price);
         this.setState({
             name: name,
             price: price,
             modalIsOpen: false
-
         });
         console.log(this.state)
 
@@ -35,11 +30,10 @@ class ItemContents extends Component {
         this.setState({
             name: this.props.list.name,
             price: this.props.list.price,
-
         })
     }
 
-    openModal() {
+    openModal = () => {
 
         let component = this;
         let name1 = component.props.list.name;
@@ -55,22 +49,17 @@ class ItemContents extends Component {
                 '<input name="name" type="text" value="' + name1 + '" required data-id2="' + itemId + '"   />',
                 '<input name="price" type="text" value="' + price1 + '"  required  />'
 
-
             ].join(''),
 
-            callback: function (data) {
+            callback: (data) => {
                 if (!data) {
                     console.log('Cancelled')
                 } else {
-                    console.log('name', data.name, 'Price', data.price);
-                    component.handleSubmit(data.name, data.price)
-
+                    this.handleSubmit(data.name, data.price)
                 }
             }
         })
-
-    }
-
+    };
 
 
     render() {

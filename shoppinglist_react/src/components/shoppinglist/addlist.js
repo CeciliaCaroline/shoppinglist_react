@@ -14,15 +14,13 @@ class AddList extends Component {
             description: '',
         };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.openModal = this.openModal.bind(this);
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    handleSubmit(name, description) {
+    handleSubmit = (name, description) => {
         axios.post(`http://127.0.0.1:5000/v2/shoppinglist/`,
             {
                 name: name,
@@ -67,10 +65,7 @@ class AddList extends Component {
             });
     };
 
-    openModal() {
-
-        let component = this;
-
+    openModal = () => {
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';
         vex.dialog.open({
@@ -83,16 +78,16 @@ class AddList extends Component {
 
             ].join(''),
 
-            callback: function (data) {
+            callback: (data) => {
                 if (!data) {
                     console.log('Cancelled')
                 } else {
-                    component.handleSubmit(data.name, data.description)
+                    this.handleSubmit(data.name, data.description)
                 }
             }
         })
 
-    }
+    };
 
 
     render() {

@@ -8,10 +8,10 @@ import NotificationSystem from 'react-notification-system';
 import BaseComponent from '../base';
 
 
-
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 let shoppingLists = [];
+
 class ShoppingList extends BaseComponent {
 
     constructor(props) {
@@ -31,7 +31,6 @@ class ShoppingList extends BaseComponent {
     }
 
     componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
         this.getShoppingLists(1, "");
     }
 
@@ -57,7 +56,7 @@ class ShoppingList extends BaseComponent {
                 if (error.response.status === 404) {
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
-                        message: 'No shopping lists have been found',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc',
                         dismissible: 'true',
@@ -77,7 +76,7 @@ class ShoppingList extends BaseComponent {
                     totalItems: shoppingLists.count,
                     itemsPerPage: shoppingLists.limit,
                     search_count: shoppingLists.search_count,
-
+                    notificationSystem: this.refs.notificationSystem
                 });
 
             })
@@ -85,8 +84,7 @@ class ShoppingList extends BaseComponent {
     }
 
 
-    onListAdd(name, description, id) {
-        console.log(name, description, id);
+    onListAdd = (name, description, id) => {
         this.getShoppingLists(1, "");
         this.state.lists.ShoppingLists.push(
             {
@@ -116,8 +114,8 @@ class ShoppingList extends BaseComponent {
 
             .then(response => {
                 let index = this.state.lists.ShoppingLists.findIndex(x => x.id == id);
-                this.state.lists.ShoppingLists.map((list, sidx) => {
-                    if (index !== sidx) return list;
+                this.state.lists.ShoppingLists.map((list, listid) => {
+                    if (index !== listid) return list;
                     return {...list};
                 });
                 this.setState({notificationSystem: this.refs.notificationSystem});
@@ -134,7 +132,15 @@ class ShoppingList extends BaseComponent {
             .catch((error) => {
                 if (error.response.status === 400) {
                     this.state.notificationSystem.addNotification({
-                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+
+                if (error.response.status === 404) {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -142,7 +148,7 @@ class ShoppingList extends BaseComponent {
             });
     };
 
-    openModal(event) {
+    openModal = (event) => {
         let component = this;
         let e = event.target;
 
@@ -162,7 +168,7 @@ class ShoppingList extends BaseComponent {
             }
         });
 
-    }
+    };
 
     onRemoveList(e) {
         let event = e;
@@ -176,7 +182,7 @@ class ShoppingList extends BaseComponent {
                     if (response.status === 200) {
                         this.setState({notificationSystem: this.refs.notificationSystem});
                         this.state.notificationSystem.addNotification({
-                            message: 'Shopping list has been deleted',
+                            message: response.data.message,
                             level: 'success',
                             position: 'tc'
                         });
@@ -189,24 +195,35 @@ class ShoppingList extends BaseComponent {
                     return response.data
                 }
             )
-            .catch(err => console.log(err));
+            .catch((error) => {
+
+                if (error.response.status === 404) {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+            })
     }
 
-    updateSearch(event) {
+
+
+    updateSearch = (event) => {
         this.setState({search: event.target.value.substr(0, 20)})
 
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault();
         this.getShoppingLists(1, this.state.search)
 
-    }
+    };
 
-    handleSelect(e) {
+    handleSelect = (e) => {
         this.setState({activePage: e});
         this.getShoppingLists(e)
-    }
+    };
 
 
     render() {
@@ -221,11 +238,11 @@ class ShoppingList extends BaseComponent {
         return (
 
             <div className="container">
-                <Header/>
-                <AddList onAdd={this.onListAdd.bind(this)}/>
+                <Header onlink={this.pushNavigation}/>
+                <AddList onAdd={this.onListAdd}/>
 
                 <NotificationSystem ref="notificationSystem"/>
-                <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit.bind(this)}>
+                <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit}>
                     <span className="input-group-addon  form-control form-control-sm">Search Name</span>
                     <input
                         type="text"
@@ -234,7 +251,7 @@ class ShoppingList extends BaseComponent {
                         ref='search'
                         aria-describedby="btnGroupAddon"
                         value={this.state.search}
-                        onChange={this.updateSearch.bind(this)}
+                        onChange={this.updateSearch}
                     />
                 </form>
                 <table className="table items table-hover table-striped ">
@@ -247,9 +264,8 @@ class ShoppingList extends BaseComponent {
                     </thead>
                     <tbody>
                     {this.state.lists.ShoppingLists ? this.state.lists.ShoppingLists.map((list) => (
-                        <TableContents onRemove={this.openModal.bind(this)}
+                        <TableContents onRemove={this.openModal}
                                        list={list}
-
                                        key={list.id} id={list.id} onlink={this.pushNavigation}
                                        onEdit={this.onListEdit.bind(this)}
                         />)) : 'Not Found'}
@@ -260,7 +276,9 @@ class ShoppingList extends BaseComponent {
                     bsSize="medium"
                     items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
-                    onSelect={this.handleSelect.bind(this)}
+                    onSelect={this.handleSelect}
+                    className='justify-content-center'
+
                 />
             </div>
 

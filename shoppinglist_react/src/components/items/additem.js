@@ -14,17 +14,13 @@ class AddItem extends Component {
             price: '',
         };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.openModal = this.openModal.bind(this);
-
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-    handleSubmit(name, price) {
-
+    handleSubmit = (name, price) => {
 
         axios.post(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.list_id}/items/`,
             {
@@ -33,7 +29,6 @@ class AddItem extends Component {
             }, {
                 headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
             })
-
 
             .then((response) => {
                 let data = response.data;
@@ -46,7 +41,7 @@ class AddItem extends Component {
 
                     });
                     this.state.notificationSystem.addNotification({
-                        message: 'Shopping list item has been created',
+                        message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
@@ -57,13 +52,13 @@ class AddItem extends Component {
             .catch((error) => {
                 if (error.response.data.message === 'Item price should be an integer') {
                     this.state.notificationSystem.addNotification({
-                        message: 'Item price should be an integer',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
                 } else {
                     this.state.notificationSystem.addNotification({
-                        message: 'Wrong name format. Name cannot contain special characters or start with a space',
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });
@@ -74,10 +69,7 @@ class AddItem extends Component {
     };
 
 
-    openModal() {
-
-        let component = this;
-
+    openModal = () => {
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';
         vex.dialog.open({
@@ -90,17 +82,17 @@ class AddItem extends Component {
 
             ].join(''),
 
-            callback: function (data) {
+            callback: (data) => {
                 if (!data) {
                     console.log('Cancelled')
                 } else {
-                    component.handleSubmit(data.name, data.price)
+                    this.handleSubmit(data.name, data.price)
 
                 }
             }
         })
 
-    }
+    };
 
 
     render() {

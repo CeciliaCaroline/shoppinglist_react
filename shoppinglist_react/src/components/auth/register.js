@@ -19,16 +19,13 @@ class Register extends BaseComponent {
             notificationSystem: null,
             isLoading: false
         };
-        this.register = this.register.bind(this);
-
     }
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
-
-    register(e) {
+    register = (e) => {
         e.preventDefault();
         axios.post(`http://127.0.0.1:5000/auth/register`,
             {
@@ -38,7 +35,6 @@ class Register extends BaseComponent {
             }, head)
             .then((response) => {
                 if (response.status === 201) {
-
                     localStorage.setItem('token', response.data.auth_token);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
@@ -76,11 +72,10 @@ class Register extends BaseComponent {
                     });
                 }
             });
-
     };
 
 
-    onChange(event) {
+    onChange = (event) => {
         const obj = {};
         obj[event.target.name] = event.target.value;
         this.setState(obj);
@@ -127,7 +122,7 @@ class Register extends BaseComponent {
                                 required
                                 ref='username'
                                 value={this.state.username}
-                                onChange={this.onChange.bind(this)}
+                                onChange={this.onChange}
                             />
                         </div>
                         <div className="form-group">
@@ -139,7 +134,7 @@ class Register extends BaseComponent {
                                 required
                                 ref='email'
                                 value={this.state.email}
-                                onChange={this.onChange.bind(this)}
+                                onChange={this.onChange}
                             />
                         </div>
 
@@ -152,7 +147,7 @@ class Register extends BaseComponent {
                                 required
                                 ref='password'
                                 value={this.state.password}
-                                onChange={this.onChange.bind(this)}
+                                onChange={this.onChange}
                             />
                         </div>
 
@@ -169,7 +164,6 @@ class Register extends BaseComponent {
                     </form>
                 </div>
             </div>
-
 
         );
     }

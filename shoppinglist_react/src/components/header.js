@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
-import { Redirect} from 'react-router-dom';
+import React from 'react';
+import {Redirect} from 'react-router-dom';
 import axios from 'axios';
+import BaseComponent from './base';
 
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 
 
-class Header extends Component {
+class Header extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,8 +34,7 @@ class Header extends Component {
             });
     }
 
-    openModal() {
-        let component = this;
+    logoutModal = () => {
 
         vex.dialog.defaultOptions.showCloseButton = true;
         vex.dialog.defaultOptions.escapeButtonCloses = true;
@@ -45,17 +45,17 @@ class Header extends Component {
 
         vex.dialog.confirm({
             message: 'Are you sure you want to log out?',
-            callback: function (value) {
+            callback: (value) => {
                 if (value === true) {
-                    component.logout();
+                    this.logout();
                 }
             }
         });
-    }
+    };
 
     render() {
 
-         if (this.state.loggedOut) {
+        if (this.state.loggedOut) {
             return <Redirect to="/auth/login"/>
 
         }
@@ -63,12 +63,14 @@ class Header extends Component {
 
             <nav className="navbar navbar-inverse fixed-top bg-faded navbar-toggleable-sm ">
                 <div className="container">
-                    <a href="/v2/shoppinglist/" className="navbar-brand m-o align-content-end mr-auto" onClick={this.pushNavigation}>
+                    <a href="/v2/shoppinglist/" className="navbar-brand m-o align-content-end mr-auto"
+                       onClick={this.props.onlink}>
                         SHOPPING LIST
                     </a>
                     <div className="navbar-nav ">
-                        <a href="/v2/shoppinglist/" className="nav-item nav-link active" onClick={this.pushNavigation}>My Lists</a >
-                        <a href='#' className="nav-item nav-link" onClick={this.openModal.bind(this)}>Log Out</a>
+                        <a href="/v2/shoppinglist/" className="nav-item nav-link active" onClick={this.props.onlink}>My
+                            Lists</a>
+                        <a className="nav-item nav-link" onClick={this.logoutModal}>Log Out</a>
                     </div>
                 </div>
             </nav>
