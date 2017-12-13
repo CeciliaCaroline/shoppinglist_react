@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 import {mount, shallow} from 'enzyme';
 import React from 'react';
-import "./utils";
+import "./setup_test";
 import ResetPassword from './components/auth/reset_password'
 
 

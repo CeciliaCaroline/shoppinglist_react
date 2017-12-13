@@ -5,7 +5,7 @@ import expect from 'expect';
 import App from "./components/App";
 import renderer from 'react-test-renderer';
 import {BrowserRouter} from 'react-router-dom';
-import "./utils";
+import "./setup_test";
 
 
 // configure({adapter: new Adapter()});

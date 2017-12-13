@@ -2,7 +2,7 @@ import moxios from 'moxios';
 import {mount, configure,shallow} from 'enzyme';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import "./utils";
+import "./setup_test";
 import Login from './components/auth/login'
 
 

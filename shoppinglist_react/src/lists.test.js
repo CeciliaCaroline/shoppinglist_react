@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import ShoppingList from "./components/shoppinglist/shoppinglist";
 import AddList from "./components/shoppinglist/addlist";
 import TableContents from "./components/shoppinglist/tablecontents";
-import "./utils"
+import "./setup_test"
 
 
 

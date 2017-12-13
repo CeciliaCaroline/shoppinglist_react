@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 import {mount, shallow} from 'enzyme';
 import React from 'react';
-import "./utils";
+import "./setup_test";
 import ShoppingList from './components/shoppinglist/shoppinglist';
 import AddList from "./components/shoppinglist/addlist";
 
