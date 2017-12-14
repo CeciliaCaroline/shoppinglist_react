@@ -56,8 +56,7 @@ class Header extends BaseComponent {
     render() {
 
         if (this.state.loggedOut) {
-            return <Redirect to="/auth/login"/>
-
+            this.props.history.push("/auth/login");
         }
         return (
 
