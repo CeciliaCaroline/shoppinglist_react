@@ -47,11 +47,8 @@ class TableContents extends BaseComponent {
             ].join(''),
 
             callback: (data) => {
-                if (!data) {
-                    console.log('Cancelled')
-                } else {
+                if (data) {
                     this.handleSubmit(data.name, data.description)
-
                 }
             }
         })
