@@ -1,5 +1,4 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import BaseComponent from './base';
 
@@ -17,10 +16,8 @@ class Header extends BaseComponent {
         };
     }
 
-    logout() {
-        axios.post(`http://127.0.0.1:5000/auth/logout`, {}, {
-                headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-            }
+    logout = () => {
+        axios.post(`${this.baseURL}/auth/logout`, {}, this.authHeader()
         )
             .then((response) => {
                 if (response.status === 200) {
