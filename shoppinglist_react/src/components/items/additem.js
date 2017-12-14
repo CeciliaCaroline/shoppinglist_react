@@ -45,13 +45,7 @@ class AddItem extends BaseComponent {
                 }
             })
             .catch((error) => {
-                if (error.response.data.message === 'Item price should be an integer') {
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.data.message,
-                        level: 'error',
-                        position: 'tc'
-                    });
-                } else {
+                if (error.response.data.message ) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
@@ -76,11 +70,8 @@ class AddItem extends BaseComponent {
             ].join(''),
 
             callback: (data) => {
-                if (!data) {
-                    console.log('Cancelled')
-                } else {
+                if (data) {
                     this.handleSubmit(data.name, data.price)
-
                 }
             }
         })

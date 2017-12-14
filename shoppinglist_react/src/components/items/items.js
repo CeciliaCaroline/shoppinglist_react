@@ -46,7 +46,7 @@ class Items extends Component {
                 }
             )
             .catch((error) => {
-                if (error.response.status === 404) {
+                if (error.response.data.message) {
                     this.setState({notificationSystem: this.refs.notificationSystem,});
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -72,8 +72,17 @@ class Items extends Component {
 
                 });
             })
-            .catch(err => console.log(err));
-    }
+            .catch((error) => {
+                if (error.response.data.message) {
+                    this.setState({notificationSystem: this.refs.notificationSystem,});
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
+            });
+    };
 
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
@@ -129,7 +138,8 @@ class Items extends Component {
                 }
             )
             .catch((error) => {
-                if (error.response.status === 404) {
+                this.setState({notificationSystem: this.refs.notificationSystem});
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
@@ -166,26 +176,17 @@ class Items extends Component {
             })
 
             .catch((error) => {
+                console.log(error.response.data.message);
                 this.setState({notificationSystem: this.refs.notificationSystem});
-
-                if (error.response.status === 400) {
-                    if (error.response.data.message === 'Item price should be an integer') {
-                        this.state.notificationSystem.addNotification({
-                            message: error.response.data.message,
-                            level: 'error',
-                            position: 'tc'
-                        });
-                    } else {
-                        this.state.notificationSystem.addNotification({
-                            message: error.response.data.message,
-                            level: 'error',
-                            position: 'tc'
-                        });
-                    }
+                if (error.response.data.message) {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
                 }
             });
-        // this.getShoppingListItems(this.state.activePage)
-    }
+    };
 
     noItems = () => {
         return (
