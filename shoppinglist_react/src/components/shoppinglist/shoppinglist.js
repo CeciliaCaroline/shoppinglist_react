@@ -27,7 +27,6 @@ class ShoppingList extends BaseComponent {
             isSearch: false,
             notificationSystem: null
         };
-
     }
 
     componentDidMount() {
@@ -91,14 +90,13 @@ class ShoppingList extends BaseComponent {
                 id: id
             });
         this.setState(this.state);
-
     };
 
     noLists = () => {
         return (
             <div className="container-fluid">
                 <Header/>
-                <AddList onAdd={this.onListAdd.bind(this)}/>
+                <AddList onAdd={this.onListAdd}/>
                 <h2 className="text-center ">No Shopping Lists</h2>
             </div>
         );
@@ -145,7 +143,6 @@ class ShoppingList extends BaseComponent {
     };
 
     openModal = (event) => {
-        let component = this;
         let e = event.target;
 
         vex.dialog.defaultOptions.showCloseButton = true;
@@ -157,9 +154,9 @@ class ShoppingList extends BaseComponent {
 
         vex.dialog.confirm({
             message: 'Are you sure you want to delete this list?',
-            callback: function (value) {
+            callback: (value) => {
                 if (value === true) {
-                    component.onRemoveList(e);
+                    this.onRemoveList(e);
                 }
             }
         });
@@ -198,8 +195,7 @@ class ShoppingList extends BaseComponent {
                     });
                 }
             })
-    }
-
+    };
 
 
     updateSearch = (event) => {
@@ -213,7 +209,7 @@ class ShoppingList extends BaseComponent {
 
     };
 
-    handleSelect = (e) => {
+    handlePageSelect = (e) => {
         this.setState({activePage: e});
         this.getShoppingLists(e)
     };
@@ -223,7 +219,6 @@ class ShoppingList extends BaseComponent {
         if (!this.state.lists.ShoppingLists.length) {
             return this.noLists();
         }
-
 
         let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
         let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
@@ -269,9 +264,8 @@ class ShoppingList extends BaseComponent {
                     bsSize="medium"
                     items={this.state.search_count ? searchPages : totalPages}
                     activePage={this.state.activePage}
-                    onSelect={this.handleSelect}
+                    onSelect={this.handlePageSelect}
                     className='justify-content-center'
-
                 />
             </div>
 
