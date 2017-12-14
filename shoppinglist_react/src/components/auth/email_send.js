@@ -32,7 +32,7 @@ class SendEmail extends Component {
                 }
             })
             .catch( (error) => {
-                if (error.response.message {
+                if (error.response.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
