@@ -5,9 +5,6 @@ import "./setup_test";
 import Register from './components/auth/register'
 
 
-
-
-
 describe('mocking register requests', function () {
     describe('notification sent after registration', function () {
         beforeEach(function () {
