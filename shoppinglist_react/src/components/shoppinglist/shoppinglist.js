@@ -44,10 +44,8 @@ class ShoppingList extends BaseComponent {
             search_string = ""
         }
 
-        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/?` + p + search_string,
-            {
-                headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-            })
+        return axios.get(`${this.baseURL}/v2/shoppinglist/?` + p + search_string,
+            this.authHeader())
             .then(response => {
                     return response.data
                 }
@@ -107,10 +105,8 @@ class ShoppingList extends BaseComponent {
     };
 
     onListEdit = (id, name, description) => {
-        axios.put(`http://127.0.0.1:5000/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
-            {
-                headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
-            })
+        axios.put(`${this.baseURL}/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
+            this.authHeader())
 
             .then(response => {
                 let index = this.state.lists.ShoppingLists.findIndex(x => x.id == id);
@@ -170,11 +166,8 @@ class ShoppingList extends BaseComponent {
 
     };
 
-    onRemoveList = (e) =>  {
-        let event = e;
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + event.getAttribute('data-id'), {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-        })
+    onRemoveList = (e) => {
+        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + e.getAttribute('data-id'), this.authHeader())
             .then(response => {
 
                     let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.getAttribute('data-id'));
