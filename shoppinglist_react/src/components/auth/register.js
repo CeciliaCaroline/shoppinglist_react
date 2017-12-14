@@ -73,7 +73,7 @@ class Register extends BaseComponent {
 
     render() {
         if (this.state.registered) {
-            return <Redirect to="/auth/login"/>
+            this.props.history.push("/auth/login");
         }
         return (
 
