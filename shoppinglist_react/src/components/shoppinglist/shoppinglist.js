@@ -49,7 +49,7 @@ class ShoppingList extends BaseComponent {
                 }
             )
             .catch((error) => {
-                if (error.response.message) {
+                if (error.response.data.message) {
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -76,16 +76,7 @@ class ShoppingList extends BaseComponent {
 
             })
             .catch((error) => {
-                if (error.response.message) {
-                    this.setState({notificationSystem: this.refs.notificationSystem});
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.data.message,
-                        level: 'error',
-                        position: 'tc',
-                        dismissible: 'true',
-                        autoDismiss: 0
-                    });
-                }
+
             })
     };
 

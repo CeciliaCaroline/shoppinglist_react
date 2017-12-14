@@ -71,14 +71,7 @@ class Items extends BaseComponent {
                 });
             })
             .catch((error) => {
-                if (error.response.data.message) {
-                    this.setState({notificationSystem: this.refs.notificationSystem,});
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.data.message,
-                        level: 'error',
-                        position: 'tc'
-                    });
-                }
+
             });
     };
 
