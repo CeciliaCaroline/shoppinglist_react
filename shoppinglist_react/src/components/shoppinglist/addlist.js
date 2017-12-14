@@ -38,19 +38,11 @@ class AddList extends BaseComponent {
                         name: "",
                         description: "",
                     });
-
                 }
             })
-            .catch((error) => {
-                if (error.response.status === 403) {
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.message,
-                        level: 'error',
-                        position: 'tc'
-                    });
-                }
 
-                if (error.response.status === 400) {
+            .catch((error) => {
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.message,
                         level: 'error',
@@ -70,18 +62,14 @@ class AddList extends BaseComponent {
                 '<input name="name" type="text" placeholder="Enter name" required    />',
                 '<input name="description" type="text" placeholder="Description here" required  />'
 
-
             ].join(''),
 
             callback: (data) => {
-                if (!data) {
-                    console.log('Cancelled')
-                } else {
+                if (data) {
                     this.handleSubmit(data.name, data.description)
                 }
             }
         })
-
     };
 
 
