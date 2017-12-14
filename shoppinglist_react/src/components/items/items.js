@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Header from "../header";
 import AddItem from './additem';
 import axios from 'axios';
