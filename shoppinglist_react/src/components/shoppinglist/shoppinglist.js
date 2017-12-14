@@ -50,7 +50,7 @@ class ShoppingList extends BaseComponent {
                 }
             )
             .catch((error) => {
-                if (error.response.status === 404) {
+                if (error.response.message) {
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -124,7 +124,7 @@ class ShoppingList extends BaseComponent {
                 return response.data
             })
             .catch((error) => {
-                if (error.response.status === 400) {
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
@@ -132,13 +132,6 @@ class ShoppingList extends BaseComponent {
                     });
                 }
 
-                if (error.response.status === 404) {
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.data.message,
-                        level: 'error',
-                        position: 'tc'
-                    });
-                }
             });
     };
 
@@ -186,8 +179,7 @@ class ShoppingList extends BaseComponent {
                 }
             )
             .catch((error) => {
-
-                if (error.response.status === 404) {
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
