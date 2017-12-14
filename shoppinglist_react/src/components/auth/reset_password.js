@@ -46,7 +46,7 @@ class ResetPassword extends Component {
                 }
             })
             .catch( (error) => {
-                if (error.response.message) {
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',

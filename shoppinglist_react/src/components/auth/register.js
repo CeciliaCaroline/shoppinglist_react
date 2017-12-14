@@ -1,5 +1,4 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
 import BaseComponent from '../base';
@@ -48,7 +47,7 @@ class Register extends BaseComponent {
                 }
             })
             .catch((error) => {
-                if (error.response.status === 403) {
+                if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
@@ -56,13 +55,6 @@ class Register extends BaseComponent {
                     });
                 }
 
-                if (error.response.status === 400) {
-                    this.state.notificationSystem.addNotification({
-                        message: error.response.data.message,
-                        level: 'error',
-                        position: 'tc'
-                    });
-                }
             });
     };
 
