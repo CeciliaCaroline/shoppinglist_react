@@ -9,7 +9,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import NotFound from './notfound';
 
 
-class App extends Component {
+export default  {
 
     render() {
         return (
@@ -32,4 +32,3 @@ class App extends Component {
     }
 }
 
-export default App;
