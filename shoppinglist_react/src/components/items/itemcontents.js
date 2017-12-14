@@ -22,7 +22,6 @@ class ItemContents extends BaseComponent {
         this.setState({
             name: name,
             price: price,
-            modalIsOpen: false
         });
 
     };
@@ -36,10 +35,9 @@ class ItemContents extends BaseComponent {
 
     openModal = () => {
 
-        let component = this;
-        let name1 = component.props.list.name;
-        let price1 = component.props.list.price;
-        let itemId = component.props.list.id;
+        let editName = this.props.list.name;
+        let editPrice = this.props.list.price;
+        let itemId = this.props.list.id;
 
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';
@@ -47,15 +45,13 @@ class ItemContents extends BaseComponent {
             message: 'Edit Shopping List Item',
             input: [
 
-                '<input name="name" type="text" value="' + name1 + '" required data-id2="' + itemId + '"   />',
-                '<input name="price" type="text" value="' + price1 + '"  required  />'
+                '<input name="name" type="text" value="' + editName + '" required data-id2="' + itemId + '"   />',
+                '<input name="price" type="text" value="' + editPrice + '"  required  />'
 
             ].join(''),
 
             callback: (data) => {
-                if (!data) {
-                    console.log('Cancelled')
-                } else {
+                if (data) {
                     this.handleSubmit(data.name, data.price)
                 }
             }
