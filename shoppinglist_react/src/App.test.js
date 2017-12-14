@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { render, shallow} from 'enzyme';
+import {render, shallow} from 'enzyme';
 import expect from 'expect';
 import App from "./components/App";
 import renderer from 'react-test-renderer';
@@ -8,14 +8,10 @@ import {BrowserRouter} from 'react-router-dom';
 import "./setup_test";
 
 
-// configure({adapter: new Adapter()});
-
-
 describe('App component', () => {
     it('it renders app component', () => {
 
-        const wrapper = render(<BrowserRouter
-        ><App/>
+        const wrapper = render(<BrowserRouter><App/>
         </BrowserRouter>);
         expect(wrapper.find('div').length).toEqual(8);
 
@@ -31,8 +27,8 @@ describe('App component', () => {
     });
 
     it('renders correctly', () => {
-        const tree = renderer.create(<App/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const app = renderer.create(<App/>).toJSON();
+        expect(app).toMatchSnapshot();
     });
 });
 

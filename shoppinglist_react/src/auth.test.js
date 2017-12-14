@@ -12,27 +12,27 @@ import "./setup_test";
 describe('Authentication components', () => {
 
     it('renders correctly', () => {
-        const tree = renderer.create(<Register/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const register = renderer.create(<Register/>).toJSON();
+        expect(register).toMatchSnapshot();
     });
 
     it('renders correctly', () => {
-        const tree = renderer.create(<Login/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const login = renderer.create(<Login/>).toJSON();
+        expect(login).toMatchSnapshot();
 
     });
     it('renders correctly', () => {
-        const tree = renderer.create(<SendEmail/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const sendEmail = renderer.create(<SendEmail/>).toJSON();
+        expect(sendEmail).toMatchSnapshot();
 
     });
     it('renders correctly', () => {
-        const tree = renderer.create(<ResetPassword/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const reset = renderer.create(<ResetPassword/>).toJSON();
+        expect(reset).toMatchSnapshot();
     });
     it('renders correctly', () => {
-        const tree = renderer.create(<Header/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const header = renderer.create(<Header/>).toJSON();
+        expect(header).toMatchSnapshot();
     });
 });
 

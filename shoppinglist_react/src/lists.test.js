@@ -7,24 +7,23 @@ import TableContents from "./components/shoppinglist/tablecontents";
 import "./setup_test"
 
 
-
 describe('Shopping list components', () => {
 
     it('renders correctly', () => {
-        const tree = renderer.create(<ShoppingList/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const list = renderer.create(<ShoppingList/>).toJSON();
+        expect(list).toMatchSnapshot();
     });
 
     it('renders correctly', () => {
-        const tree = renderer.create(<AddList/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const addList = renderer.create(<AddList/>).toJSON();
+        expect(addList).toMatchSnapshot();
 
     });
 
     it('renders correctly', () => {
         let list = {id: 1, name: "Cece", description: "Ceces boys"};
-        const tree = renderer.create(<TableContents list={list} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const table = renderer.create(<TableContents list={list}/>).toJSON();
+        expect(table).toMatchSnapshot();
 
     });
 

@@ -11,20 +11,20 @@ describe('Shopping list components', () => {
 
     it('renders correctly', () => {
         let match = {params: {id: 1}};
-        const tree = renderer.create(<Items match={match}/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const items = renderer.create(<Items match={match}/>).toJSON();
+        expect(items).toMatchSnapshot();
     });
 
     it('renders correctly', () => {
-        const tree = renderer.create(<AddItem/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const additem = renderer.create(<AddItem/>).toJSON();
+        expect(additem).toMatchSnapshot();
 
     });
 
     it('renders correctly', () => {
         let list = {id: 1, name: "Cece", price: 10};
-        const tree = renderer.create(<ItemContents list={list}/>).toJSON();
-        expect(tree).toMatchSnapshot();
+        const itemContents = renderer.create(<ItemContents list={list}/>).toJSON();
+        expect(itemContents).toMatchSnapshot();
 
     });
 
