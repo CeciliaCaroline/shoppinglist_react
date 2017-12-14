@@ -3,6 +3,7 @@ import axios from 'axios'
 import NotificationSystem from 'react-notification-system';
 import BaseComponent from '../base';
 
+
 let vex = require('vex-js');
 vex.registerPlugin(require('vex-dialog'));
 vex.defaultOptions.className = 'vex-theme-os';
@@ -14,22 +15,15 @@ class AddList extends BaseComponent {
             name: '',
             description: '',
         };
-
-    }
-
-    componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
     }
 
     handleSubmit = (name, description) => {
-        axios.post(`http://127.0.0.1:5000/v2/shoppinglist/`,
+        axios.post(`${this.baseURL}/v2/shoppinglist/`,
             {
                 name: name,
                 description: description,
-            }, {
-                headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-            })
-
+            }, this.authHeader()
+        )
 
             .then((response) => {
                 let data = response.data;
