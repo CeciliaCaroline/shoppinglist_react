@@ -5,13 +5,13 @@ import axios from 'axios';
 import ItemContents from "./itemcontents";
 import {Pagination} from 'react-bootstrap';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
 
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
-let shoppinglists_items = [];
 
-class Items extends Component {
+class Items extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,7 +28,7 @@ class Items extends Component {
         }
     }
 
-    getItems(page, search_string = "") {
+    getItems = (page, search_string = "") => {
         let URLSearchParams = require('url-search-params');
         let p = new URLSearchParams();
         p.append('page', page || 1);
@@ -38,9 +38,8 @@ class Items extends Component {
             search_string = ""
         }
 
-        return axios.get(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/?` + p + search_string, {
-            headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-        })
+        return axios.get(`${this.baseURL}/v2/shoppinglist/${this.props.match.params.id}/items/?` + p + search_string,
+            this.authHeader())
             .then(response => {
                     return response.data
                 }
@@ -57,17 +56,16 @@ class Items extends Component {
             });
     };
 
-    getShoppingListItems(pageNum, search_string = "") {
+    getShoppingListItems = (pageNum, search_string = "") => {
         this.getItems(pageNum, search_string)
             .then((allitems) => {
-                shoppinglists_items = allitems;
                 this.setState({
-                    items: shoppinglists_items,
-                    name: shoppinglists_items.name,
-                    activePage: shoppinglists_items.page,
-                    totalItems: shoppinglists_items.count,
-                    itemsPerPage: shoppinglists_items.limit,
-                    search_count: shoppinglists_items.search_count,
+                    items: allitems,
+                    name: allitems.name,
+                    activePage: allitems.page,
+                    totalItems: allitems.count,
+                    itemsPerPage: allitems.limit,
+                    search_count: allitems.search_count,
                     get_count: allitems.count,
 
                 });
@@ -92,7 +90,6 @@ class Items extends Component {
     }
 
     openModal = (event) => {
-        let component = this;
         let e = event.target;
 
         vex.dialog.defaultOptions.showCloseButton = true;
@@ -103,38 +100,28 @@ class Items extends Component {
         vex.dialog.buttons.NO.text = 'No, thank you!';
 
         vex.dialog.confirm({
-            message: 'Are you sure you want to delete this list?',
-            callback: function (value) {
+            message: 'Are you sure you want to delete this item?',
+            callback: (value) => {
                 if (value === true) {
 
-                    component.onRemoveItem(e);
+                    this.onRemoveItem(e);
                 }
             }
         });
 
     };
 
-    onRemoveItem(e) {
-        let event = e;
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'), {
-            headers: {Authorization: "Bearer " + localStorage.getItem('token')}
-
-        })
+    onRemoveItem = (event) => {
+        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'),
+            this.authHeader())
             .then(response => {
-                    let index = this.state.items.Shoppinglists_Items.findIndex(item => item.id == event.getAttribute('data-id2'));
-                    this.state.items.Shoppinglists_Items.splice(index, 1);
+                    this.getShoppingListItems(1, "");
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
-                    this.setState(this.state);
-
-                    if (this.state.items.Shoppinglists_Items.length !== 0) {
-                        this.getShoppingListItems(this.state.activePage)
-                    }
-                    return response.data
                 }
             )
             .catch((error) => {
@@ -148,31 +135,21 @@ class Items extends Component {
                 }
             });
 
-    }
+    };
 
 
     onItemEdit = (id, name, price) => {
         axios.put(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + id, '{ "name": "' + name + '", "price": "' + price + '"}',
-            {
-                headers: {Authorization: "Bearer " + localStorage.getItem('token'), "Content-Type": "application/json"},
-            })
+            this.authHeader())
 
             .then(response => {
-                let index = this.state.items.Shoppinglists_Items.findIndex(x => x.id == id);
-                this.state.items.Shoppinglists_Items.map((item, sidx) => {
-                    if (index !== sidx) return item;
-                    return {...item};
-                });
+                this.getShoppingListItems(1, "");
                 this.setState({notificationSystem: this.refs.notificationSystem});
                 this.state.notificationSystem.addNotification({
                     message: response.data.message,
                     level: 'success',
                     position: 'tc'
                 });
-
-                this.setState(this.state);
-                this.getShoppingListItems(1, "");
-                return response.data
             })
 
             .catch((error) => {
@@ -192,7 +169,7 @@ class Items extends Component {
         return (
             <div className="container-fluid">
                 <Header/>
-                <AddItem onAdd={this.onItemAdd.bind(this)} list_id={this.state.list_id}/>
+                <AddItem onAdd={this.onItemAdd} list_id={this.state.list_id}/>
                 <h2 className="text-center ">No Shopping List Items </h2>
             </div>
         );
@@ -208,7 +185,6 @@ class Items extends Component {
                 id: id
             });
         this.setState(this.state);
-        // this.getShoppingListItems(this.state.activePage);
 
 
     };
