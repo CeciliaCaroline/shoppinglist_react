@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from "../base";
 
 
-class ResetPassword extends Component {
+class ResetPassword extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {

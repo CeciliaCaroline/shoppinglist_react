@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from "../base";
 
 
-class SendEmail extends Component {
+class SendEmail extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
