@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
+
 
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 
-class AddItem extends Component {
+class AddItem extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,19 +18,13 @@ class AddItem extends Component {
 
     }
 
-    componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
-    }
-
     handleSubmit = (name, price) => {
 
-        axios.post(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.list_id}/items/`,
+        axios.post(`${this.baseURL}/v2/shoppinglist/${this.props.list_id}/items/`,
             {
                 name: name,
                 price: price,
-            }, {
-                headers: {'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('token')}
-            })
+            }, this.authHeader())
 
             .then((response) => {
                 let data = response.data;
@@ -37,7 +33,6 @@ class AddItem extends Component {
                     this.setState({
                         name: "",
                         price: "",
-                        modalIsOpen: false
 
                     });
                     this.state.notificationSystem.addNotification({
@@ -64,8 +59,6 @@ class AddItem extends Component {
                     });
                 }
             });
-
-
     };
 
 
