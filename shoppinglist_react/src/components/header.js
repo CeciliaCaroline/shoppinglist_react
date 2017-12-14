@@ -26,10 +26,16 @@ class Header extends BaseComponent {
                 }
             })
 
-            .catch(function (error) {
-                console.log(error);
+            .catch((error) => {
+                if (error.response.data.message) {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    })
+                }
             });
-    }
+    };
 
     logoutModal = () => {
 
