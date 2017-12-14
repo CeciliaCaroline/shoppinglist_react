@@ -4,10 +4,6 @@ import NotificationSystem from 'react-notification-system';
 import BaseComponent from '../base';
 
 
-let head = {
-    headers: {"Content-Type": "application/json"}
-};
-
 class Login extends BaseComponent {
     constructor(props) {
         super(props);
@@ -19,17 +15,14 @@ class Login extends BaseComponent {
         };
     }
 
-    componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
-    }
 
     login = (e) => {
         e.preventDefault();
-        axios.post(`http://127.0.0.1:5000/auth/login`,
+        axios.post(`${this.baseURL}/auth/login`,
             {
                 email: this.state.email,
                 password: this.state.password
-            }, head)
+            }, this.contentHeader())
             .then((response) => {
                 if (response.status === 200) {
                     localStorage.setItem('token', response.data.auth_token);
@@ -68,9 +61,8 @@ class Login extends BaseComponent {
     };
 
     onChange = (event) => {
-        const obj = {};
-        obj[event.target.name] = event.target.value;
-        this.setState(obj);
+        this.setState({[event.target.name] : event.target.value})
+
 
     };
 

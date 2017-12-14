@@ -4,9 +4,6 @@ import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
 import BaseComponent from '../base';
 
-let head = {
-    headers: {"Content-Type": "application/json"}
-};
 
 class Register extends BaseComponent {
     constructor(props) {
@@ -21,18 +18,14 @@ class Register extends BaseComponent {
         };
     }
 
-    componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
-    }
-
     register = (e) => {
         e.preventDefault();
-        axios.post(`http://127.0.0.1:5000/auth/register`,
+        axios.post(`${this.baseURL}/auth/register`,
             {
                 email: this.state.email,
                 password: this.state.password,
                 username: this.state.username
-            }, head)
+            }, this.contentHeader())
             .then((response) => {
                 if (response.status === 201) {
                     localStorage.setItem('token', response.data.auth_token);
@@ -53,7 +46,6 @@ class Register extends BaseComponent {
                     }, 500);
 
                 }
-
             })
             .catch((error) => {
                 if (error.response.status === 403) {
@@ -74,11 +66,8 @@ class Register extends BaseComponent {
             });
     };
 
-
     onChange = (event) => {
-        const obj = {};
-        obj[event.target.name] = event.target.value;
-        this.setState(obj);
+        this.setState({[event.target.name] : event.target.value})
 
     };
 

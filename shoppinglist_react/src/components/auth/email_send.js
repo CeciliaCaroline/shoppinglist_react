@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import NotificationSystem from 'react-notification-system';
 
-let head = {
-    headers: {"Content-Type": "application/json"}
-};
 
 class SendEmail extends Component {
     constructor(props) {
@@ -16,16 +13,12 @@ class SendEmail extends Component {
         };
     }
 
-    componentDidMount() {
-        this.setState({notificationSystem: this.refs.notificationSystem});
-    }
-
-    handleReset = (e) =>  {
+    handleReset = (e) => {
         e.preventDefault();
-        axios.post(`http://127.0.0.1:5000/auth/reset_password`,
+        axios.post(`${this.baseURL}/auth/reset_password`,
             {
                 email: this.state.email,
-            }, head)
+            }, this.contentHeader())
 
             .then((response) => {
                 if (response.status === 200) {
@@ -36,19 +29,21 @@ class SendEmail extends Component {
                     });
 
                     this.setState({email: ''});
-
                 }
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch( (error) => {
+                if (error.response.message {
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc'
+                    });
+                }
             });
     };
 
     onChange = (event) => {
-        const obj = {};
-        obj[event.target.name] = event.target.value;
-        this.setState(obj);
-
+        this.setState({[event.target.name]: event.target.value})
     };
 
     render() {
