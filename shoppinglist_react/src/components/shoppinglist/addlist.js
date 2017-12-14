@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import axios from 'axios'
 import NotificationSystem from 'react-notification-system';
+import BaseComponent from '../base';
 
 let vex = require('vex-js');
 vex.registerPlugin(require('vex-dialog'));
 vex.defaultOptions.className = 'vex-theme-os';
 
-class AddList extends Component {
+class AddList extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
