@@ -5,7 +5,6 @@ import "./setup_test";
 import SendEmail from './components/auth/email_send'
 
 
-
 describe('mocking email send requests', function () {
     {
         beforeEach(function () {
@@ -22,13 +21,16 @@ describe('mocking email send requests', function () {
             const send_email = mount(<SendEmail/>);
 
             send_email.state().email = 'chris@gmail.com';
-
+            send_email.instance().contentHeader = () => {
+            };
             send_email.instance().handleReset({
                 preventDefault() {
                 }
             });
+
             moxios.stubRequest('http://127.0.0.1:5000/auth/reset_password', {
                 status: 200,
+                response: {message: "Email to reset password has been sent"}
 
             });
 
