@@ -32,7 +32,7 @@ class ShoppingList extends BaseComponent {
         this.getShoppingLists(1, "");
     }
 
-    getLists(page, search_string = "") {
+    getLists = (page, search_string = "") => {
         let URLSearchParams = require('url-search-params');
         let p = new URLSearchParams();
         p.append('page', page || 1);
@@ -62,7 +62,7 @@ class ShoppingList extends BaseComponent {
             });
     };
 
-    getShoppingLists(pageNum, search_string = "") {
+    getShoppingLists = (pageNum, search_string = "") => {
         this.getLists(pageNum, search_string)
             .then((allshoppingLists) => {
                 this.setState({
@@ -87,7 +87,7 @@ class ShoppingList extends BaseComponent {
                     });
                 }
             })
-    }
+    };
 
 
     onListAdd = (name, description, id) => {
