@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Header from './header'
+import BaseComponent from "./base";
 
 
-class NotFound extends Component {
+class NotFound extends BaseComponent {
     render() {
         return (
 
@@ -15,7 +16,8 @@ class NotFound extends Component {
                                 <section className='mt-5 container'>
                                     <h3 className='text-center'>404 page not found</h3>
                                     <p className='text-center'>We are sorry but the page you are looking for does not
-                                        exist.</p>
+                                        exist. <a href='/' onClick={this.pushNavigation}>Click here to return to the
+                                            home page </a></p>
                                 </section>
                             </div>
                         </div>
@@ -26,5 +28,6 @@ class NotFound extends Component {
         )
     }
 }
+export default NotFound
 
-export default NotFound;
+
