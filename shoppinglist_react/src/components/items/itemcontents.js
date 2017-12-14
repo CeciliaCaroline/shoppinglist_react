@@ -22,7 +22,6 @@ class ItemContents extends Component {
             price: price,
             modalIsOpen: false
         });
-        console.log(this.state)
 
     };
 

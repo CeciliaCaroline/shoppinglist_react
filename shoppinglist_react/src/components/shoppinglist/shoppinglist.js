@@ -10,7 +10,6 @@ import BaseComponent from '../base';
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
-let shoppingLists = [];
 
 class ShoppingList extends BaseComponent {
 
@@ -66,18 +65,28 @@ class ShoppingList extends BaseComponent {
     getShoppingLists(pageNum, search_string = "") {
         this.getLists(pageNum, search_string)
             .then((allshoppingLists) => {
-                shoppingLists = allshoppingLists;
                 this.setState({
-                    lists: shoppingLists,
-                    activePage: shoppingLists.page,
-                    totalItems: shoppingLists.count,
-                    itemsPerPage: shoppingLists.limit,
-                    search_count: shoppingLists.search_count,
+                    lists: allshoppingLists,
+                    activePage: allshoppingLists.page,
+                    totalItems: allshoppingLists.count,
+                    itemsPerPage: allshoppingLists.limit,
+                    search_count: allshoppingLists.search_count,
                     notificationSystem: this.refs.notificationSystem
                 });
 
             })
-            .catch(err => console.log(err));
+            .catch((error) => {
+                if (error.response.message) {
+                    this.setState({notificationSystem: this.refs.notificationSystem});
+                    this.state.notificationSystem.addNotification({
+                        message: error.response.data.message,
+                        level: 'error',
+                        position: 'tc',
+                        dismissible: 'true',
+                        autoDismiss: 0
+                    });
+                }
+            })
     }
 
 
@@ -107,21 +116,13 @@ class ShoppingList extends BaseComponent {
             this.authHeader())
 
             .then(response => {
-                let index = this.state.lists.ShoppingLists.findIndex(x => x.id == id);
-                this.state.lists.ShoppingLists.map((list, listid) => {
-                    if (index !== listid) return list;
-                    return {...list};
-                });
+                this.getShoppingLists(1, "");
                 this.setState({notificationSystem: this.refs.notificationSystem});
                 this.state.notificationSystem.addNotification({
                     message: response.data.message,
                     level: 'success',
                     position: 'tc'
                 });
-
-                this.setState(this.state);
-                this.getShoppingLists(1, "");
-                return response.data
             })
             .catch((error) => {
                 if (error.response.data.message) {
@@ -159,9 +160,7 @@ class ShoppingList extends BaseComponent {
     onRemoveList = (e) => {
         axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + e.getAttribute('data-id'), this.authHeader())
             .then(response => {
-
-                    let index = this.state.lists.ShoppingLists.findIndex(x => x.id == event.getAttribute('data-id'));
-                    this.state.lists.ShoppingLists.splice(index, 1);
+                    this.getShoppingLists(this.state.activePage);
                     if (response.status === 200) {
                         this.setState({notificationSystem: this.refs.notificationSystem});
                         this.state.notificationSystem.addNotification({
@@ -170,12 +169,6 @@ class ShoppingList extends BaseComponent {
                             position: 'tc'
                         });
                     }
-
-                    this.setState(this.state);
-                    if (this.state.lists.ShoppingLists.length !== 0) {
-                        this.getShoppingLists(this.state.activePage)
-                    }
-                    return response.data
                 }
             )
             .catch((error) => {
