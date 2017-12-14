@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import BaseComponent from '../base';
+
 
 
 let vex = require('vex-js');
 vex.defaultOptions.className = 'vex-theme-os';
 
 
-class ItemContents extends Component {
+class ItemContents extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
