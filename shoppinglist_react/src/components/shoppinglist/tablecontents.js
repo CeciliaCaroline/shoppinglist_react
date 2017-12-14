@@ -31,8 +31,8 @@ class TableContents extends BaseComponent {
     }
 
     openModal = () => {
-        let name1 = this.props.list.name;
-        let description1 = this.props.list.description;
+        let editName = this.props.list.name;
+        let editDescription = this.props.list.description;
         let listId = this.props.list.id;
 
         vex.dialog.buttons.YES.text = 'Save';
@@ -41,8 +41,8 @@ class TableContents extends BaseComponent {
             message: 'Edit Shopping List',
             input: [
 
-                '<input name="name" type="text" value="' + name1 + '" required data-id2="' + listId + '"   />',
-                '<input name="description" type="text" value="' + description1 + '"  required  />'
+                '<input name="name" type="text" value="' + editName + '" required data-id2="' + listId + '"   />',
+                '<input name="description" type="text" value="' + editDescription + '"  required  />'
 
             ].join(''),
 
