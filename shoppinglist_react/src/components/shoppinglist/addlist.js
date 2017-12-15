@@ -44,7 +44,7 @@ class AddList extends BaseComponent {
             .catch((error) => {
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
-                        message: error.response.message,
+                        message: error.response.data.message,
                         level: 'error',
                         position: 'tc'
                     });

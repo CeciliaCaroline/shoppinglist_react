@@ -156,15 +156,14 @@ class ShoppingList extends BaseComponent {
     onRemoveList = (e) => {
         axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + e.getAttribute('data-id'), this.authHeader())
             .then(response => {
-                    this.getShoppingLists(this.state.activePage);
-                    if (response.status === 200) {
-                        this.setState({notificationSystem: this.refs.notificationSystem});
-                        this.state.notificationSystem.addNotification({
-                            message: response.data.message,
-                            level: 'success',
-                            position: 'tc'
-                        });
-                    }
+                    this.getShoppingLists(1, "");
+                    this.setState({notificationSystem: this.refs.notificationSystem});
+                    this.state.notificationSystem.addNotification({
+                        message: response.data.message,
+                        level: 'success',
+                        position: 'tc'
+                    });
+
                 }
             )
             .catch((error) => {
