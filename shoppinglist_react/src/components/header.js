@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import BaseComponent from './base';
+import {Redirect} from 'react-router-dom';
 
 
 let vex = require('vex-js');
@@ -59,7 +60,7 @@ class Header extends BaseComponent {
     render() {
 
         if (this.state.loggedOut) {
-            this.props.history.push("/auth/login");
+            return <Redirect to = "/auth/login"/>
         }
         return (
 
