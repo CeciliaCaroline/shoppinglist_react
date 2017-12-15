@@ -11,9 +11,9 @@ class Register extends BaseComponent {
             email: '',
             password: '',
             username: '',
+            confirm_password: '',
             registered: false,
             notificationSystem: null,
-            isLoading: false
         };
     }
 
@@ -23,6 +23,7 @@ class Register extends BaseComponent {
             {
                 email: this.state.email,
                 password: this.state.password,
+                confirm_password: this.state.confirm_password,
                 username: this.state.username
             }, this.contentHeader())
             .then((response) => {
@@ -37,6 +38,7 @@ class Register extends BaseComponent {
                     this.setState({
                         email: '',
                         password: '',
+                        confirm_password: '',
                         username: '',
                     });
 
@@ -128,6 +130,19 @@ class Register extends BaseComponent {
                                 required
                                 ref='password'
                                 value={this.state.password}
+                                onChange={this.onChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">Confirm Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                name="confirm_password"
+                                required
+                                ref='confirm_password'
+                                value={this.state.confirm_password}
                                 onChange={this.onChange}
                             />
                         </div>

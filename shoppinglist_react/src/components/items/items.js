@@ -24,7 +24,8 @@ class Items extends BaseComponent {
             activePage: 1,
             list_id: "",
             isSearch: false,
-            notificationSystem: null
+            notificationSystem: null,
+
         }
     }
 
