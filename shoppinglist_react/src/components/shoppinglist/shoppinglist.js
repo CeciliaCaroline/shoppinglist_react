@@ -29,6 +29,11 @@ class ShoppingList extends BaseComponent {
     }
 
     componentDidMount() {
+
+        if (!localStorage.getItem("token")) {
+            this.props.history.push("/auth/login");
+        }
+
         this.getShoppingLists(1, "");
     }
 
