@@ -3,7 +3,7 @@ import {mount, configure,shallow} from 'enzyme';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import "./setup_test";
-import Login from './components/auth/login'
+import Login from '../components/auth/login'
 
 
 configure({adapter: new Adapter()});

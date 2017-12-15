@@ -2,7 +2,7 @@ import moxios from 'moxios';
 import {mount, configure, shallow} from 'enzyme';
 import React from 'react';
 import "./setup_test";
-import Register from './components/auth/register'
+import Register from '../components/auth/register'
 
 
 describe('mocking register requests', function () {

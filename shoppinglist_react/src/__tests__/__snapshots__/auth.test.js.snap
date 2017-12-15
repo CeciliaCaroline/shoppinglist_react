@@ -108,6 +108,23 @@ exports[`Authentication components renders correctly 1`] = `
           value=""
         />
       </div>
+      <div
+        className="form-group"
+      >
+        <label
+          htmlFor="password"
+        >
+          Confirm Password
+        </label>
+        <input
+          className="form-control"
+          name="confirm_password"
+          onChange={[Function]}
+          required={true}
+          type="password"
+          value=""
+        />
+      </div>
       <div>
         <button
           className="btn btn-primary btn-block"

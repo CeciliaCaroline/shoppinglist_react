@@ -2,7 +2,7 @@ import moxios from 'moxios';
 import {mount, shallow} from 'enzyme';
 import React from 'react';
 import "./setup_test";
-import ResetPassword from './components/auth/reset_password'
+import ResetPassword from '../components/auth/reset_password'
 
 
 describe('mocking email send requests', function () {
