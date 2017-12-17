@@ -17,6 +17,7 @@ class Header extends BaseComponent {
         };
     }
 
+    //event handler for logging out
     logout = () => {
         axios.post(`${this.baseURL}/auth/logout`, {}, this.authHeader()
         )
@@ -38,6 +39,7 @@ class Header extends BaseComponent {
             });
     };
 
+    //modal to confirm log out
     logoutModal = () => {
 
         vex.dialog.defaultOptions.showCloseButton = true;
@@ -59,6 +61,7 @@ class Header extends BaseComponent {
 
     render() {
 
+        //if logged out, redirect to login page
         if (this.state.loggedOut) {
             return <Redirect to = "/auth/login"/>
         }

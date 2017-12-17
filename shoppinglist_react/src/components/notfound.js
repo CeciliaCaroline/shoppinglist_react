@@ -5,6 +5,7 @@ import BaseComponent from "./base";
 
 class NotFound extends BaseComponent {
     render() {
+        //not found template
         return (
 
             <div>
