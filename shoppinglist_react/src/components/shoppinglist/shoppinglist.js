@@ -31,6 +31,7 @@ class ShoppingList extends BaseComponent {
     componentDidMount() {
         // if there is no token in local storage, redirect to login page
         if (!localStorage.getItem("token")) {
+            console.log(this.props.history);
             this.props.history.push("/auth/login");
         }
 
