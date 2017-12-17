@@ -21,14 +21,15 @@ class Register extends BaseComponent {
 
         //prevent browser refresh on submit
         e.preventDefault();
+        const {email, confirm_password, password, username} = this.state;
 
         //pass registration credentials in the payload of the post request to database
         axios.post(`${this.baseURL}/auth/register`,
             {
-                email: this.state.email,
-                password: this.state.password,
-                confirm_password: this.state.confirm_password,
-                username: this.state.username
+                email,
+                password,
+                confirm_password,
+                username
             }, this.contentHeader())
 
             //promise is returned
@@ -78,9 +79,10 @@ class Register extends BaseComponent {
     };
 
     render() {
+        const {email, confirm_password, password, username, registered} = this.state;
 
         //if state is registered, redirect to login page
-        if (this.state.registered) {
+        if (registered) {
             this.props.history.push("/auth/login");
         }
         return (
@@ -118,7 +120,7 @@ class Register extends BaseComponent {
                                 name="username"
                                 required
                                 ref='username'
-                                value={this.state.username}
+                                value={username}
                                 onChange={this.onChange}
                             />
                         </div>
@@ -130,7 +132,7 @@ class Register extends BaseComponent {
                                 name="email"
                                 required
                                 ref='email'
-                                value={this.state.email}
+                                value={email}
                                 onChange={this.onChange}
                             />
                         </div>
@@ -143,7 +145,7 @@ class Register extends BaseComponent {
                                 name="password"
                                 required
                                 ref='password'
-                                value={this.state.password}
+                                value={password}
                                 onChange={this.onChange}
                             />
                         </div>
@@ -156,7 +158,7 @@ class Register extends BaseComponent {
                                 name="confirm_password"
                                 required
                                 ref='confirm_password'
-                                value={this.state.confirm_password}
+                                value={confirm_password}
                                 onChange={this.onChange}
                             />
                         </div>

@@ -23,13 +23,14 @@ class ResetPassword extends BaseComponent {
 
         //prevent browser refresh on submit
         e.preventDefault();
+        const {email, confirm_password, new_password} = this.state;
 
         //pass reset password credentials payload with the post request
         axios.post(`${this.baseURL}/auth/reset_password/${this.props.match.params.token}`,
             {
-                email: this.state.email,
-                new_password: this.state.new_password,
-                confirm_password: this.state.confirm_password
+                email,
+                new_password,
+                confirm_password
             }, this.contentHeader())
 
             //returns a promise
@@ -75,6 +76,7 @@ class ResetPassword extends BaseComponent {
     };
 
     render() {
+        const {email, confirm_password, new_password} = this.state;
 
         //if reset is true, redirect to shopping lists
         if (!this.state.reset) {
@@ -95,7 +97,7 @@ class ResetPassword extends BaseComponent {
                             name="email"
                             required
                             ref='email'
-                            value={this.state.email}
+                            value={email}
                             onChange={this.onChange}
                         />
                     </div>
@@ -108,7 +110,7 @@ class ResetPassword extends BaseComponent {
                             name="new_password"
                             required
                             ref='newpassword'
-                            value={this.state.password}
+                            value={new_password}
                             onChange={this.onChange}
                         />
                     </div>
@@ -121,7 +123,7 @@ class ResetPassword extends BaseComponent {
                             name="confirm_password"
                             required
                             ref='confirmpassword'
-                            value={this.state.password}
+                            value={confirm_password}
                             onChange={this.onChange}
                         />
                     </div>

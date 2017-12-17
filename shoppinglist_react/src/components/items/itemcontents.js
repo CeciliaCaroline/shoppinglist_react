@@ -28,18 +28,21 @@ class ItemContents extends BaseComponent {
     };
 
     componentDidMount() {
+                const {name, price} = this.props.list;
+
         this.setState({
-            name: this.props.list.name,
-            price: this.props.list.price,
+            name: name,
+            price: price,
         })
     }
 
     //modal to edit shopping list item
     openModal = () => {
+                const {name, price, id} = this.props.list;
 
-        let editName = this.props.list.name;
-        let editPrice = this.props.list.price;
-        let itemId = this.props.list.id;
+        let editName = name;
+        let editPrice = price;
+        let itemId = id;
 
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';
@@ -62,20 +65,21 @@ class ItemContents extends BaseComponent {
 
 
     render() {
+                const {list, onRemove } = this.props;
 
         return (
 
             <tr>
-                <td> {this.props.list.name}</td>
-                <td>{this.props.list.price}</td>
+                <td> {list.name}</td>
+                <td>{list.price}</td>
                 <td>
                     <button className="text-center btn btn-primary btn-sm"
                             onClick={this.openModal}>EDIT
                     </button>
                 </td>
                 <td>
-                    <button className="text-right btn btn-danger btn-sm" data-id2={this.props.list.id}
-                            onClick={this.props.onRemove}>DELETE
+                    <button className="text-right btn btn-danger btn-sm" data-id2={list.id}
+                            onClick={onRemove}>DELETE
                     </button>
                 </td>
 

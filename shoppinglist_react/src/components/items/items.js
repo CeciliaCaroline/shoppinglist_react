@@ -226,21 +226,22 @@ class Items extends BaseComponent {
     };
 
     render() {
+        const {items, totalItems, search, search_count, itemsPerPage, activePage, list_id, name} = this.state;
 
         //if there are no items, render the no items template
         if (!this.state.items.Shoppinglists_Items.length) {
             return this.noItems();
         }
 
-        let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
-        let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
+        let totalPages = Math.ceil(totalItems / itemsPerPage);
+        let searchPages = Math.ceil(search_count / itemsPerPage);
 
         return (
 
             <div className="container">
 
                 <Header/>
-                <AddItem onAdd={this.onItemAdd} list_id={this.state.list_id}/>
+                <AddItem onAdd={this.onItemAdd} list_id={list_id}/>
                 <NotificationSystem ref="notificationSystem"/>
                 <form className="input-group col-4 offset-8" onSubmit={this.handleSubmit}>
                     <span className="input-group-addon form-control form-control-sm">Search Name</span>
@@ -250,11 +251,11 @@ class Items extends BaseComponent {
                         name="search"
                         ref='search'
                         aria-describedby="btnGroupAddon"
-                        value={this.state.search}
+                        value={search}
                         onChange={this.updateSearch}
                     />
                 </form>
-                <h5>Shopping list - {this.state.name}</h5>
+                <h5>Shopping list - {name}</h5>
                 <table className="table items table-hover table-striped">
                     <thead>
                     <tr>
@@ -264,7 +265,7 @@ class Items extends BaseComponent {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.items.Shoppinglists_Items ? this.state.items.Shoppinglists_Items.map((item) => (
+                    {items.Shoppinglists_Items ? items.Shoppinglists_Items.map((item) => (
                         <ItemContents onRemove={this.openModal}
                                       list={item}
                                       id={item.id}
@@ -273,8 +274,8 @@ class Items extends BaseComponent {
                 </table>
                 <Pagination
                     bsSize="medium"
-                    items={this.state.search_count ? searchPages : totalPages}
-                    activePage={this.state.activePage}
+                    items={search_count ? searchPages : totalPages}
+                    activePage={activePage}
                     onSelect={this.handleSelect}
                     className='justify-content-center'
                 />

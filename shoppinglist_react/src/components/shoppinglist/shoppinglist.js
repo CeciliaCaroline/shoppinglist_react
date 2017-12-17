@@ -75,7 +75,7 @@ class ShoppingList extends BaseComponent {
 
     getShoppingLists = (pageNum, search_string = "") => {
         this.getLists(pageNum, search_string)
-            //returns a promise
+        //returns a promise
             .then((allshoppingLists) => {
 
                 //set state to shopping lists attributes
@@ -218,13 +218,16 @@ class ShoppingList extends BaseComponent {
 
 
     render() {
+        const {lists, totalItems, search, search_count, itemsPerPage, activePage} = this.state;
+
         //if there are no shopping lists, display no lists template
-        if (!this.state.lists.ShoppingLists.length) {
+        if (!lists.ShoppingLists.length) {
             return this.noLists();
         }
 
-        let totalPages = Math.ceil(this.state.totalItems / this.state.itemsPerPage);
-        let searchPages = Math.ceil(this.state.search_count / this.state.itemsPerPage);
+
+        let totalPages = Math.ceil(totalItems / itemsPerPage);
+        let searchPages = Math.ceil(search_count / itemsPerPage);
 
         return (
 
@@ -241,7 +244,7 @@ class ShoppingList extends BaseComponent {
                         name="search"
                         ref='search'
                         aria-describedby="btnGroupAddon"
-                        value={this.state.search}
+                        value={search}
                         onChange={this.updateSearch}
                     />
                 </form>
@@ -254,7 +257,7 @@ class ShoppingList extends BaseComponent {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lists.ShoppingLists ? this.state.lists.ShoppingLists.map((list) => (
+                    {lists.ShoppingLists ? lists.ShoppingLists.map((list) => (
                         <TableContents onRemove={this.openModal}
                                        list={list}
                                        key={list.id} id={list.id} onlink={this.pushNavigation}
@@ -265,8 +268,8 @@ class ShoppingList extends BaseComponent {
                 </table>
                 <Pagination
                     bsSize="medium"
-                    items={this.state.search_count ? searchPages : totalPages}
-                    activePage={this.state.activePage}
+                    items={search_count ? searchPages : totalPages}
+                    activePage={activePage}
                     onSelect={this.handlePageSelect}
                     className='justify-content-center'
                 />

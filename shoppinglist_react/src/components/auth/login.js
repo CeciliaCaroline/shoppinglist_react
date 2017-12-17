@@ -20,15 +20,16 @@ class Login extends BaseComponent {
 
         //prevent browser refresh on submit
         e.preventDefault();
+        const {email, password} = this.state;
 
         //pass login credentials in the payload of the post request to database
         axios.post(`${this.baseURL}/auth/login`,
             {
-                email: this.state.email,
-                password: this.state.password
+                email,
+                password
             }, this.contentHeader())
 
-            //promise is returned
+        //promise is returned
             .then((response) => {
                 if (response.status === 200) {
 
@@ -68,15 +69,17 @@ class Login extends BaseComponent {
     };
 
     onChange = (event) => {
-        this.setState({[event.target.name] : event.target.value})
+        this.setState({[event.target.name]: event.target.value})
 
 
     };
 
     render() {
+        const {email, password, loggedIn} = this.state;
+
 
         //if state is loggedIn, redirect to shoppinglists page
-        if (this.state.loggedIn) {
+        if (loggedIn) {
             this.props.history.push("/v2/shoppinglist/");
         }
 
@@ -95,7 +98,7 @@ class Login extends BaseComponent {
                             name="email"
                             required
                             ref='email'
-                            value={this.state.email}
+                            value={email}
                             onChange={this.onChange}
                         />
                     </div>
@@ -108,7 +111,7 @@ class Login extends BaseComponent {
                             name="password"
                             required
                             ref='password'
-                            value={this.state.password}
+                            value={password}
                             onChange={this.onChange}
 
                         />

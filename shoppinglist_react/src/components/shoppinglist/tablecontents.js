@@ -25,17 +25,22 @@ class TableContents extends BaseComponent {
     };
 
     componentDidMount() {
+        const {name, description} = this.props.list;
+
+
         this.setState({
-            name: this.props.list.name,
-            description: this.props.list.description,
+            name,
+            description,
         })
     }
 
     //modal to edit shopping list
     openModal = () => {
-        let editName = this.props.list.name;
-        let editDescription = this.props.list.description;
-        let listId = this.props.list.id;
+        const {name, description, id} = this.props.list;
+
+        let editName = name;
+        let editDescription = description;
+        let listId = id;
 
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';
@@ -57,21 +62,23 @@ class TableContents extends BaseComponent {
     };
 
     render() {
-        let id = this.props.list.id;
+        const {list, onRemove, onlink} = this.props;
+
+        let id = list.id;
         return (
             <tr>
 
-                <td><a href={`/v2/shoppinglist/${id}/items/`} onClick={this.props.onlink}> {this.props.list.name}</a>
+                <td><a href={`/v2/shoppinglist/${id}/items/`} onClick={onlink}> {list.name}</a>
                 </td>
-                <td>{this.props.list.description}</td>
+                <td>{list.description}</td>
                 <td>
                     <button className="text-center btn btn-primary btn-sm"
                             onClick={this.openModal}>EDIT
                     </button>
                 </td>
                 <td>
-                    <button className="text-right btn btn-danger btn-sm" data-id={this.props.list.id}
-                            onClick={this.props.onRemove}>DELETE
+                    <button className="text-right btn btn-danger btn-sm" data-id={list.id}
+                            onClick={onRemove}>DELETE
                     </button>
                 </td>
             </tr>
