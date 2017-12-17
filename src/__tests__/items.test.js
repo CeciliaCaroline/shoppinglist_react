@@ -1,7 +1,7 @@
 import React from 'react';
 import expect from 'expect';
 import renderer from 'react-test-renderer';
-import "./setup_test"
+import "../setup_test"
 import Items from "../components/items/items";
 import AddItem from "../components/items/additem";
 import ItemContents from "../components/items/itemcontents";

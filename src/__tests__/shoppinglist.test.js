@@ -1,9 +1,9 @@
 import moxios from 'moxios';
 import {mount, shallow} from 'enzyme';
 import React from 'react';
-import "./setup_test";
-import ShoppingList from './components/shoppinglist/shoppinglist';
-import AddList from "./components/shoppinglist/addlist";
+import "../setup_test";
+import ShoppingList from '../components/shoppinglist/shoppinglist';
+import AddList from "../components/shoppinglist/addlist";
 
 
 describe('mocking shoppinglist requests', function () {
@@ -19,6 +19,7 @@ describe('mocking shoppinglist requests', function () {
         });
 
         it('stub response for viewing shoppinglists', function (done) {
+            localStorage.setItem('token', 'sthii');
             const shoppinglist = mount(<ShoppingList/>);
             const getlist = {
                 "ShoppingLists": [

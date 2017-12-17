@@ -6,7 +6,7 @@ import Login from "../components/auth/login";
 import SendEmail from "../components/auth/email_send";
 import ResetPassword from "../components/auth/reset_password";
 import Header from "../components/header";
-import "./setup_test";
+import "../setup_test";
 
 
 describe('Authentication components', () => {

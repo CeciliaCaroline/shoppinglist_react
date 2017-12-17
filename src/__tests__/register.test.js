@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 import {mount, configure, shallow} from 'enzyme';
 import React from 'react';
-import "./setup_test";
+import "../setup_test";
 import Register from '../components/auth/register'
 
 

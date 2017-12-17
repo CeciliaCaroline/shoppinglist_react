@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import ShoppingList from "../components/shoppinglist/shoppinglist";
 import AddList from "../components/shoppinglist/addlist";
 import TableContents from "../components/shoppinglist/tablecontents";
-import "./setup_test"
+import "../setup_test"
 
 
 describe('Shopping list components', () => {
