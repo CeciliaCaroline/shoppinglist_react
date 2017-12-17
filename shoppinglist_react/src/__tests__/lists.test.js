@@ -9,18 +9,19 @@ import "./setup_test"
 
 describe('Shopping list components', () => {
 
-    it('renders correctly', () => {
+    it('list renders correctly', () => {
+        localStorage.setItem('token', 'sthii');
         const list = renderer.create(<ShoppingList/>).toJSON();
         expect(list).toMatchSnapshot();
     });
 
-    it('renders correctly', () => {
+    it('add list renders correctly', () => {
         const addList = renderer.create(<AddList/>).toJSON();
         expect(addList).toMatchSnapshot();
 
     });
 
-    it('renders correctly', () => {
+    it('table contents renders correctly', () => {
         let list = {id: 1, name: "Cece", description: "Ceces boys"};
         const table = renderer.create(<TableContents list={list}/>).toJSON();
         expect(table).toMatchSnapshot();

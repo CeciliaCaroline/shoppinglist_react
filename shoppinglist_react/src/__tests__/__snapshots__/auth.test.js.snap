@@ -334,7 +334,7 @@ exports[`Authentication components renders correctly 4`] = `
         onChange={[Function]}
         required={true}
         type="password"
-        value={undefined}
+        value=""
       />
     </div>
     <div
@@ -351,7 +351,7 @@ exports[`Authentication components renders correctly 4`] = `
         onChange={[Function]}
         required={true}
         type="password"
-        value={undefined}
+        value=""
       />
     </div>
     <div>
