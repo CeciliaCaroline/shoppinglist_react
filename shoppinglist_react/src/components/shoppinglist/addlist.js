@@ -16,7 +16,7 @@ class AddList extends BaseComponent {
             description: '',
         };
     }
-
+     // event handler for new shopping list form submission
     handleSubmit = (name, description) => {
         axios.post(`${this.baseURL}/v2/shoppinglist/`,
             {
@@ -24,11 +24,13 @@ class AddList extends BaseComponent {
                 description: description,
             }, this.authHeader()
         )
-
+            //returns a promise
             .then((response) => {
                 let data = response.data;
                 if (response.status === 201) {
                     this.props.onAdd(data.name, data.description, data.id);
+
+                    //display response message as notification
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
@@ -41,8 +43,10 @@ class AddList extends BaseComponent {
                 }
             })
 
+            //returns promise
             .catch((error) => {
                 if (error.response.data.message) {
+                    //display error response message as notification
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
                         level: 'error',
@@ -52,6 +56,7 @@ class AddList extends BaseComponent {
             });
     };
 
+    //modal for adding new shopping list
     openModal = () => {
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';

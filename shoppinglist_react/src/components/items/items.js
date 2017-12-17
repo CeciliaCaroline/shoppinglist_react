@@ -29,16 +29,21 @@ class Items extends BaseComponent {
         }
     }
 
+    //method to get shopping list items
     getItems = (page, search_string = "") => {
         let URLSearchParams = require('url-search-params');
         let p = new URLSearchParams();
+        //append page parameter to url query string
         p.append('page', page || 1);
+
+        //if search string exists, append to  url query string
         if (search_string && search_string.trim() !== "") {
             search_string = "&q=" + search_string
         } else {
             search_string = ""
         }
 
+        //api call to get shopping list items from database
         return axios.get(`${this.baseURL}/v2/shoppinglist/${this.props.match.params.id}/items/?` + p + search_string,
             this.authHeader())
             .then(response => {
@@ -46,6 +51,8 @@ class Items extends BaseComponent {
                 }
             )
             .catch((error) => {
+
+                //if error message exists, display as a notification
                 if (error.response.data.message) {
                     this.setState({notificationSystem: this.refs.notificationSystem,});
                     this.state.notificationSystem.addNotification({
@@ -57,9 +64,14 @@ class Items extends BaseComponent {
             });
     };
 
+    //get all shopping list items
     getShoppingListItems = (pageNum, search_string = "") => {
         this.getItems(pageNum, search_string)
+
+            //returns promise
             .then((allitems) => {
+
+            //set state to items attributes from the response
                 this.setState({
                     items: allitems,
                     name: allitems.name,
@@ -79,10 +91,12 @@ class Items extends BaseComponent {
     componentDidMount() {
         this.setState({notificationSystem: this.refs.notificationSystem});
         this.getShoppingListItems(1, "");
+        //set id from  url as list id
         this.setState({list_id: this.props.match.params.id});
 
     }
 
+    //modal to delete shopping list item
     openModal = (event) => {
         let e = event.target;
 
@@ -105,10 +119,15 @@ class Items extends BaseComponent {
 
     };
 
+    //event handler for deleting shopping list item
     onRemoveItem = (event) => {
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'),
+        axios.delete(`${this.baseURL}/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'),
             this.authHeader())
+
+            //returns a promise
             .then(response => {
+
+                //after deleting an item, get and display the remaining items
                     this.getShoppingListItems(1, "");
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
@@ -120,6 +139,8 @@ class Items extends BaseComponent {
             )
             .catch((error) => {
                 this.setState({notificationSystem: this.refs.notificationSystem});
+
+                //display the error message as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -131,12 +152,13 @@ class Items extends BaseComponent {
 
     };
 
-
+    //event handler for editing shopping  list item
     onItemEdit = (id, name, price) => {
-        axios.put(`http://127.0.0.1:5000/v2/shoppinglist/${this.props.match.params.id}/items/` + id, '{ "name": "' + name + '", "price": "' + price + '"}',
+        axios.put(`${this.baseURL}/v2/shoppinglist/${this.props.match.params.id}/items/` + id, '{ "name": "' + name + '", "price": "' + price + '"}',
             this.authHeader())
 
             .then(response => {
+                //after editing an item, get and display the items
                 this.getShoppingListItems(1, "");
                 this.setState({notificationSystem: this.refs.notificationSystem});
                 this.state.notificationSystem.addNotification({
@@ -147,8 +169,9 @@ class Items extends BaseComponent {
             })
 
             .catch((error) => {
-                console.log(error.response.data.message);
                 this.setState({notificationSystem: this.refs.notificationSystem});
+
+                //display the error message as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -159,6 +182,7 @@ class Items extends BaseComponent {
             });
     };
 
+    //template for no items
     noItems = () => {
         return (
             <div className="container-fluid">
@@ -169,6 +193,7 @@ class Items extends BaseComponent {
         );
     };
 
+    //method to add a shopping list item
     onItemAdd = (name, price, id) => {
 
         this.getShoppingListItems(1, "");
@@ -183,15 +208,18 @@ class Items extends BaseComponent {
 
     };
 
+    //event handler for search
     updateSearch = (event) => {
         this.setState({search: event.target.value.substr(0, 20)})
     };
 
+    //event handler for submission of the search form
     handleSubmit = (event) => {
         event.preventDefault();
         this.getShoppingListItems(1, this.state.search);
     };
 
+    //event handler for page selection in pagination
     handleSelect = (e) => {
         this.setState({activePage: e});
         this.getShoppingListItems(e)
@@ -199,6 +227,7 @@ class Items extends BaseComponent {
 
     render() {
 
+        //if there are no items, render the no items template
         if (!this.state.items.Shoppinglists_Items.length) {
             return this.noItems();
         }

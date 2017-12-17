@@ -17,20 +17,30 @@ class Login extends BaseComponent {
 
 
     login = (e) => {
+
+        //prevent browser refresh on submit
         e.preventDefault();
+
+        //pass login credentials in the payload of the post request to database
         axios.post(`${this.baseURL}/auth/login`,
             {
                 email: this.state.email,
                 password: this.state.password
             }, this.contentHeader())
+
+            //promise is returned
             .then((response) => {
                 if (response.status === 200) {
+
+                    //set the token from the response in local storage
                     localStorage.setItem('token', response.data.auth_token);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
                         level: 'success',
                         position: 'tc'
                     });
+
+                    //setstate to registered after 1000ms
                     setTimeout(() => {
                         this.setState({
                             email: '',
@@ -41,7 +51,11 @@ class Login extends BaseComponent {
 
                 }
             })
+
+            //promise is returned
             .catch((error) => {
+
+                //if an error message is returned in the response, display as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -60,6 +74,8 @@ class Login extends BaseComponent {
     };
 
     render() {
+
+        //if state is loggedIn, redirect to shoppinglists page
         if (this.state.loggedIn) {
             this.props.history.push("/v2/shoppinglist/");
         }

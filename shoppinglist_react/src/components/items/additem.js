@@ -18,6 +18,7 @@ class AddItem extends BaseComponent {
 
     }
 
+    //event handler for adding new shopping list item
     handleSubmit = (name, price) => {
 
         axios.post(`${this.baseURL}/v2/shoppinglist/${this.props.list_id}/items/`,
@@ -56,6 +57,7 @@ class AddItem extends BaseComponent {
     };
 
 
+    //modal to add new shopping list item
     openModal = () => {
         vex.dialog.buttons.YES.text = 'Save';
         vex.dialog.buttons.NO.text = 'Cancel';

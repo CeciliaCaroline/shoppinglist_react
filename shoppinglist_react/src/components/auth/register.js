@@ -18,7 +18,11 @@ class Register extends BaseComponent {
     }
 
     register = (e) => {
+
+        //prevent browser refresh on submit
         e.preventDefault();
+
+        //pass registration credentials in the payload of the post request to database
         axios.post(`${this.baseURL}/auth/register`,
             {
                 email: this.state.email,
@@ -26,8 +30,11 @@ class Register extends BaseComponent {
                 confirm_password: this.state.confirm_password,
                 username: this.state.username
             }, this.contentHeader())
+
+            //promise is returned
             .then((response) => {
                 if (response.status === 201) {
+                    //set the token from the response in local storage
                     localStorage.setItem('token', response.data.auth_token);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
@@ -42,13 +49,18 @@ class Register extends BaseComponent {
                         username: '',
                     });
 
+                    //setstate to registered after 500s
                     setTimeout(() => {
                         this.setState({registered: true});
                     }, 500);
 
                 }
             })
+
+            //promise is returned
             .catch((error) => {
+
+            //if an error message is returned in the response, display as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -66,6 +78,8 @@ class Register extends BaseComponent {
     };
 
     render() {
+
+        //if state is registered, redirect to login page
         if (this.state.registered) {
             this.props.history.push("/auth/login");
         }

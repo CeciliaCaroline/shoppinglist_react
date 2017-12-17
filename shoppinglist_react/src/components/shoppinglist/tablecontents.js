@@ -14,6 +14,7 @@ class TableContents extends BaseComponent {
         };
     }
 
+    //event handler for submission of edited shopping list
     handleSubmit = (name, description) => {
         this.props.onEdit(this.props.id, name, description);
 
@@ -30,6 +31,7 @@ class TableContents extends BaseComponent {
         })
     }
 
+    //modal to edit shopping list
     openModal = () => {
         let editName = this.props.list.name;
         let editDescription = this.props.list.description;

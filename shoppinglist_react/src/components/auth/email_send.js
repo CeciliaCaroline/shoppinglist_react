@@ -15,12 +15,17 @@ class SendEmail extends BaseComponent {
     }
 
     handleReset = (e) => {
+
+        //prevent browser refresh on submit
         e.preventDefault();
+
+        //pass email in the payload of the post request
         axios.post(`${this.baseURL}/auth/reset_password`,
             {
                 email: this.state.email,
             }, this.contentHeader())
 
+            //promise is returned
             .then((response) => {
                 if (response.status === 200) {
                     this.state.notificationSystem.addNotification({
@@ -33,6 +38,8 @@ class SendEmail extends BaseComponent {
                 }
             })
             .catch( (error) => {
+
+                //if an error message is returned in the response, display as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,

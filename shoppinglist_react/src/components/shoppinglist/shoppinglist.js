@@ -29,7 +29,7 @@ class ShoppingList extends BaseComponent {
     }
 
     componentDidMount() {
-
+        // if there is no token in local storage, redirect to login page
         if (!localStorage.getItem("token")) {
             this.props.history.push("/auth/login");
         }
@@ -37,16 +37,22 @@ class ShoppingList extends BaseComponent {
         this.getShoppingLists(1, "");
     }
 
+    //event handler to get shopping lists from the database
     getLists = (page, search_string = "") => {
         let URLSearchParams = require('url-search-params');
         let p = new URLSearchParams();
+
+        //append page parameter to query string
         p.append('page', page || 1);
+
+        //if search string exists, append it to the query string
         if (search_string && search_string.trim() !== "") {
             search_string = "&q=" + search_string
         } else {
             search_string = ""
         }
 
+        //api call to get shopping lists from database
         return axios.get(`${this.baseURL}/v2/shoppinglist/?` + p + search_string,
             this.authHeader())
             .then(response => {
@@ -69,7 +75,10 @@ class ShoppingList extends BaseComponent {
 
     getShoppingLists = (pageNum, search_string = "") => {
         this.getLists(pageNum, search_string)
+            //returns a promise
             .then((allshoppingLists) => {
+
+                //set state to shopping lists attributes
                 this.setState({
                     lists: allshoppingLists,
                     activePage: allshoppingLists.page,
@@ -80,12 +89,14 @@ class ShoppingList extends BaseComponent {
                 });
 
             })
+            //returns a promise
             .catch((error) => {
-
+                console.log(error)
             })
     };
 
 
+    //method to add new shopping lists
     onListAdd = (name, description, id) => {
         this.getShoppingLists(1, "");
         this.state.lists.ShoppingLists.push(
@@ -97,6 +108,7 @@ class ShoppingList extends BaseComponent {
         this.setState(this.state);
     };
 
+    //template when there are no lists
     noLists = () => {
         return (
             <div className="container-fluid">
@@ -107,7 +119,11 @@ class ShoppingList extends BaseComponent {
         );
     };
 
+    //event handler for editing a shopping list
     onListEdit = (id, name, description) => {
+
+        //api call to edit shopping list
+        //pass shopping list attributes with the put request
         axios.put(`${this.baseURL}/v2/shoppinglist/` + id, '{ "name": "' + name + '", "description": "' + description + '"}',
             this.authHeader())
 
@@ -132,6 +148,7 @@ class ShoppingList extends BaseComponent {
             });
     };
 
+    //modal to delete shopping list
     openModal = (event) => {
         let e = event.target;
 
@@ -153,8 +170,10 @@ class ShoppingList extends BaseComponent {
 
     };
 
+    //event handler to delete shopping list
     onRemoveList = (e) => {
-        axios.delete(`http://127.0.0.1:5000/v2/shoppinglist/` + e.getAttribute('data-id'), this.authHeader())
+        //api call to delete shopping list
+        axios.delete(`${this.baseURL}/v2/shoppinglist/` + e.getAttribute('data-id'), this.authHeader())
             .then(response => {
                     this.getShoppingLists(1, "");
                     this.setState({notificationSystem: this.refs.notificationSystem});
@@ -178,17 +197,20 @@ class ShoppingList extends BaseComponent {
     };
 
 
+    //event handler for searching shopping list names
     updateSearch = (event) => {
         this.setState({search: event.target.value.substr(0, 20)})
 
     };
 
+    //event handler for submission of the search form
     handleSubmit = (event) => {
         event.preventDefault();
         this.getShoppingLists(1, this.state.search)
 
     };
 
+    //event handler for selecting active page in pagination
     handlePageSelect = (e) => {
         this.setState({activePage: e});
         this.getShoppingLists(e)
@@ -196,6 +218,7 @@ class ShoppingList extends BaseComponent {
 
 
     render() {
+        //if there are no shopping lists, display no lists template
         if (!this.state.lists.ShoppingLists.length) {
             return this.noLists();
         }

@@ -20,15 +20,23 @@ class ResetPassword extends BaseComponent {
 
 
     handleReset = (e) => {
+
+        //prevent browser refresh on submit
         e.preventDefault();
+
+        //pass reset password credentials payload with the post request
         axios.post(`${this.baseURL}/auth/reset_password/${this.props.match.params.token}`,
             {
                 email: this.state.email,
                 new_password: this.state.new_password,
                 confirm_password: this.state.confirm_password
             }, this.contentHeader())
+
+            //returns a promise
             .then((response) => {
                 if (response.status === 200) {
+
+                    //set the token from the url in local storage
                     localStorage.setItem('token', this.props.match.params.token);
                     this.state.notificationSystem.addNotification({
                         message: response.data.message,
@@ -46,7 +54,11 @@ class ResetPassword extends BaseComponent {
 
                 }
             })
+
+            //returns a promise
             .catch( (error) => {
+
+                //if an error message is returned in the response, display as a notification
                 if (error.response.data.message) {
                     this.state.notificationSystem.addNotification({
                         message: error.response.data.message,
@@ -63,6 +75,8 @@ class ResetPassword extends BaseComponent {
     };
 
     render() {
+
+        //if reset is true, redirect to shopping lists
         if (!this.state.reset) {
             return <Redirect to="/v2/shoppinglist/"/>
         }

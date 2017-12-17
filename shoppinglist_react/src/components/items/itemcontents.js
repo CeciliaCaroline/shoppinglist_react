@@ -16,6 +16,7 @@ class ItemContents extends BaseComponent {
         };
     }
 
+    //method to handele submission of the shopping list item edit form
     handleSubmit = (name, price) => {
 
         this.props.onEdit(this.props.id, name, price);
@@ -33,6 +34,7 @@ class ItemContents extends BaseComponent {
         })
     }
 
+    //modal to edit shopping list item
     openModal = () => {
 
         let editName = this.props.list.name;
