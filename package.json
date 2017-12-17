@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
+    "coveralls": "^3.0.0",
     "moxios": "^0.4.0",
     "react": "~16.1.1",
     "react-bootstrap": "^0.31.5",
@@ -20,7 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

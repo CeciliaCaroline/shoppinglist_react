@@ -1,4 +1,4 @@
-##Shopping List React Client
+## Shopping List React Client
 
 [![Build Status](https://travis-ci.org/CeciliaCaroline/shoppinglist_react.svg?branch=lists)](https://travis-ci.org/CeciliaCaroline/shoppinglist_react)
 [![Coverage Status](https://coveralls.io/repos/github/CeciliaCaroline/shoppinglist_react/badge.svg?branch=master)](https://coveralls.io/github/CeciliaCaroline/shoppinglist_react?branch=master)
@@ -8,7 +8,7 @@ The shopping list react client  is a front end app that consumes a flask API who
 
 This app enables users to manage and keep track of their shopping lists
 
-###Node Dependency
+### Node Dependency
 Node v6.11.2
 
 Installation
