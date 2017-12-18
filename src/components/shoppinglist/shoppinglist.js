@@ -106,7 +106,7 @@ class ShoppingList extends BaseComponent {
                 description: description,
                 id: id
             });
-        this.setState(this.state);
+        this.setState({lists : this.state.lists});
     };
 
     //template when there are no lists

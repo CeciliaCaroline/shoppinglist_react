@@ -203,12 +203,14 @@ class Items extends BaseComponent {
                 price: price,
                 id: id
             });
-        this.setState(this.state);
+
+        this.setState({items : this.state.items});
 
 
     };
 
     //event handler for search
+
     updateSearch = (event) => {
         this.setState({search: event.target.value.substr(0, 20)})
     };
