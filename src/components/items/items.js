@@ -68,10 +68,10 @@ class Items extends BaseComponent {
     getShoppingListItems = (pageNum, search_string = "") => {
         this.getItems(pageNum, search_string)
 
-            //returns promise
+        //returns promise
             .then((allitems) => {
 
-            //set state to items attributes from the response
+                //set state to items attributes from the response
                 this.setState({
                     items: allitems,
                     name: allitems.name,
@@ -124,10 +124,10 @@ class Items extends BaseComponent {
         axios.delete(`${this.baseURL}/v2/shoppinglist/${this.props.match.params.id}/items/` + event.getAttribute('data-id2'),
             this.authHeader())
 
-            //returns a promise
+        //returns a promise
             .then(response => {
 
-                //after deleting an item, get and display the remaining items
+                    //after deleting an item, get and display the remaining items
                     this.getShoppingListItems(1, "");
                     this.setState({notificationSystem: this.refs.notificationSystem});
                     this.state.notificationSystem.addNotification({
@@ -204,8 +204,8 @@ class Items extends BaseComponent {
                 id: id
             });
 
-        this.setState({items : this.state.items});
-
+        const {items} = this.state;
+        this.setState({items});
 
     };
 
