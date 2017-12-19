@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "6.11.2"
 
+env:
+  CODECLIMATE_REPO_TOKEN: 5bf93931f1352e67660b681ec7bb2e1920052021270a1e1a1460100d96e97db2
+
 script:
   - npm test
 
