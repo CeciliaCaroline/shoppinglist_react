@@ -1,0 +1,92 @@
+import React from 'react';
+import BaseComponent from '../base';
+
+
+
+let vex = require('vex-js');
+vex.defaultOptions.className = 'vex-theme-os';
+
+
+class ItemContents extends BaseComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            price: '',
+        };
+    }
+
+    //method to handele submission of the shopping list item edit form
+    handleSubmit = (name, price) => {
+
+        this.props.onEdit(this.props.id, name, price);
+        this.setState({
+            name: name,
+            price: price,
+        });
+
+    };
+
+    componentDidMount() {
+                const {name, price} = this.props.list;
+
+        this.setState({
+            name: name,
+            price: price,
+        })
+    }
+
+    //modal to edit shopping list item
+    openModal = () => {
+                const {name, price, id} = this.props.list;
+
+        let editName = name;
+        let editPrice = price;
+        let itemId = id;
+
+        vex.dialog.buttons.YES.text = 'Save';
+        vex.dialog.buttons.NO.text = 'Cancel';
+        vex.dialog.open({
+            message: 'Edit Shopping List Item',
+            input: [
+
+                '<input name="name" type="text" value="' + editName + '" required data-id2="' + itemId + '"   />',
+                '<input name="price" type="text" value="' + editPrice + '"  required  />'
+
+            ].join(''),
+
+            callback: (data) => {
+                if (data) {
+                    this.handleSubmit(data.name, data.price)
+                }
+            }
+        })
+    };
+
+
+    render() {
+                const {list, onRemove } = this.props;
+
+        return (
+
+            <tr>
+                <td> {list.name}</td>
+                <td>{list.price}</td>
+                <td>
+                    <button className="text-center btn btn-primary btn-sm"
+                            onClick={this.openModal}>EDIT
+                    </button>
+                </td>
+                <td>
+                    <button className="text-right btn btn-danger btn-sm" data-id2={list.id}
+                            onClick={onRemove}>DELETE
+                    </button>
+                </td>
+
+            </tr>
+        );
+    }
+}
+
+
+export default ItemContents;
