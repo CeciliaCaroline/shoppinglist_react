@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Shopping list components add list renders correctly 1`] = `
+<div
+  className="container"
+>
+  <button
+    className=" items btn btn-primary btn-sm "
+    onClick={[Function]}
+  >
+    Create New List
+  </button>
+  <div
+    className="notifications-wrapper"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`Shopping list components list renders correctly 1`] = `
+<div
+  className="container-fluid"
+>
+  <nav
+    className="navbar navbar-inverse fixed-top bg-faded navbar-toggleable-sm "
+  >
+    <div
+      className="container"
+    >
+      <a
+        className="navbar-brand m-o align-content-end mr-auto"
+        href="/v2/shoppinglist/"
+        onClick={undefined}
+      >
+        SHOPPING LIST
+      </a>
+      <div
+        className="navbar-nav "
+      >
+        <a
+          className="nav-item nav-link active"
+          href="/v2/shoppinglist/"
+          onClick={undefined}
+        >
+          My Lists
+        </a>
+        <a
+          className="nav-item nav-link"
+          onClick={[Function]}
+        >
+          Log Out
+        </a>
+      </div>
+    </div>
+  </nav>
+  <div
+    className="container"
+  >
+    <button
+      className=" items btn btn-primary btn-sm "
+      onClick={[Function]}
+    >
+      Create New List
+    </button>
+    <div
+      className="notifications-wrapper"
+      style={Object {}}
+    />
+  </div>
+  <h2
+    className="text-center "
+  >
+    No Shopping Lists
+  </h2>
+</div>
+`;
+
+exports[`Shopping list components table contents renders correctly 1`] = `
+<tr>
+  <td>
+    <a
+      href="/v2/shoppinglist/1/items/"
+      onClick={undefined}
+    >
+       
+      Cece
+    </a>
+  </td>
+  <td>
+    Ceces boys
+  </td>
+  <td>
+    <button
+      className="text-center btn btn-primary btn-sm"
+      onClick={[Function]}
+    >
+      EDIT
+    </button>
+  </td>
+  <td>
+    <button
+      className="text-right btn btn-danger btn-sm"
+      data-id={1}
+      onClick={undefined}
+    >
+      DELETE
+    </button>
+  </td>
+</tr>
+`;
